@@ -6,7 +6,7 @@ GymOps is a Turborepo monorepo for a gym reservation system covering pool slots,
 
 ## Apps
 
-- `apps/web`: Next.js App Router web operations surface using shadcn/ui and Supabase client helpers. Current panels include login, profile/logout, admin CRUD, and manager dashboard/staff/trainer/gym-goer/session CRUD.
+- `apps/web`: Next.js App Router web operations surface using shadcn/ui and Supabase client helpers. Route files stay thin and delegate to `apps/web/features/*`. Current panels include login, profile/logout, admin CRUD, and manager dashboard/staff/trainer/gym-goer/session CRUD.
 - `apps/mobile`: Expo React Native customer companion using the shared domain package.
 - `apps/backend`: Django + Django REST Framework runtime shell. It owns settings, URL routing, OpenAPI docs, and process commands. OpenAPI schema is served at `/api/schema/`, Swagger at `/api/docs/`, and Scalar at `/api/scalar/`.
 
@@ -48,6 +48,8 @@ GymOps is a Turborepo monorepo for a gym reservation system covering pool slots,
 ## Notes For Future Work
 
 - Keep all cross-application models, types, schemas, constants, and translations in `packages/`.
+- Future coding agents must read `AGENTS.md` before frontend work; it contains the current frontend refactoring rules.
+- Agents should commit small verified checkpoints and push regularly when the remote is available, following the git workflow rules in `AGENTS.md`.
 - Product/domain context lives in `project_context.md`; update it when roles, panels, or domain rules change.
 - The repo package manager is Bun `1.3.13`; use `bun install` and commit `bun.lock`.
 - Sample auth credentials live in `packages/domain/src/auth/sample-users.ts`; keep them aligned with `supabase/seed.sql` and the Django `seed_sample_users` command.

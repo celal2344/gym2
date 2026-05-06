@@ -118,6 +118,7 @@ All shared models, types, schemas, constants, translations, and domain contracts
 - OpenAPI schema output lives at `apps/backend/schema.yml`; generated frontend API types live at `apps/web/lib/api/generated/schema.d.ts`. Regenerate with `bun run api:generate-types`.
 - Runtime API docs are available from the backend at `/api/schema/` for OpenAPI, `/api/docs/` for Swagger UI, and `/api/scalar/` for Scalar.
 - Web CRUD tables use a shared shadcn/TanStack DataTable wrapper. Web CRUD forms use React Hook Form with shadcn Field components and package-level Zod schemas. Zod validation messages are stored as translation keys and rendered through `packages/domain/src/i18n`.
+- Frontend route files are thin wrappers. Feature UI lives under `apps/web/features/<feature>/` with separated `components`, `constants.ts`, and utility files where needed. Agent-facing frontend rules live in `AGENTS.md`.
 
 ## Future Work
 
