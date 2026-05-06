@@ -1,0 +1,32 @@
+{
+  "name": "@repo/domain",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./accounts": "./src/accounts/index.ts",
+    "./auth": "./src/auth/index.ts",
+    "./bookings": "./src/bookings/schemas.ts",
+    "./dashboard": "./src/dashboard/metrics.ts",
+    "./sessions": "./src/sessions/index.ts",
+    "./services": "./src/services/index.ts",
+    "./i18n": "./src/i18n/index.ts",
+    "./i18n/en.json": "./src/i18n/en.json",
+    "./i18n/tr.json": "./src/i18n/tr.json"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "test": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.2.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "eslint": "^9.39.1",
+    "typescript": "5.9.2"
+  }
+}

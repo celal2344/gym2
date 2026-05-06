@@ -1,0 +1,4 @@
+$ node scripts/manage.mjs runserver 0.0.0.0:8000
+Watching for file changes with StatReloader
+[04/May/2026 15:21:28] "GET /api/schema/ HTTP/1.1" 200 58689
+[04/May/2026 15:21:28,156] - Broken pipe from ('127.0.0.1', 59753)

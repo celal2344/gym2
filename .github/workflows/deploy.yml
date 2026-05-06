@@ -1,0 +1,72 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Deployment target
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run build --filter=web
+      - name: Deploy with Vercel CLI
+        if: ${{ vars.WEB_DEPLOY_PROVIDER == 'vercel' }}
+        run: |
+          bunx vercel pull --yes --environment=${{ inputs.target }} --token=${{ secrets.VERCEL_TOKEN }}
+          bunx vercel build ${{ inputs.target == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+          bunx vercel deploy --prebuilt ${{ inputs.target == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Netlify alternative
+        if: ${{ vars.WEB_DEPLOY_PROVIDER == 'netlify' }}
+        run: |
+          bunx netlify deploy --dir=apps/web/.next --site=${{ secrets.NETLIFY_SITE_ID }} --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} ${{ inputs.target == 'production' && '--prod' || '' }}
+
+  backend-and-database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install backend dependencies
+        run: |
+          python -m venv apps/backend/.venv
+          apps/backend/.venv/bin/python -m pip install --upgrade pip
+          apps/backend/.venv/bin/pip install -r apps/backend/requirements.txt
+      - name: Check Django project
+        run: apps/backend/.venv/bin/python apps/backend/manage.py check
+      - name: Push Supabase migrations
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase db push --project-ref ${{ inputs.target == 'production' && secrets.SUPABASE_PROJECT_REF_PROD || secrets.SUPABASE_PROJECT_REF_STAGING }}
+
+  mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: bun install --frozen-lockfile
+      - name: EAS preview or production build
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: bunx eas-cli build --platform all --profile ${{ inputs.target }} --non-interactive

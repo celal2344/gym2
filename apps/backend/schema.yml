@@ -1,0 +1,4079 @@
+openapi: 3.0.3
+info:
+  title: GymOps API
+  version: 0.1.0
+  description: Reservation, capacity, entitlement, and check-in API for a gym operations
+    platform.
+paths:
+  /api/admin/customers/:
+    get:
+      operationId: admin_customers_list
+      tags:
+      - admin
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    post:
+      operationId: admin_customers_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+  /api/admin/customers/{id}/:
+    get:
+      operationId: admin_customers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - admin
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    put:
+      operationId: admin_customers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    patch:
+      operationId: admin_customers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminCustomer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminCustomer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminCustomer'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    delete:
+      operationId: admin_customers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - admin
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/admin/employees/:
+    get:
+      operationId: admin_employees_list
+      tags:
+      - admin
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    post:
+      operationId: admin_employees_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+  /api/admin/employees/{id}/:
+    get:
+      operationId: admin_employees_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - admin
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    put:
+      operationId: admin_employees_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    patch:
+      operationId: admin_employees_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    delete:
+      operationId: admin_employees_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - admin
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/attachments/:
+    get:
+      operationId: attachments_list
+      tags:
+      - attachments
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attachment'
+          description: ''
+    post:
+      operationId: attachments_create
+      tags:
+      - attachments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+  /api/attachments/{id}/:
+    get:
+      operationId: attachments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attachment.
+        required: true
+      tags:
+      - attachments
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+  /api/auth/me/:
+    get:
+      operationId: auth_me_retrieve
+      tags:
+      - auth
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          description: No response body
+  /api/bookings/:
+    get:
+      operationId: bookings_list
+      tags:
+      - bookings
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+          description: ''
+    post:
+      operationId: bookings_create
+      tags:
+      - bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Booking'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/bookings/{id}/:
+    get:
+      operationId: bookings_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - bookings
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    put:
+      operationId: bookings_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Booking'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    patch:
+      operationId: bookings_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBooking'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBooking'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBooking'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    delete:
+      operationId: bookings_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - bookings
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/bookings/{id}/cancel/:
+    post:
+      operationId: bookings_cancel_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Booking'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/bookings/{id}/check-in/:
+    post:
+      operationId: bookings_check_in_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this booking.
+        required: true
+      tags:
+      - bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Booking'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Booking'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/customers/:
+    get:
+      operationId: customers_list
+      tags:
+      - customers
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+          description: ''
+    post:
+      operationId: customers_create
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+  /api/customers/{id}/:
+    get:
+      operationId: customers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - customers
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+    put:
+      operationId: customers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+    patch:
+      operationId: customers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomer'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+    delete:
+      operationId: customers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - customers
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/locations/:
+    get:
+      operationId: locations_list
+      tags:
+      - locations
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+          description: ''
+    post:
+      operationId: locations_create
+      tags:
+      - locations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Location'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Location'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+  /api/locations/{id}/:
+    get:
+      operationId: locations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this location.
+        required: true
+      tags:
+      - locations
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+    put:
+      operationId: locations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this location.
+        required: true
+      tags:
+      - locations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Location'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Location'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+    patch:
+      operationId: locations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this location.
+        required: true
+      tags:
+      - locations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLocation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLocation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLocation'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+          description: ''
+    delete:
+      operationId: locations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this location.
+        required: true
+      tags:
+      - locations
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/manager/gym-goers/:
+    get:
+      operationId: manager_gym_goers_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    post:
+      operationId: manager_gym_goers_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+  /api/manager/gym-goers/{id}/:
+    get:
+      operationId: manager_gym_goers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    put:
+      operationId: manager_gym_goers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminCustomer'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    patch:
+      operationId: manager_gym_goers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminCustomer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminCustomer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminCustomer'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCustomer'
+          description: ''
+    delete:
+      operationId: manager_gym_goers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/manager/session-occurrences/:
+    get:
+      operationId: manager_session_occurrences_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainingSessionOccurrence'
+          description: ''
+    post:
+      operationId: manager_session_occurrences_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionOccurrence'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionOccurrence'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionOccurrence'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionOccurrence'
+          description: ''
+  /api/manager/session-occurrences/{id}/:
+    get:
+      operationId: manager_session_occurrences_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session occurrence.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionOccurrence'
+          description: ''
+    put:
+      operationId: manager_session_occurrences_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session occurrence.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionOccurrence'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionOccurrence'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionOccurrence'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionOccurrence'
+          description: ''
+    patch:
+      operationId: manager_session_occurrences_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session occurrence.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingSessionOccurrence'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingSessionOccurrence'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingSessionOccurrence'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionOccurrence'
+          description: ''
+    delete:
+      operationId: manager_session_occurrences_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session occurrence.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/manager/session-occurrences/calendar/:
+    get:
+      operationId: manager_session_occurrences_calendar_retrieve
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionOccurrence'
+          description: ''
+  /api/manager/session-plans/:
+    get:
+      operationId: manager_session_plans_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainingSessionPlan'
+          description: ''
+    post:
+      operationId: manager_session_plans_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionPlan'
+          description: ''
+  /api/manager/session-plans/{id}/:
+    get:
+      operationId: manager_session_plans_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session plan.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionPlan'
+          description: ''
+    put:
+      operationId: manager_session_plans_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session plan.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionPlan'
+          description: ''
+    patch:
+      operationId: manager_session_plans_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session plan.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingSessionPlan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingSessionPlan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingSessionPlan'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionPlan'
+          description: ''
+    delete:
+      operationId: manager_session_plans_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session plan.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/manager/session-plans/{id}/generate-occurrences/:
+    post:
+      operationId: manager_session_plans_generate_occurrences_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training session plan.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingSessionPlan'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingSessionPlan'
+          description: ''
+  /api/manager/staff/:
+    get:
+      operationId: manager_staff_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    post:
+      operationId: manager_staff_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+  /api/manager/staff/{id}/:
+    get:
+      operationId: manager_staff_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    put:
+      operationId: manager_staff_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    patch:
+      operationId: manager_staff_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    delete:
+      operationId: manager_staff_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/manager/trainers/:
+    get:
+      operationId: manager_trainers_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    post:
+      operationId: manager_trainers_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+  /api/manager/trainers/{id}/:
+    get:
+      operationId: manager_trainers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    put:
+      operationId: manager_trainers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminEmployee'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    patch:
+      operationId: manager_trainers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminEmployee'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminEmployee'
+          description: ''
+    delete:
+      operationId: manager_trainers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/memberships/:
+    get:
+      operationId: memberships_list
+      tags:
+      - memberships
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Membership'
+          description: ''
+    post:
+      operationId: memberships_create
+      tags:
+      - memberships
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Membership'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+  /api/memberships/{id}/:
+    get:
+      operationId: memberships_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
+        required: true
+      tags:
+      - memberships
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+    put:
+      operationId: memberships_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
+        required: true
+      tags:
+      - memberships
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Membership'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+    patch:
+      operationId: memberships_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
+        required: true
+      tags:
+      - memberships
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMembership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMembership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMembership'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+    delete:
+      operationId: memberships_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
+        required: true
+      tags:
+      - memberships
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/organizations/:
+    get:
+      operationId: organizations_list
+      tags:
+      - organizations
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+          description: ''
+    post:
+      operationId: organizations_create
+      tags:
+      - organizations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+  /api/organizations/{id}/:
+    get:
+      operationId: organizations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization.
+        required: true
+      tags:
+      - organizations
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    put:
+      operationId: organizations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization.
+        required: true
+      tags:
+      - organizations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Organization'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Organization'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    patch:
+      operationId: organizations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization.
+        required: true
+      tags:
+      - organizations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganization'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganization'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    delete:
+      operationId: organizations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization.
+        required: true
+      tags:
+      - organizations
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/resources/:
+    get:
+      operationId: resources_list
+      tags:
+      - resources
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resource'
+          description: ''
+    post:
+      operationId: resources_create
+      tags:
+      - resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Resource'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Resource'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+          description: ''
+  /api/resources/{id}/:
+    get:
+      operationId: resources_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this resource.
+        required: true
+      tags:
+      - resources
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+          description: ''
+    put:
+      operationId: resources_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this resource.
+        required: true
+      tags:
+      - resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Resource'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Resource'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+          description: ''
+    patch:
+      operationId: resources_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this resource.
+        required: true
+      tags:
+      - resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedResource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedResource'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedResource'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+          description: ''
+    delete:
+      operationId: resources_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this resource.
+        required: true
+      tags:
+      - resources
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - en
+          - tr
+      tags:
+      - schema
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/services/:
+    get:
+      operationId: services_list
+      tags:
+      - services
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+          description: ''
+    post:
+      operationId: services_create
+      tags:
+      - services
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Service'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Service'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+  /api/services/{id}/:
+    get:
+      operationId: services_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this service.
+        required: true
+      tags:
+      - services
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    put:
+      operationId: services_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this service.
+        required: true
+      tags:
+      - services
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Service'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Service'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    patch:
+      operationId: services_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this service.
+        required: true
+      tags:
+      - services
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedService'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedService'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    delete:
+      operationId: services_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this service.
+        required: true
+      tags:
+      - services
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/slots/:
+    get:
+      operationId: slots_list
+      tags:
+      - slots
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SlotInventory'
+          description: ''
+    post:
+      operationId: slots_create
+      tags:
+      - slots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlotInventory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SlotInventory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SlotInventory'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlotInventory'
+          description: ''
+  /api/slots/{id}/:
+    get:
+      operationId: slots_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this slot inventory.
+        required: true
+      tags:
+      - slots
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlotInventory'
+          description: ''
+    put:
+      operationId: slots_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this slot inventory.
+        required: true
+      tags:
+      - slots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlotInventory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SlotInventory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SlotInventory'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlotInventory'
+          description: ''
+    patch:
+      operationId: slots_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this slot inventory.
+        required: true
+      tags:
+      - slots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSlotInventory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSlotInventory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSlotInventory'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlotInventory'
+          description: ''
+    delete:
+      operationId: slots_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this slot inventory.
+        required: true
+      tags:
+      - slots
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/staff/:
+    get:
+      operationId: staff_list
+      tags:
+      - staff
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StaffMember'
+          description: ''
+    post:
+      operationId: staff_create
+      tags:
+      - staff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaffMember'
+          description: ''
+  /api/staff/{id}/:
+    get:
+      operationId: staff_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - staff
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaffMember'
+          description: ''
+    put:
+      operationId: staff_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - staff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StaffMember'
+        required: true
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaffMember'
+          description: ''
+    patch:
+      operationId: staff_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - staff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStaffMember'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStaffMember'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStaffMember'
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaffMember'
+          description: ''
+    delete:
+      operationId: staff_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this staff member.
+        required: true
+      tags:
+      - staff
+      security:
+      - SupabaseJWT: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AdminCustomer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        profile_id:
+          type: string
+          format: uuid
+          readOnly: true
+        supabase_user_id:
+          type: string
+          format: uuid
+          writeOnly: true
+          nullable: true
+        full_name:
+          type: string
+          writeOnly: true
+          maxLength: 160
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        phone:
+          type: string
+          writeOnly: true
+          maxLength: 40
+        membership_code:
+          type: string
+          maxLength: 40
+        status:
+          $ref: '#/components/schemas/StatusD27Enum'
+        notes:
+          type: string
+        is_active:
+          type: boolean
+        deactivated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - deactivated_at
+      - full_name
+      - id
+      - membership_code
+      - profile_id
+      - updated_at
+    AdminEmployee:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        profile_id:
+          type: string
+          format: uuid
+          readOnly: true
+        supabase_user_id:
+          type: string
+          format: uuid
+          writeOnly: true
+          nullable: true
+        full_name:
+          type: string
+          writeOnly: true
+          maxLength: 160
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        phone:
+          type: string
+          writeOnly: true
+          maxLength: 40
+        display_name:
+          type: string
+          maxLength: 160
+        role_kind:
+          $ref: '#/components/schemas/RoleKindEnum'
+        job_title:
+          type: string
+          maxLength: 120
+        employment_status:
+          $ref: '#/components/schemas/EmploymentStatusEnum'
+        starts_on:
+          type: string
+          format: date
+          nullable: true
+        emergency_contact_name:
+          type: string
+          maxLength: 160
+        emergency_contact_phone:
+          type: string
+          maxLength: 40
+        notes:
+          type: string
+        is_active:
+          type: boolean
+        deactivated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - deactivated_at
+      - display_name
+      - full_name
+      - id
+      - profile_id
+      - role_kind
+      - updated_at
+    Attachment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        bucket:
+          type: string
+          maxLength: 80
+        path:
+          type: string
+          maxLength: 512
+        kind:
+          $ref: '#/components/schemas/KindEnum'
+        owner_customer:
+          type: string
+          format: uuid
+          nullable: true
+        booking:
+          type: string
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - bucket
+      - created_at
+      - id
+      - kind
+      - path
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        service:
+          type: string
+          format: uuid
+          readOnly: true
+        service_name:
+          type: string
+          readOnly: true
+        slot:
+          type: string
+          format: uuid
+        slot_starts_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BookingStatusEnum'
+          readOnly: true
+        channel:
+          $ref: '#/components/schemas/ChannelEnum'
+        attendee_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        qr_token:
+          type: string
+          format: uuid
+          readOnly: true
+        external_payment_reference:
+          type: string
+          maxLength: 160
+        cancelled_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - cancelled_at
+      - created_at
+      - customer
+      - id
+      - qr_token
+      - service
+      - service_name
+      - slot
+      - slot_starts_at
+      - status
+      - updated_at
+    BookingStatusEnum:
+      enum:
+      - reserved
+      - checked_in
+      - cancelled
+      - no_show
+      type: string
+      description: |-
+        * `reserved` - Reserved
+        * `checked_in` - Checked in
+        * `cancelled` - Cancelled
+        * `no_show` - No-show
+    CapacityModeEnum:
+      enum:
+      - shared_capacity
+      - staff_exclusive
+      - staff_and_resource
+      - entitlement
+      type: string
+      description: |-
+        * `shared_capacity` - Shared capacity
+        * `staff_exclusive` - Staff exclusive
+        * `staff_and_resource` - Staff and resource
+        * `entitlement` - Entitlement
+    ChannelEnum:
+      enum:
+      - web
+      - mobile
+      - front_desk
+      type: string
+      description: |-
+        * `web` - Web
+        * `mobile` - Mobile
+        * `front_desk` - Front desk
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/Profile'
+          readOnly: true
+        membership_code:
+          type: string
+          maxLength: 40
+        status:
+          $ref: '#/components/schemas/StatusD27Enum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - membership_code
+      - organization
+      - profile
+      - updated_at
+    EmploymentStatusEnum:
+      enum:
+      - active
+      - on_leave
+      - terminated
+      type: string
+      description: |-
+        * `active` - Active
+        * `on_leave` - On leave
+        * `terminated` - Terminated
+    KindEnum:
+      enum:
+      - receipt
+      - waiver
+      - avatar
+      - evidence
+      type: string
+      description: |-
+        * `receipt` - Receipt
+        * `waiver` - Waiver
+        * `avatar` - Avatar
+        * `evidence` - Evidence
+    Location:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 160
+        timezone:
+          type: string
+          maxLength: 64
+        address:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - organization
+      - updated_at
+    Membership:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        product_kind:
+          $ref: '#/components/schemas/ProductKindEnum'
+        valid_from:
+          type: string
+          format: date
+        valid_to:
+          type: string
+          format: date
+          nullable: true
+        remaining_credits:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        external_payment_reference:
+          type: string
+          maxLength: 160
+        is_active:
+          type: boolean
+      required:
+      - customer
+      - id
+      - product_kind
+      - valid_from
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - slug
+      - updated_at
+    PatchedAdminCustomer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        profile_id:
+          type: string
+          format: uuid
+          readOnly: true
+        supabase_user_id:
+          type: string
+          format: uuid
+          writeOnly: true
+          nullable: true
+        full_name:
+          type: string
+          writeOnly: true
+          maxLength: 160
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        phone:
+          type: string
+          writeOnly: true
+          maxLength: 40
+        membership_code:
+          type: string
+          maxLength: 40
+        status:
+          $ref: '#/components/schemas/StatusD27Enum'
+        notes:
+          type: string
+        is_active:
+          type: boolean
+        deactivated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedAdminEmployee:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        profile_id:
+          type: string
+          format: uuid
+          readOnly: true
+        supabase_user_id:
+          type: string
+          format: uuid
+          writeOnly: true
+          nullable: true
+        full_name:
+          type: string
+          writeOnly: true
+          maxLength: 160
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        phone:
+          type: string
+          writeOnly: true
+          maxLength: 40
+        display_name:
+          type: string
+          maxLength: 160
+        role_kind:
+          $ref: '#/components/schemas/RoleKindEnum'
+        job_title:
+          type: string
+          maxLength: 120
+        employment_status:
+          $ref: '#/components/schemas/EmploymentStatusEnum'
+        starts_on:
+          type: string
+          format: date
+          nullable: true
+        emergency_contact_name:
+          type: string
+          maxLength: 160
+        emergency_contact_phone:
+          type: string
+          maxLength: 40
+        notes:
+          type: string
+        is_active:
+          type: boolean
+        deactivated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedBooking:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        service:
+          type: string
+          format: uuid
+          readOnly: true
+        service_name:
+          type: string
+          readOnly: true
+        slot:
+          type: string
+          format: uuid
+        slot_starts_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BookingStatusEnum'
+          readOnly: true
+        channel:
+          $ref: '#/components/schemas/ChannelEnum'
+        attendee_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        qr_token:
+          type: string
+          format: uuid
+          readOnly: true
+        external_payment_reference:
+          type: string
+          maxLength: 160
+        cancelled_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCustomer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/Profile'
+          readOnly: true
+        membership_code:
+          type: string
+          maxLength: 40
+        status:
+          $ref: '#/components/schemas/StatusD27Enum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedLocation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 160
+        timezone:
+          type: string
+          maxLength: 64
+        address:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedMembership:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        product_kind:
+          $ref: '#/components/schemas/ProductKindEnum'
+        valid_from:
+          type: string
+          format: date
+        valid_to:
+          type: string
+          format: date
+          nullable: true
+        remaining_credits:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        external_payment_reference:
+          type: string
+          maxLength: 160
+        is_active:
+          type: boolean
+    PatchedOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedResource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        location:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 160
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKindEnum'
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        is_active:
+          type: boolean
+    PatchedService:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        location:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 160
+        service_kind:
+          $ref: '#/components/schemas/ServiceKindEnum'
+        duration_min:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        slot_interval_min:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        capacity_mode:
+          $ref: '#/components/schemas/CapacityModeEnum'
+        requires_staff:
+          type: boolean
+        requires_resource:
+          type: boolean
+        price_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        price_currency:
+          type: string
+          maxLength: 3
+        is_active:
+          type: boolean
+    PatchedSlotInventory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        service:
+          type: string
+          format: uuid
+        service_name:
+          type: string
+          readOnly: true
+        staff_member:
+          type: string
+          format: uuid
+          nullable: true
+        resource:
+          type: string
+          format: uuid
+          nullable: true
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        capacity_total:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        capacity_reserved:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        available_capacity:
+          type: integer
+          readOnly: true
+        is_published:
+          type: boolean
+    PatchedStaffMember:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        profile:
+          type: string
+          format: uuid
+          nullable: true
+        display_name:
+          type: string
+          maxLength: 160
+        role_kind:
+          $ref: '#/components/schemas/RoleKindEnum'
+        is_active:
+          type: boolean
+    PatchedTrainingSessionOccurrence:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        plan:
+          type: string
+          format: uuid
+        plan_title:
+          type: string
+          readOnly: true
+        session_kind:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+          readOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        trainer:
+          type: string
+          format: uuid
+          readOnly: true
+        trainer_name:
+          type: string
+          readOnly: true
+        sequence_number:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/TrainingSessionOccurrenceStatusEnum'
+        location_name:
+          type: string
+          maxLength: 160
+        notes:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedTrainingSessionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        trainer:
+          type: string
+          format: uuid
+        trainer_name:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 160
+        session_kind:
+          $ref: '#/components/schemas/SessionKindEnum'
+        status:
+          $ref: '#/components/schemas/TrainingSessionPlanStatusEnum'
+        payment_status:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        payment_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        amount_paid:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        amount_due:
+          type: integer
+          readOnly: true
+        payment_currency:
+          type: string
+          maxLength: 3
+        payment_provider:
+          type: string
+          maxLength: 80
+        external_payment_reference:
+          type: string
+          maxLength: 160
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+        payment_notes:
+          type: string
+        total_sessions:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        default_duration_min:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        starts_on:
+          type: string
+          format: date
+          nullable: true
+        ends_on:
+          type: string
+          format: date
+          nullable: true
+        details:
+          type: string
+        is_active:
+          type: boolean
+        scheduled_count:
+          type: integer
+          readOnly: true
+        completed_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PaymentStatusEnum:
+      enum:
+      - unpaid
+      - partial
+      - paid
+      - refunded
+      - external_pending
+      type: string
+      description: |-
+        * `unpaid` - Unpaid
+        * `partial` - Partial
+        * `paid` - Paid
+        * `refunded` - Refunded
+        * `external_pending` - External pending
+    ProductKindEnum:
+      enum:
+      - membership
+      - credit_pack
+      - day_pass
+      type: string
+      description: |-
+        * `membership` - Membership
+        * `credit_pack` - Credit pack
+        * `day_pass` - Day pass
+    Profile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        supabase_user_id:
+          type: string
+          format: uuid
+          nullable: true
+        full_name:
+          type: string
+          maxLength: 160
+        phone:
+          type: string
+          maxLength: 40
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - full_name
+      - id
+      - updated_at
+    Resource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        location:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 160
+        resource_kind:
+          $ref: '#/components/schemas/ResourceKindEnum'
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        is_active:
+          type: boolean
+      required:
+      - id
+      - location
+      - name
+      - resource_kind
+    ResourceKindEnum:
+      enum:
+      - pool_lane
+      - room
+      - entry_gate
+      type: string
+      description: |-
+        * `pool_lane` - Pool lane
+        * `room` - Room
+        * `entry_gate` - Entry gate
+    RoleKindEnum:
+      enum:
+      - admin
+      - manager
+      - personal_trainer
+      - front_desk
+      - therapist
+      type: string
+      description: |-
+        * `admin` - Admin
+        * `manager` - Manager
+        * `personal_trainer` - Personal trainer
+        * `front_desk` - Front desk
+        * `therapist` - Therapist
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        location:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 160
+        service_kind:
+          $ref: '#/components/schemas/ServiceKindEnum'
+        duration_min:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        slot_interval_min:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        capacity_mode:
+          $ref: '#/components/schemas/CapacityModeEnum'
+        requires_staff:
+          type: boolean
+        requires_resource:
+          type: boolean
+        price_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        price_currency:
+          type: string
+          maxLength: 3
+        is_active:
+          type: boolean
+      required:
+      - capacity_mode
+      - duration_min
+      - id
+      - location
+      - name
+      - service_kind
+    ServiceKindEnum:
+      enum:
+      - pool
+      - personal_training
+      - massage
+      - day_pass
+      type: string
+      description: |-
+        * `pool` - Pool
+        * `personal_training` - Personal training
+        * `massage` - Massage
+        * `day_pass` - Day pass
+    SessionKindEnum:
+      enum:
+      - personal_training
+      - yoga
+      - swimming_lesson
+      - boxing
+      - pilates
+      - rehab
+      - other
+      type: string
+      description: |-
+        * `personal_training` - Personal training
+        * `yoga` - Yoga
+        * `swimming_lesson` - Swimming lesson
+        * `boxing` - Boxing
+        * `pilates` - Pilates
+        * `rehab` - Rehab
+        * `other` - Other
+    SlotInventory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        service:
+          type: string
+          format: uuid
+        service_name:
+          type: string
+          readOnly: true
+        staff_member:
+          type: string
+          format: uuid
+          nullable: true
+        resource:
+          type: string
+          format: uuid
+          nullable: true
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        capacity_total:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        capacity_reserved:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        available_capacity:
+          type: integer
+          readOnly: true
+        is_published:
+          type: boolean
+      required:
+      - available_capacity
+      - ends_at
+      - id
+      - service
+      - service_name
+      - starts_at
+    StaffMember:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+        profile:
+          type: string
+          format: uuid
+          nullable: true
+        display_name:
+          type: string
+          maxLength: 160
+        role_kind:
+          $ref: '#/components/schemas/RoleKindEnum'
+        is_active:
+          type: boolean
+      required:
+      - display_name
+      - id
+      - organization
+      - role_kind
+    StatusD27Enum:
+      enum:
+      - active
+      - guest
+      - suspended
+      type: string
+      description: |-
+        * `active` - Active
+        * `guest` - Guest
+        * `suspended` - Suspended
+    TrainingSessionOccurrence:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        plan:
+          type: string
+          format: uuid
+        plan_title:
+          type: string
+          readOnly: true
+        session_kind:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+          readOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        trainer:
+          type: string
+          format: uuid
+          readOnly: true
+        trainer_name:
+          type: string
+          readOnly: true
+        sequence_number:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/TrainingSessionOccurrenceStatusEnum'
+        location_name:
+          type: string
+          maxLength: 160
+        notes:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - customer
+      - customer_name
+      - ends_at
+      - id
+      - plan
+      - plan_title
+      - sequence_number
+      - session_kind
+      - starts_at
+      - trainer
+      - trainer_name
+      - updated_at
+    TrainingSessionOccurrenceStatusEnum:
+      enum:
+      - scheduled
+      - completed
+      - cancelled
+      - no_show
+      - rescheduled
+      type: string
+      description: |-
+        * `scheduled` - Scheduled
+        * `completed` - Completed
+        * `cancelled` - Cancelled
+        * `no_show` - No-show
+        * `rescheduled` - Rescheduled
+    TrainingSessionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        trainer:
+          type: string
+          format: uuid
+        trainer_name:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 160
+        session_kind:
+          $ref: '#/components/schemas/SessionKindEnum'
+        status:
+          $ref: '#/components/schemas/TrainingSessionPlanStatusEnum'
+        payment_status:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        payment_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        amount_paid:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        amount_due:
+          type: integer
+          readOnly: true
+        payment_currency:
+          type: string
+          maxLength: 3
+        payment_provider:
+          type: string
+          maxLength: 80
+        external_payment_reference:
+          type: string
+          maxLength: 160
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+        payment_notes:
+          type: string
+        total_sessions:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        default_duration_min:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 1
+          format: int64
+        starts_on:
+          type: string
+          format: date
+          nullable: true
+        ends_on:
+          type: string
+          format: date
+          nullable: true
+        details:
+          type: string
+        is_active:
+          type: boolean
+        scheduled_count:
+          type: integer
+          readOnly: true
+        completed_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - amount_due
+      - completed_count
+      - created_at
+      - customer
+      - customer_name
+      - id
+      - organization
+      - scheduled_count
+      - session_kind
+      - title
+      - total_sessions
+      - trainer
+      - trainer_name
+      - updated_at
+    TrainingSessionPlanStatusEnum:
+      enum:
+      - draft
+      - active
+      - paused
+      - completed
+      - cancelled
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `active` - Active
+        * `paused` - Paused
+        * `completed` - Completed
+        * `cancelled` - Cancelled
+  securitySchemes:
+    SupabaseJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

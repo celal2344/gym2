@@ -1,0 +1,10 @@
+{
+  "name": "@repo/backend-domain",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "echo \"Backend domain is checked through the Django backend workspace\"",
+    "check-types": "echo \"Backend domain is checked through the Django backend workspace\"",
+    "test": "echo \"Backend domain is tested through the Django backend workspace\""
+  }
+}

@@ -1,0 +1,14 @@
+project_id = "gymops"
+
+[api]
+enabled = true
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["gymops://auth/callback"]
+
+[db]
+major_version = 17
