@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 from .models import (
     Attachment,
@@ -316,6 +318,91 @@ class TrainingProgramSerializer(serializers.ModelSerializer):
 
     def get_assignment_count(self, instance) -> int:
         return instance.assignments.filter(is_active=True).count()
+
+    def validate_content(self, value):
+        validate_training_program_content(value)
+        return value
+
+
+def _field(data, snake_name: str, camel_name: str, default=None):
+    if snake_name in data:
+        return data[snake_name]
+    return data.get(camel_name, default)
+
+
+def _validate_optional_url(value, field_name: str):
+    if not value:
+        return
+    validator = URLValidator()
+    try:
+        validator(value)
+    except DjangoValidationError as exc:
+        raise serializers.ValidationError({field_name: "Must be a valid URL."}) from exc
+
+
+def validate_training_program_content(value):
+    if value in ({}, None):
+        return
+    if not isinstance(value, dict):
+        raise serializers.ValidationError("Program content must be an object.")
+
+    weeks = value.get("weeks", [])
+    if not isinstance(weeks, list):
+        raise serializers.ValidationError({"weeks": "Weeks must be a list."})
+
+    for week_index, week in enumerate(weeks, start=1):
+        if not isinstance(week, dict):
+            raise serializers.ValidationError({"weeks": f"Week {week_index} must be an object."})
+        if len(str(week.get("title", "")).strip()) < 2:
+            raise serializers.ValidationError({"weeks": f"Week {week_index} needs a title."})
+
+        days = week.get("days", [])
+        if not isinstance(days, list):
+            raise serializers.ValidationError({"weeks": f"Week {week_index} days must be a list."})
+
+        for day_index, day in enumerate(days, start=1):
+            if not isinstance(day, dict):
+                raise serializers.ValidationError({"weeks": f"Week {week_index} day {day_index} must be an object."})
+            if len(str(day.get("title", "")).strip()) < 2:
+                raise serializers.ValidationError({"weeks": f"Week {week_index} day {day_index} needs a title."})
+
+            exercises = day.get("exercises", [])
+            if not isinstance(exercises, list):
+                raise serializers.ValidationError(
+                    {"weeks": f"Week {week_index} day {day_index} exercises must be a list."}
+                )
+
+            for exercise_index, exercise in enumerate(exercises, start=1):
+                if not isinstance(exercise, dict):
+                    raise serializers.ValidationError(
+                        {"weeks": f"Week {week_index} day {day_index} exercise {exercise_index} must be an object."}
+                    )
+                if len(str(_field(exercise, "exercise_name", "exerciseName", "")).strip()) < 2:
+                    raise serializers.ValidationError(
+                        {"weeks": f"Week {week_index} day {day_index} exercise {exercise_index} needs a name."}
+                    )
+                sets = _field(exercise, "sets", "sets", 0)
+                if not isinstance(sets, int) or sets < 1 or sets > 20:
+                    raise serializers.ValidationError(
+                        {"weeks": f"Week {week_index} day {day_index} exercise {exercise_index} sets must be 1-20."}
+                    )
+                reps = str(_field(exercise, "reps", "reps", "")).strip()
+                if not reps:
+                    raise serializers.ValidationError(
+                        {"weeks": f"Week {week_index} day {day_index} exercise {exercise_index} needs reps or duration."}
+                    )
+                rest_seconds = _field(exercise, "rest_seconds", "restSeconds", 0)
+                if not isinstance(rest_seconds, int) or rest_seconds < 0 or rest_seconds > 600:
+                    raise serializers.ValidationError(
+                        {"weeks": f"Week {week_index} day {day_index} exercise {exercise_index} rest must be 0-600 seconds."}
+                    )
+                visual_cue = _field(exercise, "visual_cue", "visualCue", {}) or {}
+                if not isinstance(visual_cue, dict):
+                    raise serializers.ValidationError(
+                        {"weeks": f"Week {week_index} day {day_index} exercise {exercise_index} visual cue must be an object."}
+                    )
+                _validate_optional_url(_field(visual_cue, "image_url", "imageUrl", ""), "image_url")
+                _validate_optional_url(_field(visual_cue, "source_url", "sourceUrl", ""), "source_url")
 
 
 class TrainingProgramAssignmentSerializer(serializers.ModelSerializer):

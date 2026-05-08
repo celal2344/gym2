@@ -1,3 +1,4 @@
+from copy import deepcopy
 from datetime import timedelta
 from uuid import uuid4
 
@@ -137,6 +138,47 @@ class AdminAuthorizationTests(TestCase):
 
     def authenticate_as_manager(self):
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token_for(self.manager_user_id)}")
+
+    def valid_program_content(self):
+        return {
+            "version": 1,
+            "source_attribution": "Free Exercise DB optional visual cue links.",
+            "weeks": [
+                {
+                    "id": "week-1",
+                    "title": "Week 1",
+                    "days": [
+                        {
+                            "id": "day-1",
+                            "title": "Day 1",
+                            "focus": "Strength",
+                            "exercises": [
+                                {
+                                    "id": "exercise-1",
+                                    "exercise_name": "Goblet squat",
+                                    "target_muscles": "legs, core",
+                                    "equipment": "dumbbell",
+                                    "sets": 3,
+                                    "reps": "8-10",
+                                    "rest_seconds": 75,
+                                    "notes": "",
+                                    "visual_cue": {
+                                        "setup": "Feet shoulder-width, weight close to the chest.",
+                                        "action": "Sit between the hips, then drive the floor away.",
+                                        "tempo": "Controlled down, strong up.",
+                                        "breathing": "Inhale before lowering, exhale after standing.",
+                                        "safety": "Keep knees tracking over toes.",
+                                        "image_url": "",
+                                        "source_name": "Free Exercise DB",
+                                        "source_url": "https://github.com/yuhonas/free-exercise-db",
+                                    },
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ],
+        }
 
     def test_admin_can_create_list_update_and_deactivate_employee(self):
         self.authenticate_as_admin()
@@ -387,12 +429,13 @@ class AdminAuthorizationTests(TestCase):
                 "goal": "Build baseline strength",
                 "difficulty": "beginner",
                 "status": TrainingProgram.Status.DRAFT,
-                "content": {},
+                "content": self.valid_program_content(),
                 "is_active": True,
             },
             format="json",
         )
         self.assertEqual(program_response.status_code, 201)
+        self.assertEqual(program_response.data["content"]["weeks"][0]["days"][0]["exercises"][0]["sets"], 3)
 
         patch_response = self.client.patch(
             reverse("programs-detail", args=[program_response.data["id"]]),
@@ -417,6 +460,28 @@ class AdminAuthorizationTests(TestCase):
         self.assertEqual(assignment_response.status_code, 201)
         self.assertEqual(assignment_response.data["program_title"], "Strength foundation")
         self.assertEqual(assignment_response.data["customer_membership_code"], "M-PROGRAM")
+
+    def test_manager_program_content_validation_rejects_invalid_exercise_payload(self):
+        self.authenticate_as_manager()
+        invalid_content = deepcopy(self.valid_program_content())
+        invalid_content["weeks"][0]["days"][0]["exercises"][0]["sets"] = 0
+
+        response = self.client.post(
+            reverse("programs-list"),
+            {
+                "title": "Invalid strength plan",
+                "summary": "",
+                "goal": "Build baseline strength",
+                "difficulty": "beginner",
+                "status": TrainingProgram.Status.DRAFT,
+                "content": invalid_content,
+                "is_active": True,
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("content", response.data["details"])
 
     def test_manager_session_plan_rejects_other_organization_customer(self):
         self.authenticate_as_manager()

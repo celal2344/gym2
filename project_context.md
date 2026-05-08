@@ -48,7 +48,7 @@ Admin scope is organization-local. There is no platform/global admin behavior in
 - Web route: `/app`
 - `GET /api/app/program-assignments/`
 
-The member workspace currently shows assigned training program shells, status, date range, trainer/assigner name, and notes. This is the first customer self-service slice; booking, attendance history, memberships, documents, and notifications remain future work.
+The member workspace currently shows assigned training programs, status, date range, trainer/assigner name, notes, structure counts, and the first exercise cues. This is the first customer self-service slice; booking, attendance history, memberships, documents, and notifications remain future work.
 
 ## Sample Users
 
@@ -107,7 +107,7 @@ Implemented after the initial MVP:
 
 - Membership lifecycle: `MembershipPlan` and extended `Membership` now cover plan metadata, access rules, member status, freezes, cancellations, expiry, credits, and external payment reference tracking.
 - General attendance: `MemberCheckIn` now covers front-desk and kiosk-style check-ins outside class/session booking records.
-- Program assignment: `TrainingProgram` and `TrainingProgramAssignment` let admins/managers/trainers assign blank program shells to gym goers while detailed program creation remains a future feature.
+- Program creation and assignment: `TrainingProgram` and `TrainingProgramAssignment` let admins/managers/trainers create structured week/day/exercise program content and assign programs to gym goers. Program exercise content supports prescriptions, rest, notes, and simple visual cue metadata. Optional visual links can reference a free source such as Free Exercise DB.
 
 Still missing compared with mature gym ERP systems:
 
@@ -147,6 +147,7 @@ All shared models, types, schemas, constants, translations, and domain contracts
 - `memberships`: membership plan, membership lifecycle, and general check-in schemas
 - `services`: service, slot, and resource schemas
 - `sessions`: trainer-led session plan and occurrence schemas
+- `programs`: training program content, assignment schemas, statuses, and exercise cue contracts
 - `dashboard`: shared dashboard metric fixtures
 - Django ORM models, serializers, permissions, services, migrations, and tests: `packages/backend-domain`.
 - App folders should consume package contracts rather than defining independent domain shapes.
