@@ -11,7 +11,6 @@ const python = existsSync(pythonPath) ? pythonPath : "python";
 const result = spawnSync(python, ["manage.py", ...process.argv.slice(2)], {
   cwd: process.cwd(),
   stdio: "inherit",
-  shell: process.platform === "win32",
 });
 
 process.exit(result.status ?? 1);

@@ -31,6 +31,8 @@ bun --cwd apps/backend run migrate
 bun --cwd apps/backend run dev
 ```
 
+The backend dev server binds to `127.0.0.1:8000` by default. Use `bun --cwd apps/backend run dev:lan` or `bun run backend:dev:lan` only when you need LAN access for another device.
+
 Backend API docs:
 
 - OpenAPI schema: `http://localhost:8000/api/schema/`

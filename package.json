@@ -12,6 +12,7 @@
     "check-types": "turbo run check-types",
     "backend:migrate": "npm --workspace backend run migrate",
     "backend:dev": "npm --workspace backend run dev",
+    "backend:dev:lan": "npm --workspace backend run dev:lan",
     "api:generate-types": "bun run --cwd apps/backend --bun scripts/manage.mjs spectacular --file schema.yml && openapi-typescript apps/backend/schema.yml -o apps/web/lib/api/generated/schema.d.ts"
   },
   "devDependencies": {

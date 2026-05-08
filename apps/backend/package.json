@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/manage.mjs runserver 0.0.0.0:8000",
+    "dev": "node scripts/manage.mjs runserver 127.0.0.1:8000",
+    "dev:lan": "node scripts/manage.mjs runserver 0.0.0.0:8000",
     "migrate": "node scripts/manage.mjs migrate",
     "makemigrations": "node scripts/manage.mjs makemigrations",
     "seed:sample-users": "node scripts/manage.mjs seed_sample_users",

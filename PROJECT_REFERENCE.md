@@ -44,6 +44,7 @@ GymOps is a Turborepo monorepo for a gym reservation system covering pool slots,
 - `bun --cwd apps/backend run migrate`
 - `bun run --cwd apps/backend seed:sample-users`
 - `bun --cwd apps/backend run dev`
+- `bun --cwd apps/backend run dev:lan`
 
 ## Notes For Future Work
 
