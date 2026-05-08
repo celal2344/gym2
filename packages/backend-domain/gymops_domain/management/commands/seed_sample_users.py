@@ -7,6 +7,9 @@ from django.utils import timezone
 from gymops_domain.models import (
     Customer,
     Location,
+    MemberCheckIn,
+    Membership,
+    MembershipPlan,
     Organization,
     Profile,
     StaffMember,
@@ -104,7 +107,52 @@ class Command(BaseCommand):
             organization=organization,
             profile__supabase_user_id=UUID("10000000-0000-4000-8000-000000000003"),
         )
+        manager = StaffMember.objects.get(
+            organization=organization,
+            profile__supabase_user_id=UUID("10000000-0000-4000-8000-000000000002"),
+        )
         customer = Customer.objects.get(organization=organization, membership_code="M-SAMPLE-001")
+        membership_plan, _ = MembershipPlan.objects.update_or_create(
+            organization=organization,
+            name="Sample unlimited monthly",
+            defaults={
+                "product_kind": MembershipPlan.ProductKind.MEMBERSHIP,
+                "billing_cycle": MembershipPlan.BillingCycle.MONTHLY,
+                "access_rule": MembershipPlan.AccessRule.UNLIMITED,
+                "visit_limit_per_period": None,
+                "session_credit_amount": 0,
+                "price_amount": 250000,
+                "price_currency": "TRY",
+                "is_active": True,
+            },
+        )
+        membership, _ = Membership.objects.update_or_create(
+            customer=customer,
+            plan=membership_plan,
+            defaults={
+                "product_kind": Membership.ProductKind.MEMBERSHIP,
+                "status": Membership.Status.ACTIVE,
+                "valid_from": datetime(2026, 5, 1).date(),
+                "valid_to": datetime(2026, 6, 1).date(),
+                "remaining_credits": 0,
+                "auto_renew": True,
+                "external_payment_reference": "sample-membership-payment",
+                "is_active": True,
+            },
+        )
+        MemberCheckIn.objects.update_or_create(
+            organization=organization,
+            customer=customer,
+            checked_in_at=timezone.make_aware(datetime(2026, 5, 8, 8, 30)),
+            defaults={
+                "membership": membership,
+                "method": MemberCheckIn.Method.MEMBERSHIP_CODE,
+                "source": MemberCheckIn.Source.FRONT_DESK,
+                "handled_by": manager,
+                "notes": "Sample front-desk visit.",
+                "is_voided": False,
+            },
+        )
         plan, _ = TrainingSessionPlan.objects.update_or_create(
             organization=organization,
             customer=customer,

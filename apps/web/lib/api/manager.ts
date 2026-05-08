@@ -6,6 +6,13 @@ import {
   employeeCreateSchema,
   employeeSchema,
   generateTrainingSessionOccurrencesSchema,
+  checkInSummarySchema,
+  memberCheckInCreateSchema,
+  memberCheckInSchema,
+  membershipCreateSchema,
+  membershipPlanCreateSchema,
+  membershipPlanSchema,
+  membershipSchema,
   trainingSessionOccurrenceCreateSchema,
   trainingSessionOccurrenceSchema,
   trainingSessionPlanCreateSchema,
@@ -15,6 +22,12 @@ import {
   type Employee,
   type EmployeeCreate,
   type GenerateTrainingSessionOccurrences,
+  type MemberCheckIn,
+  type MemberCheckInCreate,
+  type Membership,
+  type MembershipCreate,
+  type MembershipPlan,
+  type MembershipPlanCreate,
   type TrainingSessionOccurrence,
   type TrainingSessionOccurrenceCreate,
   type TrainingSessionPlan,
@@ -115,6 +128,109 @@ export async function deactivateManagerGymGoer(customer: CustomerRecord) {
     method: "DELETE",
   });
   return customerSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function listManagerMembershipPlans() {
+  const data = await request<Record<string, unknown>[]>("/manager/membership-plans/");
+  return data.map((item) => membershipPlanSchema.parse(toCamelCaseRecord(item)));
+}
+
+export async function createManagerMembershipPlan(payload: MembershipPlanCreate) {
+  const parsed = membershipPlanCreateSchema.parse(payload);
+  const data = await request<Record<string, unknown>>("/manager/membership-plans/", {
+    method: "POST",
+    body: jsonBody(parsed),
+  });
+  return membershipPlanSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function updateManagerMembershipPlan(id: string, payload: Partial<MembershipPlanCreate>) {
+  const data = await request<Record<string, unknown>>(`/manager/membership-plans/${id}/`, {
+    method: "PATCH",
+    body: jsonBody(payload),
+  });
+  return membershipPlanSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function deactivateManagerMembershipPlan(plan: MembershipPlan) {
+  const data = await request<Record<string, unknown>>(`/manager/membership-plans/${plan.id}/`, {
+    method: "DELETE",
+  });
+  return membershipPlanSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function listManagerMemberships(params: { customer?: string; status?: string } = {}) {
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value) {
+      searchParams.set(key, value);
+    }
+  }
+  const suffix = searchParams.size ? `?${searchParams.toString()}` : "";
+  const data = await request<Record<string, unknown>[]>(`/manager/memberships/${suffix}`);
+  return data.map((item) => membershipSchema.parse(toCamelCaseRecord(item)));
+}
+
+export async function createManagerMembership(payload: MembershipCreate) {
+  const parsed = membershipCreateSchema.parse(payload);
+  const data = await request<Record<string, unknown>>("/manager/memberships/", {
+    method: "POST",
+    body: jsonBody(parsed),
+  });
+  return membershipSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function updateManagerMembership(id: string, payload: Partial<MembershipCreate>) {
+  const data = await request<Record<string, unknown>>(`/manager/memberships/${id}/`, {
+    method: "PATCH",
+    body: jsonBody(payload),
+  });
+  return membershipSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function deactivateManagerMembership(membership: Membership) {
+  const data = await request<Record<string, unknown>>(`/manager/memberships/${membership.id}/`, {
+    method: "DELETE",
+  });
+  return membershipSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function listManagerCheckIns(params: { customer?: string; startsAfter?: string; startsBefore?: string } = {}) {
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value) {
+      searchParams.set(key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`), value);
+    }
+  }
+  const suffix = searchParams.size ? `?${searchParams.toString()}` : "";
+  const data = await request<Record<string, unknown>[]>(`/manager/check-ins/${suffix}`);
+  return data.map((item) => memberCheckInSchema.parse(toCamelCaseRecord(item)));
+}
+
+export async function getManagerCheckInSummary() {
+  const data = await request<Record<string, unknown>>("/manager/check-ins/summary/");
+  return checkInSummarySchema.parse(toCamelCaseRecord(data));
+}
+
+export async function createManagerCheckIn(payload: MemberCheckInCreate) {
+  const parsed = memberCheckInCreateSchema.parse(payload);
+  const data = await request<Record<string, unknown>>("/manager/check-ins/", {
+    method: "POST",
+    body: jsonBody(parsed),
+  });
+  return memberCheckInSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function updateManagerCheckIn(id: string, payload: Partial<MemberCheckInCreate>) {
+  const data = await request<Record<string, unknown>>(`/manager/check-ins/${id}/`, {
+    method: "PATCH",
+    body: jsonBody(payload),
+  });
+  return memberCheckInSchema.parse(toCamelCaseRecord(data));
+}
+
+export async function voidManagerCheckIn(checkIn: MemberCheckIn) {
+  return updateManagerCheckIn(checkIn.id, { isVoided: true });
 }
 
 export async function listManagerSessionPlans(params: { trainer?: string; customer?: string; status?: string } = {}) {

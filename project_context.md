@@ -69,13 +69,20 @@ Users currently mean gym customers/members. They include linked profile details,
 ## Current Manager Capabilities
 
 - Web route: `/manager`
-- Sidebar sections: dashboard, staff, trainers, gym goers, sessions.
+- Sidebar sections: dashboard, staff, trainers, gym goers, memberships, check-ins, sessions, programs.
 - `GET/POST /api/manager/staff/`
 - `GET/PATCH/DELETE /api/manager/staff/{id}/`
 - `GET/POST /api/manager/trainers/`
 - `GET/PATCH/DELETE /api/manager/trainers/{id}/`
 - `GET/POST /api/manager/gym-goers/`
 - `GET/PATCH/DELETE /api/manager/gym-goers/{id}/`
+- `GET/POST /api/manager/membership-plans/`
+- `GET/PATCH/DELETE /api/manager/membership-plans/{id}/`
+- `GET/POST /api/manager/memberships/`
+- `GET/PATCH/DELETE /api/manager/memberships/{id}/`
+- `GET/POST /api/manager/check-ins/`
+- `GET/PATCH /api/manager/check-ins/{id}/`
+- `GET /api/manager/check-ins/summary/`
 - `GET/POST /api/manager/session-plans/`
 - `GET/PATCH/DELETE /api/manager/session-plans/{id}/`
 - `POST /api/manager/session-plans/{id}/generate-occurrences/`
@@ -83,7 +90,27 @@ Users currently mean gym customers/members. They include linked profile details,
 - `GET/PATCH/DELETE /api/manager/session-occurrences/{id}/`
 - `GET /api/manager/session-occurrences/calendar/?year=YYYY&month=M`
 
-Manager staff CRUD can manage staff records across operational roles. Manager trainer CRUD is a personal-trainer-specific staff surface and forces `role_kind = personal_trainer` on create/update. Manager gym-goer CRUD manages customer/member profiles. All manager deletes are soft deactivations.
+Manager staff CRUD can manage staff records across operational roles. Manager trainer CRUD is a personal-trainer-specific staff surface and forces `role_kind = personal_trainer` on create/update. Manager gym-goer CRUD manages customer/member profiles. Membership plan CRUD defines sellable plan shells, access rules, billing cadence metadata, visit limits, session-credit quantities, and external price metadata. Member membership CRUD tracks active/trial/frozen/cancelled/expired lifecycle status, validity dates, remaining credits, auto-renew intent, cancellation reason, and external payment references. Check-ins create a general member attendance ledger for front-desk, kiosk, membership-code, QR, and manual access flows. All manager deletes are soft deactivations or lifecycle cancellations.
+
+## Real-World Gym ERP Gap Notes
+
+Market scan references: Glofox, PushPress, Wodify, Zen Planner, GymMaster, TeamUp, ABC Fitness, and ClubReady-style systems consistently emphasize membership lifecycle, fast check-ins, attendance reporting, member booking, staff/trainer calendars, reporting, leads/trials, communications, waivers, and documents.
+
+Implemented after the initial MVP:
+
+- Membership lifecycle: `MembershipPlan` and extended `Membership` now cover plan metadata, access rules, member status, freezes, cancellations, expiry, credits, and external payment reference tracking.
+- General attendance: `MemberCheckIn` now covers front-desk and kiosk-style check-ins outside class/session booking records.
+- Program assignment: `TrainingProgram` and `TrainingProgramAssignment` let admins/managers/trainers assign blank program shells to gym goers while detailed program creation remains a future feature.
+
+Still missing compared with mature gym ERP systems:
+
+- Member self-service booking with waitlists, capacity rules, cutoffs, and cancellation windows.
+- Trainer self-service panel for own calendar, assigned members, attendance, and program updates.
+- Member app/web panel for own memberships, bookings, attendance history, program assignments, and documents.
+- Lead/trial pipeline with source, follow-up dates, conversion, and lost reasons.
+- Communication workflows for reminders, expiry alerts, no-show follow-up, and filtered announcements.
+- Waivers/documents, emergency/medical notes, and agreement acceptance history.
+- Operational reporting for retention, no-shows, class utilization, trainer utilization, expiring memberships, and attendance trends.
 
 ## Session Logic
 
@@ -110,6 +137,7 @@ All shared models, types, schemas, constants, translations, and domain contracts
 - `accounts`: employees, customers, profile input schemas
 - `auth`: role constants and role types
 - `bookings`: booking schemas and booking status/channel constants
+- `memberships`: membership plan, membership lifecycle, and general check-in schemas
 - `services`: service, slot, and resource schemas
 - `sessions`: trainer-led session plan and occurrence schemas
 - `dashboard`: shared dashboard metric fixtures

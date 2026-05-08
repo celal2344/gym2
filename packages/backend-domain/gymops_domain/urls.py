@@ -5,6 +5,9 @@ from .admin_views import AdminCustomerViewSet, AdminEmployeeViewSet
 from .auth_views import AuthMeView
 from .manager_views import (
     ManagerGymGoerViewSet,
+    ManagerMemberCheckInViewSet,
+    ManagerMembershipPlanViewSet,
+    ManagerMembershipViewSet,
     ManagerStaffViewSet,
     ManagerTrainerViewSet,
     ManagerTrainingSessionOccurrenceViewSet,
@@ -42,6 +45,9 @@ router.register("admin/customers", AdminCustomerViewSet, basename="admin-custome
 router.register("manager/staff", ManagerStaffViewSet, basename="manager-staff")
 router.register("manager/trainers", ManagerTrainerViewSet, basename="manager-trainers")
 router.register("manager/gym-goers", ManagerGymGoerViewSet, basename="manager-gym-goers")
+router.register("manager/membership-plans", ManagerMembershipPlanViewSet, basename="manager-membership-plans")
+router.register("manager/memberships", ManagerMembershipViewSet, basename="manager-memberships")
+router.register("manager/check-ins", ManagerMemberCheckInViewSet, basename="manager-check-ins")
 router.register("manager/session-plans", ManagerTrainingSessionPlanViewSet, basename="manager-session-plans")
 router.register(
     "manager/session-occurrences",

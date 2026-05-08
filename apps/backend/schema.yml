@@ -894,6 +894,165 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/manager/check-ins/:
+    get:
+      operationId: manager_check_ins_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberCheckIn'
+          description: ''
+    post:
+      operationId: manager_check_ins_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberCheckIn'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberCheckIn'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberCheckIn'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberCheckIn'
+          description: ''
+  /api/manager/check-ins/{id}/:
+    get:
+      operationId: manager_check_ins_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this member check in.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberCheckIn'
+          description: ''
+    put:
+      operationId: manager_check_ins_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this member check in.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberCheckIn'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberCheckIn'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberCheckIn'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberCheckIn'
+          description: ''
+    patch:
+      operationId: manager_check_ins_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this member check in.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberCheckIn'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberCheckIn'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberCheckIn'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberCheckIn'
+          description: ''
+    delete:
+      operationId: manager_check_ins_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this member check in.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/manager/check-ins/summary/:
+    get:
+      operationId: manager_check_ins_summary_retrieve
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberCheckIn'
+          description: ''
   /api/manager/gym-goers/:
     get:
       operationId: manager_gym_goers_list
@@ -1031,6 +1190,296 @@ paths:
           type: string
           format: uuid
         description: A UUID string identifying this customer.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/manager/membership-plans/:
+    get:
+      operationId: manager_membership_plans_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MembershipPlan'
+          description: ''
+    post:
+      operationId: manager_membership_plans_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipPlan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MembershipPlan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MembershipPlan'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipPlan'
+          description: ''
+  /api/manager/membership-plans/{id}/:
+    get:
+      operationId: manager_membership_plans_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership plan.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipPlan'
+          description: ''
+    put:
+      operationId: manager_membership_plans_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership plan.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipPlan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MembershipPlan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MembershipPlan'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipPlan'
+          description: ''
+    patch:
+      operationId: manager_membership_plans_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership plan.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMembershipPlan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMembershipPlan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMembershipPlan'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipPlan'
+          description: ''
+    delete:
+      operationId: manager_membership_plans_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership plan.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/manager/memberships/:
+    get:
+      operationId: manager_memberships_list
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Membership'
+          description: ''
+    post:
+      operationId: manager_memberships_create
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Membership'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+  /api/manager/memberships/{id}/:
+    get:
+      operationId: manager_memberships_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
+        required: true
+      tags:
+      - manager
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+    put:
+      operationId: manager_memberships_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Membership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Membership'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+    patch:
+      operationId: manager_memberships_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
+        required: true
+      tags:
+      - manager
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMembership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMembership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMembership'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+          description: ''
+    delete:
+      operationId: manager_memberships_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this membership.
         required: true
       tags:
       - manager
@@ -2913,6 +3362,18 @@ paths:
           description: No response body
 components:
   schemas:
+    AccessRuleEnum:
+      enum:
+      - unlimited
+      - limited_visits
+      - classes_only
+      - appointments_only
+      type: string
+      description: |-
+        * `unlimited` - Unlimited
+        * `limited_visits` - Limited visits
+        * `classes_only` - Classes only
+        * `appointments_only` - Appointments only
     AdminCustomer:
       type: object
       properties:
@@ -3078,6 +3539,18 @@ components:
       - id
       - kind
       - path
+    BillingCycleEnum:
+      enum:
+      - monthly
+      - annual
+      - session_pack
+      - one_time
+      type: string
+      description: |-
+        * `monthly` - Monthly
+        * `annual` - Annual
+        * `session_pack` - Session pack
+        * `one_time` - One time
     Booking:
       type: object
       properties:
@@ -3267,6 +3740,75 @@ components:
       - name
       - organization
       - updated_at
+    MemberCheckIn:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        customer_membership_code:
+          type: string
+          readOnly: true
+        membership:
+          type: string
+          format: uuid
+          nullable: true
+        membership_status:
+          type: string
+          readOnly: true
+        plan_name:
+          type: string
+          readOnly: true
+        method:
+          $ref: '#/components/schemas/MethodEnum'
+        source:
+          $ref: '#/components/schemas/SourceEnum'
+        checked_in_at:
+          type: string
+          format: date-time
+        handled_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        handled_by_name:
+          type: string
+          readOnly: true
+        notes:
+          type: string
+        is_voided:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - customer
+      - customer_membership_code
+      - customer_name
+      - handled_by
+      - handled_by_name
+      - id
+      - membership_status
+      - organization
+      - plan_name
+      - updated_at
     Membership:
       type: object
       properties:
@@ -3277,8 +3819,23 @@ components:
         customer:
           type: string
           format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        customer_membership_code:
+          type: string
+          readOnly: true
+        plan:
+          type: string
+          format: uuid
+          nullable: true
+        plan_name:
+          type: string
+          readOnly: true
         product_kind:
           $ref: '#/components/schemas/ProductKindEnum'
+        status:
+          $ref: '#/components/schemas/MembershipStatusEnum'
         valid_from:
           type: string
           format: date
@@ -3291,16 +3848,127 @@ components:
           maximum: 9223372036854775807
           minimum: 0
           format: int64
+        auto_renew:
+          type: boolean
+        frozen_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancelled_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancellation_reason:
+          type: string
         external_payment_reference:
           type: string
           maxLength: 160
         is_active:
           type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
       required:
+      - created_at
       - customer
+      - customer_membership_code
+      - customer_name
       - id
+      - plan_name
       - product_kind
+      - updated_at
       - valid_from
+    MembershipPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        product_kind:
+          $ref: '#/components/schemas/ProductKindEnum'
+        billing_cycle:
+          $ref: '#/components/schemas/BillingCycleEnum'
+        access_rule:
+          $ref: '#/components/schemas/AccessRuleEnum'
+        visit_limit_per_period:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        session_credit_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        price_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        price_currency:
+          type: string
+          maxLength: 3
+        is_active:
+          type: boolean
+        active_membership_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - active_membership_count
+      - created_at
+      - id
+      - name
+      - organization
+      - product_kind
+      - updated_at
+    MembershipStatusEnum:
+      enum:
+      - trial
+      - active
+      - frozen
+      - cancelled
+      - expired
+      type: string
+      description: |-
+        * `trial` - Trial
+        * `active` - Active
+        * `frozen` - Frozen
+        * `cancelled` - Cancelled
+        * `expired` - Expired
+    MethodEnum:
+      enum:
+      - qr
+      - membership_code
+      - manual
+      - kiosk
+      type: string
+      description: |-
+        * `qr` - QR
+        * `membership_code` - Membership code
+        * `manual` - Manual
+        * `kiosk` - Kiosk
     Organization:
       type: object
       properties:
@@ -3552,6 +4220,63 @@ components:
           type: string
           format: date-time
           readOnly: true
+    PatchedMemberCheckIn:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        customer_membership_code:
+          type: string
+          readOnly: true
+        membership:
+          type: string
+          format: uuid
+          nullable: true
+        membership_status:
+          type: string
+          readOnly: true
+        plan_name:
+          type: string
+          readOnly: true
+        method:
+          $ref: '#/components/schemas/MethodEnum'
+        source:
+          $ref: '#/components/schemas/SourceEnum'
+        checked_in_at:
+          type: string
+          format: date-time
+        handled_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        handled_by_name:
+          type: string
+          readOnly: true
+        notes:
+          type: string
+        is_voided:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
     PatchedMembership:
       type: object
       properties:
@@ -3562,8 +4287,23 @@ components:
         customer:
           type: string
           format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        customer_membership_code:
+          type: string
+          readOnly: true
+        plan:
+          type: string
+          format: uuid
+          nullable: true
+        plan_name:
+          type: string
+          readOnly: true
         product_kind:
           $ref: '#/components/schemas/ProductKindEnum'
+        status:
+          $ref: '#/components/schemas/MembershipStatusEnum'
         valid_from:
           type: string
           format: date
@@ -3576,11 +4316,83 @@ components:
           maximum: 9223372036854775807
           minimum: 0
           format: int64
+        auto_renew:
+          type: boolean
+        frozen_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancelled_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancellation_reason:
+          type: string
         external_payment_reference:
           type: string
           maxLength: 160
         is_active:
           type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedMembershipPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        product_kind:
+          $ref: '#/components/schemas/ProductKindEnum'
+        billing_cycle:
+          $ref: '#/components/schemas/BillingCycleEnum'
+        access_rule:
+          $ref: '#/components/schemas/AccessRuleEnum'
+        visit_limit_per_period:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        session_credit_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        price_amount:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        price_currency:
+          type: string
+          maxLength: 3
+        is_active:
+          type: boolean
+        active_membership_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
     PatchedOrganization:
       type: object
       properties:
@@ -4219,6 +5031,18 @@ components:
       - service
       - service_name
       - starts_at
+    SourceEnum:
+      enum:
+      - front_desk
+      - member_app
+      - kiosk
+      - import
+      type: string
+      description: |-
+        * `front_desk` - Front desk
+        * `member_app` - Member app
+        * `kiosk` - Kiosk
+        * `import` - Import
     StaffMember:
       type: object
       properties:

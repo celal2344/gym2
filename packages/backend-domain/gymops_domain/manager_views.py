@@ -10,9 +10,15 @@ from rest_framework.response import Response
 from .admin_serializers import AdminCustomerSerializer, AdminEmployeeSerializer
 from .admin_views import AdminCustomerViewSet, AdminEmployeeViewSet, OrganizationScopedAdminMixin
 from .audit import log_audit_event
-from .models import StaffMember, TrainingSessionOccurrence, TrainingSessionPlan
+from .models import MemberCheckIn, Membership, MembershipPlan, StaffMember, TrainingSessionOccurrence, TrainingSessionPlan
 from .permissions import IsOrganizationManagerOrAdmin
-from .serializers import TrainingSessionOccurrenceSerializer, TrainingSessionPlanSerializer
+from .serializers import (
+    MemberCheckInSerializer,
+    MembershipPlanSerializer,
+    MembershipSerializer,
+    TrainingSessionOccurrenceSerializer,
+    TrainingSessionPlanSerializer,
+)
 
 
 class OrganizationScopedManagerMixin(OrganizationScopedAdminMixin):
@@ -37,6 +43,158 @@ class ManagerTrainerViewSet(OrganizationScopedManagerMixin, AdminEmployeeViewSet
 
 class ManagerGymGoerViewSet(OrganizationScopedManagerMixin, AdminCustomerViewSet):
     serializer_class = AdminCustomerSerializer
+
+
+class ManagerMembershipPlanViewSet(OrganizationScopedManagerMixin, viewsets.ModelViewSet):
+    serializer_class = MembershipPlanSerializer
+
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return MembershipPlan.objects.none()
+        queryset = MembershipPlan.objects.filter(organization=organization)
+        if self.request.query_params.get("include_inactive") != "true":
+            queryset = queryset.filter(is_active=True)
+        return queryset.order_by("name")
+
+    def perform_create(self, serializer):
+        plan = serializer.save(organization=self.get_request_organization())
+        log_audit_event(
+            self.request,
+            action="membership_plan.created",
+            target=plan,
+            summary=f"Created membership plan {plan.name}",
+        )
+
+    def perform_update(self, serializer):
+        plan = serializer.save()
+        log_audit_event(
+            self.request,
+            action="membership_plan.updated",
+            target=plan,
+            summary=f"Updated membership plan {plan.name}",
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        plan = self.get_object()
+        plan.is_active = False
+        plan.save(update_fields=["is_active", "updated_at"])
+        log_audit_event(
+            request,
+            action="membership_plan.deactivated",
+            target=plan,
+            summary=f"Deactivated membership plan {plan.name}",
+        )
+        return Response(self.get_serializer(plan).data)
+
+
+class ManagerMembershipViewSet(OrganizationScopedManagerMixin, viewsets.ModelViewSet):
+    serializer_class = MembershipSerializer
+
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return Membership.objects.none()
+        queryset = Membership.objects.select_related("customer__profile", "plan").filter(customer__organization=organization)
+        if self.request.query_params.get("include_inactive") != "true":
+            queryset = queryset.filter(is_active=True)
+        customer_id = self.request.query_params.get("customer")
+        status = self.request.query_params.get("status")
+        if customer_id:
+            queryset = queryset.filter(customer_id=customer_id)
+        if status:
+            queryset = queryset.filter(status=status)
+        return queryset.order_by("-valid_from", "-created_at")
+
+    def perform_create(self, serializer):
+        membership = serializer.save()
+        log_audit_event(
+            self.request,
+            action="membership.created",
+            target=membership,
+            summary=f"Created membership for {membership.customer.membership_code}",
+        )
+
+    def perform_update(self, serializer):
+        membership = serializer.save()
+        log_audit_event(
+            self.request,
+            action="membership.updated",
+            target=membership,
+            summary=f"Updated membership for {membership.customer.membership_code}",
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        membership = self.get_object()
+        membership.is_active = False
+        membership.status = Membership.Status.CANCELLED
+        membership.cancelled_at = timezone.now()
+        membership.save(update_fields=["is_active", "status", "cancelled_at", "updated_at"])
+        log_audit_event(
+            request,
+            action="membership.cancelled",
+            target=membership,
+            summary=f"Cancelled membership for {membership.customer.membership_code}",
+        )
+        return Response(self.get_serializer(membership).data)
+
+
+class ManagerMemberCheckInViewSet(OrganizationScopedManagerMixin, viewsets.ModelViewSet):
+    serializer_class = MemberCheckInSerializer
+
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return MemberCheckIn.objects.none()
+        queryset = MemberCheckIn.objects.select_related(
+            "organization",
+            "customer__profile",
+            "membership__plan",
+            "handled_by__profile",
+        ).filter(organization=organization)
+        customer_id = self.request.query_params.get("customer")
+        starts_after = self.request.query_params.get("starts_after")
+        starts_before = self.request.query_params.get("starts_before")
+        if customer_id:
+            queryset = queryset.filter(customer_id=customer_id)
+        if starts_after:
+            queryset = queryset.filter(checked_in_at__gte=starts_after)
+        if starts_before:
+            queryset = queryset.filter(checked_in_at__lt=starts_before)
+        return queryset.order_by("-checked_in_at")
+
+    def perform_create(self, serializer):
+        check_in = serializer.save(
+            organization=self.get_request_organization(),
+            handled_by=getattr(self.request.user, "staff_member", None),
+        )
+        log_audit_event(
+            self.request,
+            action="member_check_in.created",
+            target=check_in,
+            summary=f"Checked in {check_in.customer.membership_code}",
+        )
+
+    def perform_update(self, serializer):
+        check_in = serializer.save()
+        log_audit_event(
+            self.request,
+            action="member_check_in.updated",
+            target=check_in,
+            summary=f"Updated check-in for {check_in.customer.membership_code}",
+        )
+
+    @action(detail=False, methods=["get"])
+    def summary(self, request):
+        today_start = timezone.localdate()
+        queryset = self.get_queryset().filter(checked_in_at__date=today_start, is_voided=False)
+        return Response(
+            {
+                "today_check_ins": queryset.count(),
+                "manual_check_ins": queryset.filter(method=MemberCheckIn.Method.MANUAL).count(),
+                "membership_code_check_ins": queryset.filter(method=MemberCheckIn.Method.MEMBERSHIP_CODE).count(),
+            }
+        )
 
 
 class GenerateSessionOccurrencesSerializer(serializers.Serializer):

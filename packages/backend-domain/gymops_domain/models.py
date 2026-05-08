@@ -220,22 +220,79 @@ class SlotInventory(TimeStampedModel):
         return self.is_published and self.starts_at > timezone.now() and self.available_capacity >= attendee_count
 
 
+class MembershipPlan(TimeStampedModel):
+    class ProductKind(models.TextChoices):
+        MEMBERSHIP = "membership", "Membership"
+        CREDIT_PACK = "credit_pack", "Credit pack"
+        DAY_PASS = "day_pass", "Day pass"
+
+    class BillingCycle(models.TextChoices):
+        MONTHLY = "monthly", "Monthly"
+        ANNUAL = "annual", "Annual"
+        SESSION_PACK = "session_pack", "Session pack"
+        ONE_TIME = "one_time", "One time"
+
+    class AccessRule(models.TextChoices):
+        UNLIMITED = "unlimited", "Unlimited"
+        LIMITED_VISITS = "limited_visits", "Limited visits"
+        CLASSES_ONLY = "classes_only", "Classes only"
+        APPOINTMENTS_ONLY = "appointments_only", "Appointments only"
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="membership_plans")
+    name = models.CharField(max_length=160)
+    product_kind = models.CharField(max_length=24, choices=ProductKind.choices)
+    billing_cycle = models.CharField(max_length=24, choices=BillingCycle.choices, default=BillingCycle.MONTHLY)
+    access_rule = models.CharField(max_length=32, choices=AccessRule.choices, default=AccessRule.UNLIMITED)
+    visit_limit_per_period = models.PositiveIntegerField(null=True, blank=True)
+    session_credit_amount = models.PositiveIntegerField(default=0)
+    price_amount = models.PositiveIntegerField(default=0)
+    price_currency = models.CharField(max_length=3, default="TRY")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "membership_plans"
+        ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(fields=["organization", "name"], name="unique_membership_plan_name_per_org")
+        ]
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Membership(TimeStampedModel):
     class ProductKind(models.TextChoices):
         MEMBERSHIP = "membership", "Membership"
         CREDIT_PACK = "credit_pack", "Credit pack"
         DAY_PASS = "day_pass", "Day pass"
 
+    class Status(models.TextChoices):
+        TRIAL = "trial", "Trial"
+        ACTIVE = "active", "Active"
+        FROZEN = "frozen", "Frozen"
+        CANCELLED = "cancelled", "Cancelled"
+        EXPIRED = "expired", "Expired"
+
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="memberships")
+    plan = models.ForeignKey(MembershipPlan, on_delete=models.SET_NULL, null=True, blank=True, related_name="memberships")
     product_kind = models.CharField(max_length=24, choices=ProductKind.choices)
+    status = models.CharField(max_length=24, choices=Status.choices, default=Status.ACTIVE)
     valid_from = models.DateField()
     valid_to = models.DateField(null=True, blank=True)
     remaining_credits = models.PositiveIntegerField(default=0)
+    auto_renew = models.BooleanField(default=False)
+    frozen_at = models.DateTimeField(null=True, blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    cancellation_reason = models.TextField(blank=True)
     external_payment_reference = models.CharField(max_length=160, blank=True)
     is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = "memberships"
+        indexes = [
+            models.Index(fields=["customer", "status"]),
+            models.Index(fields=["valid_to", "status"]),
+        ]
 
 
 class TrainingProgram(TimeStampedModel):
@@ -502,6 +559,42 @@ class CheckIn(TimeStampedModel):
 
     class Meta:
         db_table = "check_ins"
+
+
+class MemberCheckIn(TimeStampedModel):
+    class Method(models.TextChoices):
+        QR = "qr", "QR"
+        MEMBERSHIP_CODE = "membership_code", "Membership code"
+        MANUAL = "manual", "Manual"
+        KIOSK = "kiosk", "Kiosk"
+
+    class Source(models.TextChoices):
+        FRONT_DESK = "front_desk", "Front desk"
+        MEMBER_APP = "member_app", "Member app"
+        KIOSK = "kiosk", "Kiosk"
+        IMPORT = "import", "Import"
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="member_check_ins")
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="member_check_ins")
+    membership = models.ForeignKey(Membership, on_delete=models.SET_NULL, null=True, blank=True, related_name="check_ins")
+    method = models.CharField(max_length=32, choices=Method.choices, default=Method.MEMBERSHIP_CODE)
+    source = models.CharField(max_length=32, choices=Source.choices, default=Source.FRONT_DESK)
+    checked_in_at = models.DateTimeField(default=timezone.now)
+    handled_by = models.ForeignKey(StaffMember, on_delete=models.SET_NULL, null=True, blank=True)
+    notes = models.TextField(blank=True)
+    is_voided = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = "member_check_ins"
+        ordering = ["-checked_in_at"]
+        indexes = [
+            models.Index(fields=["organization", "checked_in_at"]),
+            models.Index(fields=["customer", "checked_in_at"]),
+            models.Index(fields=["handled_by", "checked_in_at"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.customer.membership_code} @ {self.checked_in_at:%Y-%m-%d %H:%M}"
 
 
 class DeviceToken(TimeStampedModel):

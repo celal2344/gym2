@@ -10,7 +10,9 @@ from .models import (
     Customer,
     DeviceToken,
     Location,
+    MemberCheckIn,
     Membership,
+    MembershipPlan,
     Organization,
     Profile,
     Resource,
@@ -32,12 +34,14 @@ admin.site.register(Service)
 admin.site.register(ServiceStaff)
 admin.site.register(AvailabilityRule)
 admin.site.register(SlotInventory)
+admin.site.register(MembershipPlan)
 admin.site.register(Membership)
 admin.site.register(TrainingSessionPlan)
 admin.site.register(TrainingSessionOccurrence)
 admin.site.register(CreditLedger)
 admin.site.register(Booking)
 admin.site.register(CheckIn)
+admin.site.register(MemberCheckIn)
 admin.site.register(DeviceToken)
 admin.site.register(Attachment)
 admin.site.register(AuditLog)

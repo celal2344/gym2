@@ -244,6 +244,54 @@ export interface paths {
         patch: operations["locations_partial_update"];
         trace?: never;
     };
+    "/api/manager/check-ins/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manager_check_ins_list"];
+        put?: never;
+        post: operations["manager_check_ins_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/manager/check-ins/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manager_check_ins_retrieve"];
+        put: operations["manager_check_ins_update"];
+        post?: never;
+        delete: operations["manager_check_ins_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["manager_check_ins_partial_update"];
+        trace?: never;
+    };
+    "/api/manager/check-ins/summary/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manager_check_ins_summary_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/manager/gym-goers/": {
         parameters: {
             query?: never;
@@ -274,6 +322,70 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["manager_gym_goers_partial_update"];
+        trace?: never;
+    };
+    "/api/manager/membership-plans/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manager_membership_plans_list"];
+        put?: never;
+        post: operations["manager_membership_plans_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/manager/membership-plans/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manager_membership_plans_retrieve"];
+        put: operations["manager_membership_plans_update"];
+        post?: never;
+        delete: operations["manager_membership_plans_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["manager_membership_plans_partial_update"];
+        trace?: never;
+    };
+    "/api/manager/memberships/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manager_memberships_list"];
+        put?: never;
+        post: operations["manager_memberships_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/manager/memberships/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["manager_memberships_retrieve"];
+        put: operations["manager_memberships_update"];
+        post?: never;
+        delete: operations["manager_memberships_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["manager_memberships_partial_update"];
         trace?: never;
     };
     "/api/manager/session-occurrences/": {
@@ -718,6 +830,14 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * @description * `unlimited` - Unlimited
+         *     * `limited_visits` - Limited visits
+         *     * `classes_only` - Classes only
+         *     * `appointments_only` - Appointments only
+         * @enum {string}
+         */
+        AccessRuleEnum: "unlimited" | "limited_visits" | "classes_only" | "appointments_only";
         AdminCustomer: {
             /** Format: uuid */
             readonly id: string;
@@ -781,6 +901,14 @@ export interface components {
             /** Format: date-time */
             readonly created_at: string;
         };
+        /**
+         * @description * `monthly` - Monthly
+         *     * `annual` - Annual
+         *     * `session_pack` - Session pack
+         *     * `one_time` - One time
+         * @enum {string}
+         */
+        BillingCycleEnum: "monthly" | "annual" | "session_pack" | "one_time";
         Booking: {
             /** Format: uuid */
             readonly id: string;
@@ -871,21 +999,104 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
         };
+        MemberCheckIn: {
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uuid */
+            readonly organization: string;
+            /** Format: uuid */
+            customer: string;
+            readonly customer_name: string;
+            readonly customer_membership_code: string;
+            /** Format: uuid */
+            membership?: string | null;
+            readonly membership_status: string;
+            readonly plan_name: string;
+            method?: components["schemas"]["MethodEnum"];
+            source?: components["schemas"]["SourceEnum"];
+            /** Format: date-time */
+            checked_in_at?: string;
+            /** Format: uuid */
+            readonly handled_by: string | null;
+            readonly handled_by_name: string;
+            notes?: string;
+            is_voided?: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
         Membership: {
             /** Format: uuid */
             readonly id: string;
             /** Format: uuid */
             customer: string;
+            readonly customer_name: string;
+            readonly customer_membership_code: string;
+            /** Format: uuid */
+            plan?: string | null;
+            readonly plan_name: string;
             product_kind: components["schemas"]["ProductKindEnum"];
+            status?: components["schemas"]["MembershipStatusEnum"];
             /** Format: date */
             valid_from: string;
             /** Format: date */
             valid_to?: string | null;
             /** Format: int64 */
             remaining_credits?: number;
+            auto_renew?: boolean;
+            /** Format: date-time */
+            frozen_at?: string | null;
+            /** Format: date-time */
+            cancelled_at?: string | null;
+            cancellation_reason?: string;
             external_payment_reference?: string;
             is_active?: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
         };
+        MembershipPlan: {
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uuid */
+            readonly organization: string;
+            name: string;
+            product_kind: components["schemas"]["ProductKindEnum"];
+            billing_cycle?: components["schemas"]["BillingCycleEnum"];
+            access_rule?: components["schemas"]["AccessRuleEnum"];
+            /** Format: int64 */
+            visit_limit_per_period?: number | null;
+            /** Format: int64 */
+            session_credit_amount?: number;
+            /** Format: int64 */
+            price_amount?: number;
+            price_currency?: string;
+            is_active?: boolean;
+            readonly active_membership_count: number;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `trial` - Trial
+         *     * `active` - Active
+         *     * `frozen` - Frozen
+         *     * `cancelled` - Cancelled
+         *     * `expired` - Expired
+         * @enum {string}
+         */
+        MembershipStatusEnum: "trial" | "active" | "frozen" | "cancelled" | "expired";
+        /**
+         * @description * `qr` - QR
+         *     * `membership_code` - Membership code
+         *     * `manual` - Manual
+         *     * `kiosk` - Kiosk
+         * @enum {string}
+         */
+        MethodEnum: "qr" | "membership_code" | "manual" | "kiosk";
         Organization: {
             /** Format: uuid */
             readonly id: string;
@@ -998,20 +1209,86 @@ export interface components {
             /** Format: date-time */
             readonly updated_at?: string;
         };
+        PatchedMemberCheckIn: {
+            /** Format: uuid */
+            readonly id?: string;
+            /** Format: uuid */
+            readonly organization?: string;
+            /** Format: uuid */
+            customer?: string;
+            readonly customer_name?: string;
+            readonly customer_membership_code?: string;
+            /** Format: uuid */
+            membership?: string | null;
+            readonly membership_status?: string;
+            readonly plan_name?: string;
+            method?: components["schemas"]["MethodEnum"];
+            source?: components["schemas"]["SourceEnum"];
+            /** Format: date-time */
+            checked_in_at?: string;
+            /** Format: uuid */
+            readonly handled_by?: string | null;
+            readonly handled_by_name?: string;
+            notes?: string;
+            is_voided?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
         PatchedMembership: {
             /** Format: uuid */
             readonly id?: string;
             /** Format: uuid */
             customer?: string;
+            readonly customer_name?: string;
+            readonly customer_membership_code?: string;
+            /** Format: uuid */
+            plan?: string | null;
+            readonly plan_name?: string;
             product_kind?: components["schemas"]["ProductKindEnum"];
+            status?: components["schemas"]["MembershipStatusEnum"];
             /** Format: date */
             valid_from?: string;
             /** Format: date */
             valid_to?: string | null;
             /** Format: int64 */
             remaining_credits?: number;
+            auto_renew?: boolean;
+            /** Format: date-time */
+            frozen_at?: string | null;
+            /** Format: date-time */
+            cancelled_at?: string | null;
+            cancellation_reason?: string;
             external_payment_reference?: string;
             is_active?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedMembershipPlan: {
+            /** Format: uuid */
+            readonly id?: string;
+            /** Format: uuid */
+            readonly organization?: string;
+            name?: string;
+            product_kind?: components["schemas"]["ProductKindEnum"];
+            billing_cycle?: components["schemas"]["BillingCycleEnum"];
+            access_rule?: components["schemas"]["AccessRuleEnum"];
+            /** Format: int64 */
+            visit_limit_per_period?: number | null;
+            /** Format: int64 */
+            session_credit_amount?: number;
+            /** Format: int64 */
+            price_amount?: number;
+            price_currency?: string;
+            is_active?: boolean;
+            readonly active_membership_count?: number;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
         };
         PatchedOrganization: {
             /** Format: uuid */
@@ -1319,6 +1596,14 @@ export interface components {
             readonly available_capacity: number;
             is_published?: boolean;
         };
+        /**
+         * @description * `front_desk` - Front desk
+         *     * `member_app` - Member app
+         *     * `kiosk` - Kiosk
+         *     * `import` - Import
+         * @enum {string}
+         */
+        SourceEnum: "front_desk" | "member_app" | "kiosk" | "import";
         StaffMember: {
             /** Format: uuid */
             readonly id: string;
@@ -2352,6 +2637,168 @@ export interface operations {
             };
         };
     };
+    manager_check_ins_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberCheckIn"][];
+                };
+            };
+        };
+    };
+    manager_check_ins_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MemberCheckIn"];
+                "application/x-www-form-urlencoded": components["schemas"]["MemberCheckIn"];
+                "multipart/form-data": components["schemas"]["MemberCheckIn"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberCheckIn"];
+                };
+            };
+        };
+    };
+    manager_check_ins_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this member check in. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberCheckIn"];
+                };
+            };
+        };
+    };
+    manager_check_ins_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this member check in. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MemberCheckIn"];
+                "application/x-www-form-urlencoded": components["schemas"]["MemberCheckIn"];
+                "multipart/form-data": components["schemas"]["MemberCheckIn"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberCheckIn"];
+                };
+            };
+        };
+    };
+    manager_check_ins_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this member check in. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    manager_check_ins_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this member check in. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMemberCheckIn"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMemberCheckIn"];
+                "multipart/form-data": components["schemas"]["PatchedMemberCheckIn"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberCheckIn"];
+                };
+            };
+        };
+    };
+    manager_check_ins_summary_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberCheckIn"];
+                };
+            };
+        };
+    };
     manager_gym_goers_list: {
         parameters: {
             query?: never;
@@ -2491,6 +2938,292 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminCustomer"];
+                };
+            };
+        };
+    };
+    manager_membership_plans_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipPlan"][];
+                };
+            };
+        };
+    };
+    manager_membership_plans_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MembershipPlan"];
+                "application/x-www-form-urlencoded": components["schemas"]["MembershipPlan"];
+                "multipart/form-data": components["schemas"]["MembershipPlan"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipPlan"];
+                };
+            };
+        };
+    };
+    manager_membership_plans_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership plan. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipPlan"];
+                };
+            };
+        };
+    };
+    manager_membership_plans_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership plan. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MembershipPlan"];
+                "application/x-www-form-urlencoded": components["schemas"]["MembershipPlan"];
+                "multipart/form-data": components["schemas"]["MembershipPlan"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipPlan"];
+                };
+            };
+        };
+    };
+    manager_membership_plans_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership plan. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    manager_membership_plans_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership plan. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMembershipPlan"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMembershipPlan"];
+                "multipart/form-data": components["schemas"]["PatchedMembershipPlan"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipPlan"];
+                };
+            };
+        };
+    };
+    manager_memberships_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"][];
+                };
+            };
+        };
+    };
+    manager_memberships_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Membership"];
+                "application/x-www-form-urlencoded": components["schemas"]["Membership"];
+                "multipart/form-data": components["schemas"]["Membership"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    manager_memberships_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    manager_memberships_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Membership"];
+                "application/x-www-form-urlencoded": components["schemas"]["Membership"];
+                "multipart/form-data": components["schemas"]["Membership"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    manager_memberships_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    manager_memberships_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this membership. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMembership"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMembership"];
+                "multipart/form-data": components["schemas"]["PatchedMembership"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
                 };
             };
         };

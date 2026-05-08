@@ -6,7 +6,9 @@ from .models import (
     CheckIn,
     Customer,
     Location,
+    MemberCheckIn,
     Membership,
+    MembershipPlan,
     Organization,
     Profile,
     Resource,
@@ -143,18 +145,141 @@ class CheckInCreateSerializer(serializers.Serializer):
 
 
 class MembershipSerializer(serializers.ModelSerializer):
+    customer_name = serializers.CharField(source="customer.profile.full_name", read_only=True)
+    customer_membership_code = serializers.CharField(source="customer.membership_code", read_only=True)
+    plan_name = serializers.CharField(source="plan.name", read_only=True)
+
     class Meta:
         model = Membership
         fields = [
             "id",
             "customer",
+            "customer_name",
+            "customer_membership_code",
+            "plan",
+            "plan_name",
             "product_kind",
+            "status",
             "valid_from",
             "valid_to",
             "remaining_credits",
+            "auto_renew",
+            "frozen_at",
+            "cancelled_at",
+            "cancellation_reason",
             "external_payment_reference",
             "is_active",
+            "created_at",
+            "updated_at",
         ]
+        read_only_fields = ["id", "customer_name", "customer_membership_code", "plan_name", "created_at", "updated_at"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        organization = self.context.get("organization")
+        if organization:
+            self.fields["customer"].queryset = Customer.objects.filter(organization=organization, is_active=True)
+            self.fields["plan"].queryset = MembershipPlan.objects.filter(organization=organization, is_active=True)
+
+    def validate(self, attrs):
+        organization = self.context.get("organization")
+        customer = attrs.get("customer", getattr(self.instance, "customer", None))
+        plan = attrs.get("plan", getattr(self.instance, "plan", None))
+        if organization and customer and customer.organization_id != organization.id:
+            raise serializers.ValidationError({"customer": "Customer must belong to the manager organization."})
+        if organization and plan and plan.organization_id != organization.id:
+            raise serializers.ValidationError({"plan": "Plan must belong to the manager organization."})
+        valid_from = attrs.get("valid_from", getattr(self.instance, "valid_from", None))
+        valid_to = attrs.get("valid_to", getattr(self.instance, "valid_to", None))
+        if valid_from and valid_to and valid_to < valid_from:
+            raise serializers.ValidationError({"valid_to": "Membership end date must be after the start date."})
+        return attrs
+
+
+class MembershipPlanSerializer(serializers.ModelSerializer):
+    active_membership_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MembershipPlan
+        fields = [
+            "id",
+            "organization",
+            "name",
+            "product_kind",
+            "billing_cycle",
+            "access_rule",
+            "visit_limit_per_period",
+            "session_credit_amount",
+            "price_amount",
+            "price_currency",
+            "is_active",
+            "active_membership_count",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "organization", "active_membership_count", "created_at", "updated_at"]
+
+    def get_active_membership_count(self, instance) -> int:
+        return instance.memberships.filter(is_active=True, status=Membership.Status.ACTIVE).count()
+
+
+class MemberCheckInSerializer(serializers.ModelSerializer):
+    customer_name = serializers.CharField(source="customer.profile.full_name", read_only=True)
+    customer_membership_code = serializers.CharField(source="customer.membership_code", read_only=True)
+    membership_status = serializers.CharField(source="membership.status", read_only=True)
+    plan_name = serializers.CharField(source="membership.plan.name", read_only=True)
+    handled_by_name = serializers.CharField(source="handled_by.display_name", read_only=True)
+
+    class Meta:
+        model = MemberCheckIn
+        fields = [
+            "id",
+            "organization",
+            "customer",
+            "customer_name",
+            "customer_membership_code",
+            "membership",
+            "membership_status",
+            "plan_name",
+            "method",
+            "source",
+            "checked_in_at",
+            "handled_by",
+            "handled_by_name",
+            "notes",
+            "is_voided",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = [
+            "id",
+            "organization",
+            "customer_name",
+            "customer_membership_code",
+            "membership_status",
+            "plan_name",
+            "handled_by",
+            "handled_by_name",
+            "created_at",
+            "updated_at",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        organization = self.context.get("organization")
+        if organization:
+            self.fields["customer"].queryset = Customer.objects.filter(organization=organization, is_active=True)
+            self.fields["membership"].queryset = Membership.objects.filter(customer__organization=organization, is_active=True)
+
+    def validate(self, attrs):
+        organization = self.context.get("organization")
+        customer = attrs.get("customer", getattr(self.instance, "customer", None))
+        membership = attrs.get("membership", getattr(self.instance, "membership", None))
+        if organization and customer and customer.organization_id != organization.id:
+            raise serializers.ValidationError({"customer": "Customer must belong to the manager organization."})
+        if membership and customer and membership.customer_id != customer.id:
+            raise serializers.ValidationError({"membership": "Membership must belong to the selected customer."})
+        return attrs
 
 
 class TrainingProgramSerializer(serializers.ModelSerializer):

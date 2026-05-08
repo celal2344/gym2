@@ -20,6 +20,8 @@ import {
 } from "@/lib/api/manager";
 import { managerSections, type ManagerSectionId } from "./constants";
 import { ManagerGymGoersPanel } from "./components/manager-gym-goers-panel";
+import { ManagerCheckInsPanel } from "./components/manager-check-ins-panel";
+import { ManagerMembershipsPanel } from "./components/manager-memberships-panel";
 import { ManagerOverviewPanel } from "./components/manager-overview-panel";
 import { ManagerSessionsPanel } from "./components/manager-sessions-panel";
 import { ManagerStaffPanel } from "./components/manager-staff-panel";
@@ -64,7 +66,7 @@ export function ManagerPage() {
 
             <div className="mt-auto hidden rounded-md border border-zinc-200 bg-[#fbfaf7] p-3 text-sm text-zinc-600 lg:block">
               <p className="font-medium text-zinc-950">Access scope</p>
-              <p className="mt-1">Managers can manage staff, trainers, and gym goer records inside their organization.</p>
+              <p className="mt-1">Managers can manage staff, members, memberships, check-ins, sessions, and programs.</p>
               <div className="mt-3 flex gap-2">
                 <Button variant="outline" size="sm">
                   <Link href="/profile">Profile</Link>
@@ -90,7 +92,7 @@ export function ManagerPage() {
                 <div>
                   <h1 className="text-3xl font-semibold tracking-normal sm:text-4xl">Manager operations</h1>
                   <p className="mt-2 max-w-2xl text-sm text-zinc-600">
-                    Review operational health and manage staff, personal trainers, and gym goer records.
+                    Review operational health and manage staff, memberships, attendance, trainer sessions, and programs.
                   </p>
                 </div>
               </div>
@@ -125,6 +127,8 @@ export function ManagerPage() {
               />
             ) : null}
             {activeSection === "gym-goers" ? <ManagerGymGoersPanel /> : null}
+            {activeSection === "memberships" ? <ManagerMembershipsPanel /> : null}
+            {activeSection === "check-ins" ? <ManagerCheckInsPanel /> : null}
             {activeSection === "sessions" ? <ManagerSessionsPanel /> : null}
             {activeSection === "programs" ? (
               <ProgramsPanel

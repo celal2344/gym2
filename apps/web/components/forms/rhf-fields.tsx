@@ -77,6 +77,45 @@ export function TextareaFormField<T extends FieldValues>({
   );
 }
 
+type NumberFormFieldProps<T extends FieldValues> = {
+  control: Control<T>;
+  name: FieldPath<T>;
+  label: string;
+  min?: number;
+  className?: string;
+};
+
+export function NumberFormField<T extends FieldValues>({
+  control,
+  name,
+  label,
+  min = 0,
+  className,
+}: NumberFormFieldProps<T>) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid} className={className}>
+          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+          <Input
+            id={field.name}
+            name={field.name}
+            type="number"
+            min={min}
+            value={field.value ?? 0}
+            onChange={(event) => field.onChange(Number(event.target.value))}
+            onBlur={field.onBlur}
+            aria-invalid={fieldState.invalid}
+          />
+          {fieldState.invalid ? <FieldError errors={[{ message: errorMessage(fieldState.error?.message) }]} /> : null}
+        </Field>
+      )}
+    />
+  );
+}
+
 type SelectFormFieldProps<T extends FieldValues> = {
   control: Control<T>;
   name: FieldPath<T>;
