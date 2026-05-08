@@ -29,10 +29,10 @@ test.describe("web smoke coverage", () => {
     ).toBeVisible();
     await expect(page.getByText("Supabase is not configured")).toBeVisible();
     await expect(
-      page.getByRole("button", { name: /manager manager@gymops\.dev/i }),
+      page.getByRole("button", { name: /user member@gymops\.dev/i }),
     ).toBeVisible();
     await expect(
-      page.getByText("Sample route after login: /manager"),
+      page.getByText("Sample route after login: /app"),
     ).toBeVisible();
 
     await page
@@ -44,64 +44,28 @@ test.describe("web smoke coverage", () => {
     ).toBeVisible();
   });
 
-  test("manager panel renders sidebar dashboard and handles unauthenticated api sections", async ({
+  test("protected manager route redirects to login when auth runtime is unconfigured", async ({
     page,
   }) => {
     await page.goto("/manager");
 
     await expect(
-      page.getByRole("heading", { name: "Manager operations" }),
-    ).toBeVisible();
-    await expect(page.getByRole("button", { name: "Dashboard" })).toBeVisible();
-    await expect(page.getByRole("cell", { name: "Mert Kaya" })).toBeVisible();
-    await expect(page.getByText("Recent activity")).toBeVisible();
-
-    await page.getByRole("button", { name: "Sessions" }).click();
-    await expect(page.getByText("Session calendar")).toBeVisible();
-    await expect(page.getByText("Session API unavailable")).toBeVisible();
-    await expect(
-      page.getByText("You need to log in before using this workspace."),
-    ).toBeVisible();
-  });
-
-  test("manager sidebar switches every operational section", async ({
-    page,
-  }) => {
-    await page.goto("/manager");
-
-    await page.getByRole("button", { name: "Memberships" }).click();
-    await expect(
-      page.getByRole("heading", { name: "Membership lifecycle" }),
-    ).toBeVisible();
-    await expect(page.getByText("Membership API unavailable")).toBeVisible();
-
-    await page.getByRole("button", { name: "Check-ins" }).click();
-    await expect(
-      page.getByRole("heading", { name: "Check-ins and attendance" }),
-    ).toBeVisible();
-    await expect(page.getByText("Check-in API unavailable")).toBeVisible();
-
-    await page.getByRole("button", { name: "Programs" }).click();
-    await expect(page.getByRole("heading", { name: "Programs" })).toBeVisible();
-    await expect(page.getByText("Program API unavailable")).toBeVisible();
-
-    await page.getByRole("button", { name: "Create program" }).click();
-    await expect(
-      page.getByRole("heading", { name: "Create program" }),
+      page.getByRole("heading", {
+        name: "Sign in to your operations workspace.",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByText("1 weeks - 1 days - 1 exercises"),
+      page.getByText("Protected workspace unavailable"),
     ).toBeVisible();
-    await expect(page.getByText("Exercise cues")).toBeVisible();
-    await page.getByLabel("Exercise name").fill("Push-up");
-    await expect(page.getByText("Push-up")).toBeVisible();
-    await page.getByRole("button", { name: "Back to programs" }).click();
-    await expect(page.getByRole("heading", { name: "Programs" })).toBeVisible();
-
-    await page.getByRole("button", { name: "Dashboard" }).click();
+    await expect(
+      page.getByText("protected panels stay locked until auth is configured"),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Sign in" }),
+    ).toBeDisabled();
+    await expect(page).toHaveURL(/\/login\?next=%2Fmanager&reason=auth-unavailable$/);
     await expect(
       page.getByRole("heading", { name: "Manager operations" }),
-    ).toBeVisible();
-    await expect(page.getByText("Recent activity")).toBeVisible();
+    ).toHaveCount(0);
   });
 });

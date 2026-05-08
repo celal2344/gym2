@@ -1,6 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+import {
+  isSupabaseConfigured,
+  isUnconfiguredProtectedRouteBypassEnabled,
+} from "@/lib/supabase/runtime";
+
 const protectedPrefixes = ["/admin", "/manager", "/trainer", "/profile", "/app"];
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api";
 
@@ -14,12 +19,17 @@ const pathPanelMap = {
 
 export async function proxy(request: NextRequest) {
   const isProtectedPath = protectedPrefixes.some((prefix) => request.nextUrl.pathname.startsWith(prefix));
-  const isSupabaseConfigured = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-  );
 
-  if (!isProtectedPath || !isSupabaseConfigured) {
+  if (!isProtectedPath) {
     return NextResponse.next();
+  }
+
+  if (!isSupabaseConfigured()) {
+    if (isUnconfiguredProtectedRouteBypassEnabled()) {
+      return NextResponse.next();
+    }
+
+    return redirectToLogin(request, "auth-unavailable");
   }
 
   let response = NextResponse.next({ request });
@@ -40,37 +50,55 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  let user = null;
+  let session = null;
+
+  try {
+    const [{ data: userData }, { data: sessionData }] = await Promise.all([
+      supabase.auth.getUser(),
+      supabase.auth.getSession(),
+    ]);
+    user = userData.user;
+    session = sessionData.session;
+  } catch {
+    return redirectToLogin(request, "service-unavailable");
+  }
 
   if (!user || !session?.access_token) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/login";
-    redirectUrl.searchParams.set("next", request.nextUrl.pathname);
-    return NextResponse.redirect(redirectUrl);
+    return redirectToLogin(request);
   }
 
   const requiredPanel = Object.entries(pathPanelMap).find(([prefix]) => request.nextUrl.pathname.startsWith(prefix))?.[1];
   if (requiredPanel && requiredPanel !== "profile") {
-    const profileResponse = await fetch(`${API_BASE_URL}/auth/me/`, {
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      cache: "no-store",
-    });
+    let profileResponse: Response;
 
-    if (!profileResponse.ok) {
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = "/login";
-      redirectUrl.searchParams.set("next", request.nextUrl.pathname);
-      return NextResponse.redirect(redirectUrl);
+    try {
+      profileResponse = await fetch(`${API_BASE_URL}/auth/me/`, {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        cache: "no-store",
+      });
+    } catch {
+      return redirectToLogin(request, "service-unavailable");
     }
 
-    const profile = (await profileResponse.json()) as { allowed_panels?: string[] };
+    if (profileResponse.status === 401 || profileResponse.status === 403) {
+      return redirectToLogin(request);
+    }
+
+    if (!profileResponse.ok) {
+      return redirectToLogin(request, "service-unavailable");
+    }
+
+    const profile = (await profileResponse.json().catch(() => null)) as
+      | { allowed_panels?: string[] }
+      | null;
+
+    if (!profile) {
+      return redirectToLogin(request, "service-unavailable");
+    }
+
     if (!profile.allowed_panels?.includes(requiredPanel)) {
       const redirectUrl = request.nextUrl.clone();
       redirectUrl.pathname = "/profile";
@@ -80,6 +108,16 @@ export async function proxy(request: NextRequest) {
   }
 
   return response;
+}
+
+function redirectToLogin(request: NextRequest, reason?: "auth-unavailable" | "service-unavailable") {
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.pathname = "/login";
+  redirectUrl.searchParams.set("next", request.nextUrl.pathname);
+  if (reason) {
+    redirectUrl.searchParams.set("reason", reason);
+  }
+  return NextResponse.redirect(redirectUrl);
 }
 
 export const config = {

@@ -19,6 +19,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { defaultPanelPath, getCurrentProfile } from "@/lib/api/auth";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { isSupabaseConfigured } from "@/lib/supabase/runtime";
+
+const defaultSampleUser = sampleUsers.at(-1);
 
 export default function LoginPage() {
   return (
@@ -31,15 +34,13 @@ export default function LoginPage() {
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const nextPath = searchParams.get("next");
-  const [email, setEmail] = useState(sampleUsers[1]?.email ?? "");
-  const [password, setPassword] = useState(sampleUsers[1]?.password ?? "");
+  const nextPath = getSafeNextPath(searchParams.get("next"));
+  const reason = searchParams.get("reason");
+  const [email, setEmail] = useState(defaultSampleUser?.email ?? "");
+  const [password, setPassword] = useState(defaultSampleUser?.password ?? "");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const isSupabaseConfigured = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-  );
+  const supabaseConfigured = isSupabaseConfigured();
 
   const selectedSampleUser = useMemo(
     () => sampleUsers.find((user) => user.email === email),
@@ -50,7 +51,7 @@ function LoginForm() {
     setError(null);
     setIsLoading(true);
     try {
-      if (!isSupabaseConfigured) {
+      if (!supabaseConfigured) {
         throw new Error("Supabase public environment variables are missing.");
       }
 
@@ -89,7 +90,8 @@ function LoginForm() {
       password={password}
       error={error}
       isLoading={isLoading}
-      isSupabaseConfigured={isSupabaseConfigured}
+      isSupabaseConfigured={supabaseConfigured}
+      reason={reason}
       selectedSampleUserPanelPath={selectedSampleUser?.panelPath}
       onEmailChange={setEmail}
       onPasswordChange={setPassword}
@@ -100,11 +102,12 @@ function LoginForm() {
 }
 
 function LoginShell({
-  email = sampleUsers[1]?.email ?? "",
-  password = sampleUsers[1]?.password ?? "",
+  email = defaultSampleUser?.email ?? "",
+  password = defaultSampleUser?.password ?? "",
   error = null,
   isLoading = false,
   isSupabaseConfigured = true,
+  reason = null,
   selectedSampleUserPanelPath,
   onEmailChange,
   onPasswordChange,
@@ -116,6 +119,7 @@ function LoginShell({
   error?: string | null;
   isLoading?: boolean;
   isSupabaseConfigured?: boolean;
+  reason?: string | null;
   selectedSampleUserPanelPath?: string;
   onEmailChange?: (value: string) => void;
   onPasswordChange?: (value: string) => void;
@@ -170,6 +174,24 @@ function LoginShell({
                   </AlertDescription>
                 </Alert>
               ) : null}
+              {reason === "service-unavailable" ? (
+                <Alert variant="destructive">
+                  <AlertTitle>Authentication service unavailable</AlertTitle>
+                  <AlertDescription>
+                    GymOps could not verify your access right now. Try again
+                    after the auth service recovers.
+                  </AlertDescription>
+                </Alert>
+              ) : null}
+              {reason === "auth-unavailable" ? (
+                <Alert variant="destructive">
+                  <AlertTitle>Protected workspace unavailable</AlertTitle>
+                  <AlertDescription>
+                    This web app is missing its Supabase runtime configuration,
+                    so protected panels stay locked until auth is configured.
+                  </AlertDescription>
+                </Alert>
+              ) : null}
               {error ? (
                 <Alert variant="destructive">
                   <AlertTitle>Login failed</AlertTitle>
@@ -218,7 +240,7 @@ function LoginShell({
               <Button
                 className="w-full"
                 onClick={onLogin}
-                disabled={isLoading || !email || !password}
+                disabled={isLoading || !isSupabaseConfigured || !email || !password}
               >
                 <LogIn className="size-4" />
                 {isLoading ? "Signing in" : "Sign in"}
@@ -235,4 +257,12 @@ function LoginShell({
       </section>
     </main>
   );
+}
+
+function getSafeNextPath(nextPath: string | null) {
+  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
+    return null;
+  }
+
+  return nextPath;
 }

@@ -5,13 +5,17 @@ import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { isSupabaseConfigured } from "@/lib/supabase/runtime";
 
 export function LogoutButton({ className }: { className?: string }) {
   const router = useRouter();
 
   async function logout() {
-    const supabase = createSupabaseBrowserClient();
-    await supabase.auth.signOut();
+    if (isSupabaseConfigured()) {
+      const supabase = createSupabaseBrowserClient();
+      await supabase.auth.signOut().catch(() => undefined);
+    }
+
     router.replace("/login");
     router.refresh();
   }
