@@ -68,6 +68,38 @@ export interface paths {
         patch: operations["admin_employees_partial_update"];
         trace?: never;
     };
+    "/api/app/program-assignments/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["app_program_assignments_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/app/program-assignments/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["app_program_assignments_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/attachments/": {
         parameters: {
             query?: never;
@@ -1026,6 +1058,28 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
         };
+        MemberTrainingProgramAssignment: {
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uuid */
+            readonly program: string;
+            readonly program_title: string;
+            readonly program_summary: string;
+            readonly program_goal: string;
+            readonly program_difficulty: string;
+            readonly program_content: unknown;
+            readonly assigned_by_name: string;
+            readonly status: components["schemas"]["Status0e4Enum"];
+            /** Format: date */
+            readonly starts_on: string | null;
+            /** Format: date */
+            readonly ends_on: string | null;
+            readonly notes: string;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
         Membership: {
             /** Format: uuid */
             readonly id: string;
@@ -1398,7 +1452,7 @@ export interface components {
             /** Format: uuid */
             readonly assigned_by?: string | null;
             readonly assigned_by_name?: string;
-            status?: components["schemas"]["TrainingProgramAssignmentStatusEnum"];
+            status?: components["schemas"]["Status0e4Enum"];
             /** Format: date */
             starts_on?: string | null;
             /** Format: date */
@@ -1616,6 +1670,14 @@ export interface components {
             is_active?: boolean;
         };
         /**
+         * @description * `assigned` - Assigned
+         *     * `active` - Active
+         *     * `completed` - Completed
+         *     * `cancelled` - Cancelled
+         * @enum {string}
+         */
+        Status0e4Enum: "assigned" | "active" | "completed" | "cancelled";
+        /**
          * @description * `active` - Active
          *     * `guest` - Guest
          *     * `suspended` - Suspended
@@ -1658,7 +1720,7 @@ export interface components {
             /** Format: uuid */
             readonly assigned_by: string | null;
             readonly assigned_by_name: string;
-            status?: components["schemas"]["TrainingProgramAssignmentStatusEnum"];
+            status?: components["schemas"]["Status0e4Enum"];
             /** Format: date */
             starts_on?: string | null;
             /** Format: date */
@@ -1670,14 +1732,6 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
         };
-        /**
-         * @description * `assigned` - Assigned
-         *     * `active` - Active
-         *     * `completed` - Completed
-         *     * `cancelled` - Cancelled
-         * @enum {string}
-         */
-        TrainingProgramAssignmentStatusEnum: "assigned" | "active" | "completed" | "cancelled";
         /**
          * @description * `draft` - Draft
          *     * `active` - Active
@@ -2064,6 +2118,47 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminEmployee"];
+                };
+            };
+        };
+    };
+    app_program_assignments_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberTrainingProgramAssignment"][];
+                };
+            };
+        };
+    };
+    app_program_assignments_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program assignment. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MemberTrainingProgramAssignment"];
                 };
             };
         };

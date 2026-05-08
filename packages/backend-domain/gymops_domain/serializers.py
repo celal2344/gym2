@@ -386,6 +386,35 @@ class TrainingProgramAssignmentSerializer(serializers.ModelSerializer):
         )
 
 
+class MemberTrainingProgramAssignmentSerializer(serializers.ModelSerializer):
+    program_title = serializers.CharField(source="program.title", read_only=True)
+    program_summary = serializers.CharField(source="program.summary", read_only=True)
+    program_goal = serializers.CharField(source="program.goal", read_only=True)
+    program_difficulty = serializers.CharField(source="program.difficulty", read_only=True)
+    program_content = serializers.JSONField(source="program.content", read_only=True)
+    assigned_by_name = serializers.CharField(source="assigned_by.display_name", read_only=True)
+
+    class Meta:
+        model = TrainingProgramAssignment
+        fields = [
+            "id",
+            "program",
+            "program_title",
+            "program_summary",
+            "program_goal",
+            "program_difficulty",
+            "program_content",
+            "assigned_by_name",
+            "status",
+            "starts_on",
+            "ends_on",
+            "notes",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = fields
+
+
 class TrainingSessionPlanSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(source="customer.profile.full_name", read_only=True)
     trainer_name = serializers.CharField(source="trainer.display_name", read_only=True)

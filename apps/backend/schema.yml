@@ -295,6 +295,44 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/app/program-assignments/:
+    get:
+      operationId: app_program_assignments_list
+      tags:
+      - app
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberTrainingProgramAssignment'
+          description: ''
+  /api/app/program-assignments/{id}/:
+    get:
+      operationId: app_program_assignments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program assignment.
+        required: true
+      tags:
+      - app
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberTrainingProgramAssignment'
+          description: ''
   /api/attachments/:
     get:
       operationId: attachments_list
@@ -3809,6 +3847,74 @@ components:
       - organization
       - plan_name
       - updated_at
+    MemberTrainingProgramAssignment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        program:
+          type: string
+          format: uuid
+          readOnly: true
+        program_title:
+          type: string
+          readOnly: true
+        program_summary:
+          type: string
+          readOnly: true
+        program_goal:
+          type: string
+          readOnly: true
+        program_difficulty:
+          type: string
+          readOnly: true
+        program_content:
+          readOnly: true
+        assigned_by_name:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status0e4Enum'
+          readOnly: true
+        starts_on:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        ends_on:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        notes:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - assigned_by_name
+      - created_at
+      - ends_on
+      - id
+      - notes
+      - program
+      - program_content
+      - program_difficulty
+      - program_goal
+      - program_summary
+      - program_title
+      - starts_on
+      - status
+      - updated_at
     Membership:
       type: object
       properties:
@@ -4622,7 +4728,7 @@ components:
           type: string
           readOnly: true
         status:
-          $ref: '#/components/schemas/TrainingProgramAssignmentStatusEnum'
+          $ref: '#/components/schemas/Status0e4Enum'
         starts_on:
           type: string
           format: date
@@ -5069,6 +5175,18 @@ components:
       - id
       - organization
       - role_kind
+    Status0e4Enum:
+      enum:
+      - assigned
+      - active
+      - completed
+      - cancelled
+      type: string
+      description: |-
+        * `assigned` - Assigned
+        * `active` - Active
+        * `completed` - Completed
+        * `cancelled` - Cancelled
     StatusD27Enum:
       enum:
       - active
@@ -5169,7 +5287,7 @@ components:
           type: string
           readOnly: true
         status:
-          $ref: '#/components/schemas/TrainingProgramAssignmentStatusEnum'
+          $ref: '#/components/schemas/Status0e4Enum'
         starts_on:
           type: string
           format: date
@@ -5202,18 +5320,6 @@ components:
       - program
       - program_title
       - updated_at
-    TrainingProgramAssignmentStatusEnum:
-      enum:
-      - assigned
-      - active
-      - completed
-      - cancelled
-      type: string
-      description: |-
-        * `assigned` - Assigned
-        * `active` - Active
-        * `completed` - Completed
-        * `cancelled` - Cancelled
     TrainingProgramStatusEnum:
       enum:
       - draft

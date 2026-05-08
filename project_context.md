@@ -43,6 +43,13 @@ Admin scope is organization-local. There is no platform/global admin behavior in
 - Login uses Supabase email/password auth, then calls Django `/api/auth/me/` to choose the default panel.
 - The web proxy also calls `/api/auth/me/` for protected role panels. `/admin`, `/manager`, `/trainer`, and `/app` require their matching allowed panel before the route is served.
 
+## Current Member Capabilities
+
+- Web route: `/app`
+- `GET /api/app/program-assignments/`
+
+The member workspace currently shows assigned training program shells, status, date range, trainer/assigner name, and notes. This is the first customer self-service slice; booking, attendance history, memberships, documents, and notifications remain future work.
+
 ## Sample Users
 
 Sample user metadata is shared from `packages/domain/src/auth/sample-users.ts`.
@@ -106,7 +113,7 @@ Still missing compared with mature gym ERP systems:
 
 - Member self-service booking with waitlists, capacity rules, cutoffs, and cancellation windows.
 - Trainer self-service panel for own calendar, assigned members, attendance, and program updates.
-- Member app/web panel for own memberships, bookings, attendance history, program assignments, and documents.
+- Member app/web panel for own memberships, bookings, attendance history, and documents.
 - Lead/trial pipeline with source, follow-up dates, conversion, and lost reasons.
 - Communication workflows for reminders, expiry alerts, no-show follow-up, and filtered announcements.
 - Waivers/documents, emergency/medical notes, and agreement acceptance history.

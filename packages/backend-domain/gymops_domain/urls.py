@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .admin_views import AdminCustomerViewSet, AdminEmployeeViewSet
 from .auth_views import AuthMeView
+from .member_views import MemberProgramAssignmentViewSet
 from .manager_views import (
     ManagerGymGoerViewSet,
     ManagerMemberCheckInViewSet,
@@ -54,6 +55,7 @@ router.register(
     ManagerTrainingSessionOccurrenceViewSet,
     basename="manager-session-occurrences",
 )
+router.register("app/program-assignments", MemberProgramAssignmentViewSet, basename="app-program-assignments")
 
 urlpatterns = [
     path("auth/me/", AuthMeView.as_view(), name="auth-me"),

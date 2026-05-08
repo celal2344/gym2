@@ -61,6 +61,23 @@ export const trainingProgramAssignmentCreateSchema = trainingProgramAssignmentSc
   updatedAt: true,
 });
 
+export const memberTrainingProgramAssignmentSchema = z.object({
+  id: z.string().uuid(),
+  program: z.string().uuid(),
+  programTitle: z.string().default(""),
+  programSummary: z.string().default(""),
+  programGoal: z.string().default(""),
+  programDifficulty: z.string().default(""),
+  programContent: z.record(z.string(), z.unknown()).default({}),
+  assignedByName: z.string().default(""),
+  status: z.enum(trainingProgramAssignmentStatuses).default("assigned"),
+  startsOn: z.string().nullable().optional(),
+  endsOn: z.string().nullable().optional(),
+  notes: z.string().default(""),
+  createdAt: z.string().datetime().optional(),
+  updatedAt: z.string().datetime().optional(),
+});
+
 export type TrainingProgramStatus = (typeof trainingProgramStatuses)[number];
 export type TrainingProgramAssignmentStatus = (typeof trainingProgramAssignmentStatuses)[number];
 export type TrainingProgram = z.infer<typeof trainingProgramSchema>;
@@ -69,3 +86,4 @@ export type TrainingProgramCreate = z.infer<typeof trainingProgramCreateSchema>;
 export type TrainingProgramAssignment = z.infer<typeof trainingProgramAssignmentSchema>;
 export type TrainingProgramAssignmentInput = z.input<typeof trainingProgramAssignmentCreateSchema>;
 export type TrainingProgramAssignmentCreate = z.infer<typeof trainingProgramAssignmentCreateSchema>;
+export type MemberTrainingProgramAssignment = z.infer<typeof memberTrainingProgramAssignmentSchema>;

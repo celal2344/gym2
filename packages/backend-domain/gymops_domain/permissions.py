@@ -44,3 +44,12 @@ class IsProgramAssigner(IsAuthenticatedProfile):
             and request.user.staff_member.role_kind in self.allowed_roles
             and request.user.staff_member.is_active
         )
+
+
+class IsActiveCustomer(IsAuthenticatedProfile):
+    def has_permission(self, request, view):
+        return (
+            super().has_permission(request, view)
+            and request.user.customer is not None
+            and request.user.customer.is_active
+        )
