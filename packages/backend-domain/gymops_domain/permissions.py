@@ -28,3 +28,19 @@ class IsOrganizationManagerOrAdmin(IsAuthenticatedProfile):
             and request.user.staff_member.role_kind in self.allowed_roles
             and request.user.staff_member.is_active
         )
+
+
+class IsProgramAssigner(IsAuthenticatedProfile):
+    allowed_roles = {
+        StaffMember.RoleKind.ADMIN,
+        StaffMember.RoleKind.MANAGER,
+        StaffMember.RoleKind.PERSONAL_TRAINER,
+    }
+
+    def has_permission(self, request, view):
+        return (
+            super().has_permission(request, view)
+            and request.user.staff_member is not None
+            and request.user.staff_member.role_kind in self.allowed_roles
+            and request.user.staff_member.is_active
+        )

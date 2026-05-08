@@ -500,6 +500,70 @@ export interface paths {
         patch: operations["organizations_partial_update"];
         trace?: never;
     };
+    "/api/program-assignments/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["program_assignments_list"];
+        put?: never;
+        post: operations["program_assignments_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/program-assignments/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["program_assignments_retrieve"];
+        put: operations["program_assignments_update"];
+        post?: never;
+        delete: operations["program_assignments_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["program_assignments_partial_update"];
+        trace?: never;
+    };
+    "/api/programs/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["programs_list"];
+        put?: never;
+        post: operations["programs_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/programs/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["programs_retrieve"];
+        put: operations["programs_update"];
+        post?: never;
+        delete: operations["programs_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["programs_partial_update"];
+        trace?: never;
+    };
     "/api/resources/": {
         parameters: {
             query?: never;
@@ -1021,6 +1085,54 @@ export interface components {
             role_kind?: components["schemas"]["RoleKindEnum"];
             is_active?: boolean;
         };
+        PatchedTrainingProgram: {
+            /** Format: uuid */
+            readonly id?: string;
+            /** Format: uuid */
+            readonly organization?: string;
+            title?: string;
+            summary?: string;
+            goal?: string;
+            difficulty?: string;
+            status?: components["schemas"]["TrainingProgramStatusEnum"];
+            /** Format: uuid */
+            readonly created_by?: string | null;
+            readonly created_by_name?: string;
+            content?: unknown;
+            is_active?: boolean;
+            readonly assignment_count?: number;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
+        PatchedTrainingProgramAssignment: {
+            /** Format: uuid */
+            readonly id?: string;
+            /** Format: uuid */
+            readonly organization?: string;
+            /** Format: uuid */
+            program?: string;
+            readonly program_title?: string;
+            /** Format: uuid */
+            customer?: string;
+            readonly customer_name?: string;
+            readonly customer_membership_code?: string;
+            /** Format: uuid */
+            readonly assigned_by?: string | null;
+            readonly assigned_by_name?: string;
+            status?: components["schemas"]["TrainingProgramAssignmentStatusEnum"];
+            /** Format: date */
+            starts_on?: string | null;
+            /** Format: date */
+            ends_on?: string | null;
+            notes?: string;
+            is_active?: boolean;
+            /** Format: date-time */
+            readonly created_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+        };
         PatchedTrainingSessionOccurrence: {
             /** Format: uuid */
             readonly id?: string;
@@ -1225,6 +1337,69 @@ export interface components {
          * @enum {string}
          */
         StatusD27Enum: "active" | "guest" | "suspended";
+        TrainingProgram: {
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uuid */
+            readonly organization: string;
+            title: string;
+            summary?: string;
+            goal?: string;
+            difficulty?: string;
+            status?: components["schemas"]["TrainingProgramStatusEnum"];
+            /** Format: uuid */
+            readonly created_by: string | null;
+            readonly created_by_name: string;
+            content?: unknown;
+            is_active?: boolean;
+            readonly assignment_count: number;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        TrainingProgramAssignment: {
+            /** Format: uuid */
+            readonly id: string;
+            /** Format: uuid */
+            readonly organization: string;
+            /** Format: uuid */
+            program: string;
+            readonly program_title: string;
+            /** Format: uuid */
+            customer: string;
+            readonly customer_name: string;
+            readonly customer_membership_code: string;
+            /** Format: uuid */
+            readonly assigned_by: string | null;
+            readonly assigned_by_name: string;
+            status?: components["schemas"]["TrainingProgramAssignmentStatusEnum"];
+            /** Format: date */
+            starts_on?: string | null;
+            /** Format: date */
+            ends_on?: string | null;
+            notes?: string;
+            is_active?: boolean;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description * `assigned` - Assigned
+         *     * `active` - Active
+         *     * `completed` - Completed
+         *     * `cancelled` - Cancelled
+         * @enum {string}
+         */
+        TrainingProgramAssignmentStatusEnum: "assigned" | "active" | "completed" | "cancelled";
+        /**
+         * @description * `draft` - Draft
+         *     * `active` - Active
+         *     * `archived` - Archived
+         * @enum {string}
+         */
+        TrainingProgramStatusEnum: "draft" | "active" | "archived";
         TrainingSessionOccurrence: {
             /** Format: uuid */
             readonly id: string;
@@ -3221,6 +3396,292 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Organization"];
+                };
+            };
+        };
+    };
+    program_assignments_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgramAssignment"][];
+                };
+            };
+        };
+    };
+    program_assignments_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TrainingProgramAssignment"];
+                "application/x-www-form-urlencoded": components["schemas"]["TrainingProgramAssignment"];
+                "multipart/form-data": components["schemas"]["TrainingProgramAssignment"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgramAssignment"];
+                };
+            };
+        };
+    };
+    program_assignments_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program assignment. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgramAssignment"];
+                };
+            };
+        };
+    };
+    program_assignments_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program assignment. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TrainingProgramAssignment"];
+                "application/x-www-form-urlencoded": components["schemas"]["TrainingProgramAssignment"];
+                "multipart/form-data": components["schemas"]["TrainingProgramAssignment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgramAssignment"];
+                };
+            };
+        };
+    };
+    program_assignments_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program assignment. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    program_assignments_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program assignment. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedTrainingProgramAssignment"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedTrainingProgramAssignment"];
+                "multipart/form-data": components["schemas"]["PatchedTrainingProgramAssignment"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgramAssignment"];
+                };
+            };
+        };
+    };
+    programs_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgram"][];
+                };
+            };
+        };
+    };
+    programs_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TrainingProgram"];
+                "application/x-www-form-urlencoded": components["schemas"]["TrainingProgram"];
+                "multipart/form-data": components["schemas"]["TrainingProgram"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgram"];
+                };
+            };
+        };
+    };
+    programs_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgram"];
+                };
+            };
+        };
+    };
+    programs_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TrainingProgram"];
+                "application/x-www-form-urlencoded": components["schemas"]["TrainingProgram"];
+                "multipart/form-data": components["schemas"]["TrainingProgram"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgram"];
+                };
+            };
+        };
+    };
+    programs_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    programs_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A UUID string identifying this training program. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedTrainingProgram"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedTrainingProgram"];
+                "multipart/form-data": components["schemas"]["PatchedTrainingProgram"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrainingProgram"];
                 };
             };
         };

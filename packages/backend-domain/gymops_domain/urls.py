@@ -10,6 +10,7 @@ from .manager_views import (
     ManagerTrainingSessionOccurrenceViewSet,
     ManagerTrainingSessionPlanViewSet,
 )
+from .program_views import TrainingProgramAssignmentViewSet, TrainingProgramViewSet
 from .views import (
     AttachmentViewSet,
     BookingViewSet,
@@ -34,6 +35,8 @@ router.register("slots", SlotInventoryViewSet, basename="slots")
 router.register("bookings", BookingViewSet)
 router.register("memberships", MembershipViewSet)
 router.register("attachments", AttachmentViewSet)
+router.register("programs", TrainingProgramViewSet, basename="programs")
+router.register("program-assignments", TrainingProgramAssignmentViewSet, basename="program-assignments")
 router.register("admin/employees", AdminEmployeeViewSet, basename="admin-employees")
 router.register("admin/customers", AdminCustomerViewSet, basename="admin-customers")
 router.register("manager/staff", ManagerStaffViewSet, basename="manager-staff")

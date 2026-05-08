@@ -18,6 +18,8 @@ from .models import (
     Service,
     SlotInventory,
     StaffMember,
+    TrainingProgram,
+    TrainingProgramAssignment,
     TrainingSessionOccurrence,
     TrainingSessionPlan,
 )
@@ -367,6 +369,54 @@ class AdminAuthorizationTests(TestCase):
         self.assertEqual(calendar_response.status_code, 200)
         self.assertEqual(len(calendar_response.data), 1)
         self.assertEqual(calendar_response.data[0]["plan_title"], "Boxing fundamentals")
+
+    def test_manager_can_edit_and_assign_program_shell(self):
+        self.authenticate_as_manager()
+        customer_profile = Profile.objects.create(full_name="Program Member", email="program-member@example.com")
+        customer = Customer.objects.create(
+            organization=self.organization,
+            profile=customer_profile,
+            membership_code="M-PROGRAM",
+        )
+
+        program_response = self.client.post(
+            reverse("programs-list"),
+            {
+                "title": "Strength foundation",
+                "summary": "",
+                "goal": "Build baseline strength",
+                "difficulty": "beginner",
+                "status": TrainingProgram.Status.DRAFT,
+                "content": {},
+                "is_active": True,
+            },
+            format="json",
+        )
+        self.assertEqual(program_response.status_code, 201)
+
+        patch_response = self.client.patch(
+            reverse("programs-detail", args=[program_response.data["id"]]),
+            {"status": TrainingProgram.Status.ACTIVE},
+            format="json",
+        )
+        self.assertEqual(patch_response.status_code, 200)
+        self.assertEqual(patch_response.data["status"], TrainingProgram.Status.ACTIVE)
+
+        assignment_response = self.client.post(
+            reverse("program-assignments-list"),
+            {
+                "program": program_response.data["id"],
+                "customer": str(customer.id),
+                "status": TrainingProgramAssignment.Status.ASSIGNED,
+                "starts_on": "2026-05-08",
+                "notes": "Start next week",
+                "is_active": True,
+            },
+            format="json",
+        )
+        self.assertEqual(assignment_response.status_code, 201)
+        self.assertEqual(assignment_response.data["program_title"], "Strength foundation")
+        self.assertEqual(assignment_response.data["customer_membership_code"], "M-PROGRAM")
 
     def test_manager_session_plan_rejects_other_organization_customer(self):
         self.authenticate_as_manager()

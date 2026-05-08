@@ -4,7 +4,17 @@ from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from gymops_domain.models import Customer, Location, Organization, Profile, StaffMember, TrainingSessionOccurrence, TrainingSessionPlan
+from gymops_domain.models import (
+    Customer,
+    Location,
+    Organization,
+    Profile,
+    StaffMember,
+    TrainingProgram,
+    TrainingProgramAssignment,
+    TrainingSessionOccurrence,
+    TrainingSessionPlan,
+)
 
 
 SAMPLE_USERS = [
@@ -131,5 +141,32 @@ class Command(BaseCommand):
                     "notes": "Sample seeded session",
                 },
             )
+
+        program, _ = TrainingProgram.objects.update_or_create(
+            organization=organization,
+            title="Sample strength foundation",
+            defaults={
+                "summary": "Blank shell for a future detailed strength program builder.",
+                "goal": "Strength foundation",
+                "difficulty": "beginner",
+                "status": TrainingProgram.Status.ACTIVE,
+                "created_by": trainer,
+                "content": {},
+                "is_active": True,
+            },
+        )
+        TrainingProgramAssignment.objects.update_or_create(
+            organization=organization,
+            program=program,
+            customer=customer,
+            defaults={
+                "assigned_by": trainer,
+                "status": TrainingProgramAssignment.Status.ACTIVE,
+                "starts_on": datetime(2026, 5, 6).date(),
+                "ends_on": datetime(2026, 6, 24).date(),
+                "notes": "Sample assignment for the program listing workflow.",
+                "is_active": True,
+            },
+        )
 
         self.stdout.write(self.style.SUCCESS("Seeded GymOps sample users."))

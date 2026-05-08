@@ -238,6 +238,84 @@ class Membership(TimeStampedModel):
         db_table = "memberships"
 
 
+class TrainingProgram(TimeStampedModel):
+    class Status(models.TextChoices):
+        DRAFT = "draft", "Draft"
+        ACTIVE = "active", "Active"
+        ARCHIVED = "archived", "Archived"
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="training_programs")
+    title = models.CharField(max_length=160)
+    summary = models.TextField(blank=True)
+    goal = models.CharField(max_length=160, blank=True)
+    difficulty = models.CharField(max_length=80, blank=True)
+    status = models.CharField(max_length=24, choices=Status.choices, default=Status.DRAFT)
+    created_by = models.ForeignKey(
+        StaffMember,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="created_training_programs",
+    )
+    content = models.JSONField(default=dict, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "training_programs"
+        ordering = ["title"]
+        indexes = [
+            models.Index(fields=["organization", "status"]),
+            models.Index(fields=["organization", "is_active"]),
+        ]
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class TrainingProgramAssignment(TimeStampedModel):
+    class Status(models.TextChoices):
+        ASSIGNED = "assigned", "Assigned"
+        ACTIVE = "active", "Active"
+        COMPLETED = "completed", "Completed"
+        CANCELLED = "cancelled", "Cancelled"
+
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="training_program_assignments")
+    program = models.ForeignKey(TrainingProgram, on_delete=models.PROTECT, related_name="assignments")
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="training_program_assignments")
+    assigned_by = models.ForeignKey(
+        StaffMember,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="assigned_training_programs",
+    )
+    status = models.CharField(max_length=24, choices=Status.choices, default=Status.ASSIGNED)
+    starts_on = models.DateField(null=True, blank=True)
+    ends_on = models.DateField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "training_program_assignments"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["organization", "status"]),
+            models.Index(fields=["customer", "status"]),
+            models.Index(fields=["assigned_by", "status"]),
+        ]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(ends_on__isnull=True)
+                | models.Q(starts_on__isnull=True)
+                | models.Q(ends_on__gte=models.F("starts_on")),
+                name="training_program_assignment_dates_ordered",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.program.title} -> {self.customer.membership_code}"
+
+
 class TrainingSessionPlan(TimeStampedModel):
     class SessionKind(models.TextChoices):
         PERSONAL_TRAINING = "personal_training", "Personal training"

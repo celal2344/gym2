@@ -1969,6 +1969,296 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/program-assignments/:
+    get:
+      operationId: program_assignments_list
+      tags:
+      - program-assignments
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainingProgramAssignment'
+          description: ''
+    post:
+      operationId: program_assignments_create
+      tags:
+      - program-assignments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgramAssignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingProgramAssignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingProgramAssignment'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgramAssignment'
+          description: ''
+  /api/program-assignments/{id}/:
+    get:
+      operationId: program_assignments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program assignment.
+        required: true
+      tags:
+      - program-assignments
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgramAssignment'
+          description: ''
+    put:
+      operationId: program_assignments_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program assignment.
+        required: true
+      tags:
+      - program-assignments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgramAssignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingProgramAssignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingProgramAssignment'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgramAssignment'
+          description: ''
+    patch:
+      operationId: program_assignments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program assignment.
+        required: true
+      tags:
+      - program-assignments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingProgramAssignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingProgramAssignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingProgramAssignment'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgramAssignment'
+          description: ''
+    delete:
+      operationId: program_assignments_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program assignment.
+        required: true
+      tags:
+      - program-assignments
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
+  /api/programs/:
+    get:
+      operationId: programs_list
+      tags:
+      - programs
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainingProgram'
+          description: ''
+    post:
+      operationId: programs_create
+      tags:
+      - programs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram'
+          description: ''
+  /api/programs/{id}/:
+    get:
+      operationId: programs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program.
+        required: true
+      tags:
+      - programs
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram'
+          description: ''
+    put:
+      operationId: programs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program.
+        required: true
+      tags:
+      - programs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+        required: true
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram'
+          description: ''
+    patch:
+      operationId: programs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program.
+        required: true
+      tags:
+      - programs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingProgram'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingProgram'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTrainingProgram'
+      security:
+      - SupabaseJWT: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram'
+          description: ''
+    delete:
+      operationId: programs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this training program.
+        required: true
+      tags:
+      - programs
+      security:
+      - SupabaseJWT: []
+      responses:
+        '204':
+          description: No response body
   /api/resources/:
     get:
       operationId: resources_list
@@ -3439,6 +3729,108 @@ components:
           $ref: '#/components/schemas/RoleKindEnum'
         is_active:
           type: boolean
+    PatchedTrainingProgram:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 160
+        summary:
+          type: string
+        goal:
+          type: string
+          maxLength: 160
+        difficulty:
+          type: string
+          maxLength: 80
+        status:
+          $ref: '#/components/schemas/TrainingProgramStatusEnum'
+        created_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        created_by_name:
+          type: string
+          readOnly: true
+        content: {}
+        is_active:
+          type: boolean
+        assignment_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedTrainingProgramAssignment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        program:
+          type: string
+          format: uuid
+        program_title:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        customer_membership_code:
+          type: string
+          readOnly: true
+        assigned_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        assigned_by_name:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/TrainingProgramAssignmentStatusEnum'
+        starts_on:
+          type: string
+          format: date
+          nullable: true
+        ends_on:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
     PatchedTrainingSessionOccurrence:
       type: object
       properties:
@@ -3863,6 +4255,151 @@ components:
         * `active` - Active
         * `guest` - Guest
         * `suspended` - Suspended
+    TrainingProgram:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 160
+        summary:
+          type: string
+        goal:
+          type: string
+          maxLength: 160
+        difficulty:
+          type: string
+          maxLength: 80
+        status:
+          $ref: '#/components/schemas/TrainingProgramStatusEnum'
+        created_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        created_by_name:
+          type: string
+          readOnly: true
+        content: {}
+        is_active:
+          type: boolean
+        assignment_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - assignment_count
+      - created_at
+      - created_by
+      - created_by_name
+      - id
+      - organization
+      - title
+      - updated_at
+    TrainingProgramAssignment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        organization:
+          type: string
+          format: uuid
+          readOnly: true
+        program:
+          type: string
+          format: uuid
+        program_title:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+          format: uuid
+        customer_name:
+          type: string
+          readOnly: true
+        customer_membership_code:
+          type: string
+          readOnly: true
+        assigned_by:
+          type: string
+          format: uuid
+          readOnly: true
+          nullable: true
+        assigned_by_name:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/TrainingProgramAssignmentStatusEnum'
+        starts_on:
+          type: string
+          format: date
+          nullable: true
+        ends_on:
+          type: string
+          format: date
+          nullable: true
+        notes:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - assigned_by
+      - assigned_by_name
+      - created_at
+      - customer
+      - customer_membership_code
+      - customer_name
+      - id
+      - organization
+      - program
+      - program_title
+      - updated_at
+    TrainingProgramAssignmentStatusEnum:
+      enum:
+      - assigned
+      - active
+      - completed
+      - cancelled
+      type: string
+      description: |-
+        * `assigned` - Assigned
+        * `active` - Active
+        * `completed` - Completed
+        * `cancelled` - Cancelled
+    TrainingProgramStatusEnum:
+      enum:
+      - draft
+      - active
+      - archived
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `active` - Active
+        * `archived` - Archived
     TrainingSessionOccurrence:
       type: object
       properties:

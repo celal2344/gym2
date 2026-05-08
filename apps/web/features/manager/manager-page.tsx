@@ -13,6 +13,7 @@ import {
   deactivateManagerStaff,
   deactivateManagerTrainer,
   listManagerStaff,
+  listManagerGymGoers,
   listManagerTrainers,
   updateManagerStaff,
   updateManagerTrainer,
@@ -22,6 +23,7 @@ import { ManagerGymGoersPanel } from "./components/manager-gym-goers-panel";
 import { ManagerOverviewPanel } from "./components/manager-overview-panel";
 import { ManagerSessionsPanel } from "./components/manager-sessions-panel";
 import { ManagerStaffPanel } from "./components/manager-staff-panel";
+import { ProgramsPanel } from "@/features/programs/components/programs-panel";
 
 export function ManagerPage() {
   const [activeSection, setActiveSection] = useState<ManagerSectionId>("overview");
@@ -124,6 +126,12 @@ export function ManagerPage() {
             ) : null}
             {activeSection === "gym-goers" ? <ManagerGymGoersPanel /> : null}
             {activeSection === "sessions" ? <ManagerSessionsPanel /> : null}
+            {activeSection === "programs" ? (
+              <ProgramsPanel
+                description="Edit program shells and assign them to gym goers."
+                listGymGoers={listManagerGymGoers}
+              />
+            ) : null}
           </div>
         </section>
       </div>

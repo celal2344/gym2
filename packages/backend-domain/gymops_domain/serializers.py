@@ -13,6 +13,8 @@ from .models import (
     Service,
     SlotInventory,
     StaffMember,
+    TrainingProgram,
+    TrainingProgramAssignment,
     TrainingSessionOccurrence,
     TrainingSessionPlan,
 )
@@ -153,6 +155,110 @@ class MembershipSerializer(serializers.ModelSerializer):
             "external_payment_reference",
             "is_active",
         ]
+
+
+class TrainingProgramSerializer(serializers.ModelSerializer):
+    created_by_name = serializers.CharField(source="created_by.display_name", read_only=True)
+    assignment_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TrainingProgram
+        fields = [
+            "id",
+            "organization",
+            "title",
+            "summary",
+            "goal",
+            "difficulty",
+            "status",
+            "created_by",
+            "created_by_name",
+            "content",
+            "is_active",
+            "assignment_count",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "organization", "created_by", "created_by_name", "assignment_count", "created_at", "updated_at"]
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        return TrainingProgram.objects.create(
+            organization=self.context["organization"],
+            created_by=getattr(getattr(request, "user", None), "staff_member", None),
+            **validated_data,
+        )
+
+    def get_assignment_count(self, instance) -> int:
+        return instance.assignments.filter(is_active=True).count()
+
+
+class TrainingProgramAssignmentSerializer(serializers.ModelSerializer):
+    program_title = serializers.CharField(source="program.title", read_only=True)
+    customer_name = serializers.CharField(source="customer.profile.full_name", read_only=True)
+    customer_membership_code = serializers.CharField(source="customer.membership_code", read_only=True)
+    assigned_by_name = serializers.CharField(source="assigned_by.display_name", read_only=True)
+
+    class Meta:
+        model = TrainingProgramAssignment
+        fields = [
+            "id",
+            "organization",
+            "program",
+            "program_title",
+            "customer",
+            "customer_name",
+            "customer_membership_code",
+            "assigned_by",
+            "assigned_by_name",
+            "status",
+            "starts_on",
+            "ends_on",
+            "notes",
+            "is_active",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = [
+            "id",
+            "organization",
+            "program_title",
+            "customer_name",
+            "customer_membership_code",
+            "assigned_by",
+            "assigned_by_name",
+            "created_at",
+            "updated_at",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        organization = self.context.get("organization")
+        if organization:
+            self.fields["program"].queryset = TrainingProgram.objects.filter(organization=organization, is_active=True)
+            self.fields["customer"].queryset = Customer.objects.filter(organization=organization, is_active=True)
+
+    def validate(self, attrs):
+        organization = self.context.get("organization")
+        program = attrs.get("program", getattr(self.instance, "program", None))
+        customer = attrs.get("customer", getattr(self.instance, "customer", None))
+        if organization and program and program.organization_id != organization.id:
+            raise serializers.ValidationError({"program": "Program must belong to the current organization."})
+        if organization and customer and customer.organization_id != organization.id:
+            raise serializers.ValidationError({"customer": "Gym goer must belong to the current organization."})
+        starts_on = attrs.get("starts_on", getattr(self.instance, "starts_on", None))
+        ends_on = attrs.get("ends_on", getattr(self.instance, "ends_on", None))
+        if starts_on and ends_on and ends_on < starts_on:
+            raise serializers.ValidationError({"ends_on": "Program assignment must end after it starts."})
+        return attrs
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        return TrainingProgramAssignment.objects.create(
+            organization=self.context["organization"],
+            assigned_by=getattr(getattr(request, "user", None), "staff_member", None),
+            **validated_data,
+        )
 
 
 class TrainingSessionPlanSerializer(serializers.ModelSerializer):

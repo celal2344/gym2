@@ -1,4 +1,4 @@
-import { CalendarDays, Dumbbell, LayoutDashboard, UserCog, UsersRound } from "lucide-react";
+import { CalendarDays, ClipboardList, Dumbbell, LayoutDashboard, UserCog, UsersRound } from "lucide-react";
 
 export const managerSections = [
   { id: "overview", label: "Dashboard", icon: LayoutDashboard },
@@ -6,6 +6,7 @@ export const managerSections = [
   { id: "trainers", label: "Trainers", icon: Dumbbell },
   { id: "gym-goers", label: "Gym goers", icon: UsersRound },
   { id: "sessions", label: "Sessions", icon: CalendarDays },
+  { id: "programs", label: "Programs", icon: ClipboardList },
 ] as const;
 
 export type ManagerSectionId = (typeof managerSections)[number]["id"];

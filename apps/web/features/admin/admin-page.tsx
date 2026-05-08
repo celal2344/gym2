@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminCustomersPanel } from "./components/admin-customers-panel";
 import { AdminEmployeesPanel } from "./components/admin-employees-panel";
+import { ProgramsPanel } from "@/features/programs/components/programs-panel";
+import { listCustomers } from "@/lib/api/admin";
 
 export function AdminPage() {
   return (
@@ -42,15 +44,19 @@ export function AdminPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <Tabs defaultValue="employees" className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2 rounded-md">
+          <TabsList className="grid w-full max-w-xl grid-cols-3 rounded-md">
             <TabsTrigger value="employees">Employees</TabsTrigger>
             <TabsTrigger value="customers">Users</TabsTrigger>
+            <TabsTrigger value="programs">Programs</TabsTrigger>
           </TabsList>
           <TabsContent value="employees" className="mt-4">
             <AdminEmployeesPanel />
           </TabsContent>
           <TabsContent value="customers" className="mt-4">
             <AdminCustomersPanel />
+          </TabsContent>
+          <TabsContent value="programs" className="mt-4">
+            <ProgramsPanel description="Edit program shells and assign them to gym goers." listGymGoers={listCustomers} />
           </TabsContent>
         </Tabs>
       </section>

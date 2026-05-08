@@ -5,6 +5,7 @@ export * from "./auth";
 export * from "./bookings/schemas";
 export * from "./common/money";
 export * from "./dashboard/metrics";
+export * from "./programs";
 export * from "./services/fixtures";
 export * from "./services/schemas";
 export * from "./sessions";
