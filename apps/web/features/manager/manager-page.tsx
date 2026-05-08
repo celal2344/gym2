@@ -1,12 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { ClipboardList } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { LogoutButton } from "@/components/auth/logout-button";
-import { Button } from "@/components/ui/button";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import {
   createManagerStaff,
   createManagerTrainer,
@@ -23,6 +20,7 @@ import { ManagerGymGoersPanel } from "./components/manager-gym-goers-panel";
 import { ManagerCheckInsPanel } from "./components/manager-check-ins-panel";
 import { ManagerMembershipsPanel } from "./components/manager-memberships-panel";
 import { ManagerOverviewPanel } from "./components/manager-overview-panel";
+import { ManagerSidebar } from "./components/manager-sidebar";
 import { ManagerSessionsPanel } from "./components/manager-sessions-panel";
 import { ManagerStaffPanel } from "./components/manager-staff-panel";
 import { ProgramsPanel } from "@/features/programs/components/programs-panel";
@@ -32,61 +30,22 @@ export function ManagerPage() {
   const activeMeta = managerSections.find((section) => section.id === activeSection) ?? managerSections[0];
 
   return (
-    <main className="min-h-screen bg-[#f6f4ef] text-zinc-950">
-      <div className="flex min-h-screen flex-col lg:flex-row">
-        <aside className="border-b border-zinc-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:border-r lg:border-b-0">
-          <div className="flex h-full flex-col gap-6 px-4 py-4">
-            <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-md bg-cyan-800 text-white">
-                <ClipboardList className="size-5" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold">Manager panel</p>
-                <p className="text-xs text-zinc-500">Organization operations</p>
-              </div>
-            </div>
-
-            <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
-              {managerSections.map((section) => {
-                const Icon = section.icon;
-                const isActive = section.id === activeSection;
-                return (
-                  <Button
-                    key={section.id}
-                    variant={isActive ? "default" : "ghost"}
-                    className="h-10 justify-start rounded-md whitespace-nowrap"
-                    onClick={() => setActiveSection(section.id)}
-                  >
-                    <Icon className="size-4" />
-                    {section.label}
-                  </Button>
-                );
-              })}
-            </nav>
-
-            <div className="mt-auto hidden rounded-md border border-zinc-200 bg-[#fbfaf7] p-3 text-sm text-zinc-600 lg:block">
-              <p className="font-medium text-zinc-950">Access scope</p>
-              <p className="mt-1">Managers can manage staff, members, memberships, check-ins, sessions, and programs.</p>
-              <div className="mt-3 flex gap-2">
-                <Button variant="outline" size="sm">
-                  <Link href="/profile">Profile</Link>
-                </Button>
-                <LogoutButton />
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <section className="flex-1">
-          <header className="border-b border-zinc-200 bg-white">
+    <SidebarProvider>
+      <ManagerSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
+      <SidebarInset className="min-h-screen bg-[#f6f4ef] text-zinc-950">
+        <header className="border-b border-zinc-200 bg-white">
             <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="rounded-md">
-                  {activeMeta.label}
-                </Badge>
-                <Badge variant="outline" className="rounded-md">
-                  CRUD enabled
-                </Badge>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <SidebarTrigger className="md:hidden" />
+                  <Badge variant="secondary" className="rounded-md">
+                    {activeMeta.label}
+                  </Badge>
+                  <Badge variant="outline" className="rounded-md">
+                    CRUD enabled
+                  </Badge>
+                </div>
+                <SidebarTrigger className="hidden md:inline-flex" />
               </div>
               <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                 <div>
@@ -97,9 +56,9 @@ export function ManagerPage() {
                 </div>
               </div>
             </div>
-          </header>
+        </header>
 
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             {activeSection === "overview" ? <ManagerOverviewPanel /> : null}
             {activeSection === "staff" ? (
               <ManagerStaffPanel
@@ -136,9 +95,8 @@ export function ManagerPage() {
                 listGymGoers={listManagerGymGoers}
               />
             ) : null}
-          </div>
-        </section>
-      </div>
-    </main>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
