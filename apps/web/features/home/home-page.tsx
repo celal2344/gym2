@@ -25,6 +25,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -54,11 +55,9 @@ export default function Home() {
               </h1>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline">
-                <Link href="/login" className="flex items-center gap-1.5">
-                  <LogIn className="size-4" />
-                  Login
-                </Link>
+              <Button variant="outline" render={<Link href="/login" />}>
+                <LogIn className="size-4" />
+                Login
               </Button>
               <Button variant="outline">
                 <QrCode className="size-4" />
@@ -105,6 +104,9 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <Table>
+                  <TableCaption className="sr-only">
+                    Today&apos;s bookings
+                  </TableCaption>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Member</TableHead>

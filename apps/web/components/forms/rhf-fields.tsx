@@ -1,16 +1,37 @@
 "use client";
 
-import { type Control, Controller, type FieldPath, type FieldValues } from "react-hook-form";
+import { useId } from "react";
+import {
+  type Control,
+  Controller,
+  type FieldPath,
+  type FieldValues,
+} from "react-hook-form";
 import type { TranslationKey } from "@repo/domain/i18n";
 import { t } from "@repo/domain/i18n";
 
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 function errorMessage(message?: string) {
   return message ? t(message as TranslationKey) : undefined;
+}
+
+function normalizeIdPart(value: string) {
+  return value.replace(/[^a-zA-Z0-9_-]+/g, "-");
+}
+
+function describedBy(...ids: Array<string | undefined>) {
+  const value = ids.filter(Boolean).join(" ");
+  return value || undefined;
 }
 
 type TextFormFieldProps<T extends FieldValues> = {
@@ -28,21 +49,35 @@ export function TextFormField<T extends FieldValues>({
   type = "text",
   className,
 }: TextFormFieldProps<T>) {
+  const reactId = useId().replace(/:/g, "");
+  const fieldId = `${normalizeIdPart(String(name))}-${reactId}`;
+  const inputId = `${fieldId}-input`;
+  const errorId = `${fieldId}-error`;
+
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={className}>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={inputId}>{label}</FieldLabel>
           <Input
             {...field}
-            id={field.name}
+            id={inputId}
             type={type}
             value={field.value ?? ""}
             aria-invalid={fieldState.invalid}
+            aria-describedby={describedBy(
+              fieldState.invalid ? errorId : undefined,
+            )}
+            aria-errormessage={fieldState.invalid ? errorId : undefined}
           />
-          {fieldState.invalid ? <FieldError errors={[{ message: errorMessage(fieldState.error?.message) }]} /> : null}
+          {fieldState.invalid ? (
+            <FieldError
+              id={errorId}
+              errors={[{ message: errorMessage(fieldState.error?.message) }]}
+            />
+          ) : null}
         </Field>
       )}
     />
@@ -62,15 +97,34 @@ export function TextareaFormField<T extends FieldValues>({
   label,
   className,
 }: TextareaFormFieldProps<T>) {
+  const reactId = useId().replace(/:/g, "");
+  const fieldId = `${normalizeIdPart(String(name))}-${reactId}`;
+  const inputId = `${fieldId}-input`;
+  const errorId = `${fieldId}-error`;
+
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={className}>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-          <Textarea {...field} id={field.name} value={field.value ?? ""} aria-invalid={fieldState.invalid} />
-          {fieldState.invalid ? <FieldError errors={[{ message: errorMessage(fieldState.error?.message) }]} /> : null}
+          <FieldLabel htmlFor={inputId}>{label}</FieldLabel>
+          <Textarea
+            {...field}
+            id={inputId}
+            value={field.value ?? ""}
+            aria-invalid={fieldState.invalid}
+            aria-describedby={describedBy(
+              fieldState.invalid ? errorId : undefined,
+            )}
+            aria-errormessage={fieldState.invalid ? errorId : undefined}
+          />
+          {fieldState.invalid ? (
+            <FieldError
+              id={errorId}
+              errors={[{ message: errorMessage(fieldState.error?.message) }]}
+            />
+          ) : null}
         </Field>
       )}
     />
@@ -92,15 +146,20 @@ export function NumberFormField<T extends FieldValues>({
   min = 0,
   className,
 }: NumberFormFieldProps<T>) {
+  const reactId = useId().replace(/:/g, "");
+  const fieldId = `${normalizeIdPart(String(name))}-${reactId}`;
+  const inputId = `${fieldId}-input`;
+  const errorId = `${fieldId}-error`;
+
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={className}>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={inputId}>{label}</FieldLabel>
           <Input
-            id={field.name}
+            id={inputId}
             name={field.name}
             type="number"
             min={min}
@@ -108,8 +167,17 @@ export function NumberFormField<T extends FieldValues>({
             onChange={(event) => field.onChange(Number(event.target.value))}
             onBlur={field.onBlur}
             aria-invalid={fieldState.invalid}
+            aria-describedby={describedBy(
+              fieldState.invalid ? errorId : undefined,
+            )}
+            aria-errormessage={fieldState.invalid ? errorId : undefined}
           />
-          {fieldState.invalid ? <FieldError errors={[{ message: errorMessage(fieldState.error?.message) }]} /> : null}
+          {fieldState.invalid ? (
+            <FieldError
+              id={errorId}
+              errors={[{ message: errorMessage(fieldState.error?.message) }]}
+            />
+          ) : null}
         </Field>
       )}
     />
@@ -133,15 +201,33 @@ export function SelectFormField<T extends FieldValues>({
   disabled = false,
   className,
 }: SelectFormFieldProps<T>) {
+  const reactId = useId().replace(/:/g, "");
+  const fieldId = `${normalizeIdPart(String(name))}-${reactId}`;
+  const triggerId = `${fieldId}-trigger`;
+  const errorId = `${fieldId}-error`;
+
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={className}>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-          <Select name={field.name} value={field.value ?? ""} onValueChange={field.onChange} disabled={disabled}>
-            <SelectTrigger id={field.name} className="w-full" aria-invalid={fieldState.invalid}>
+          <FieldLabel htmlFor={triggerId}>{label}</FieldLabel>
+          <Select
+            name={field.name}
+            value={field.value ?? ""}
+            onValueChange={field.onChange}
+            disabled={disabled}
+          >
+            <SelectTrigger
+              id={triggerId}
+              className="w-full"
+              aria-invalid={fieldState.invalid}
+              aria-describedby={describedBy(
+                fieldState.invalid ? errorId : undefined,
+              )}
+              aria-errormessage={fieldState.invalid ? errorId : undefined}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -152,7 +238,12 @@ export function SelectFormField<T extends FieldValues>({
               ))}
             </SelectContent>
           </Select>
-          {fieldState.invalid ? <FieldError errors={[{ message: errorMessage(fieldState.error?.message) }]} /> : null}
+          {fieldState.invalid ? (
+            <FieldError
+              id={errorId}
+              errors={[{ message: errorMessage(fieldState.error?.message) }]}
+            />
+          ) : null}
         </Field>
       )}
     />

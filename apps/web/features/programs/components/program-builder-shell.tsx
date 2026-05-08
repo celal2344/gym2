@@ -434,12 +434,13 @@ export function ProgramBuilderShell({
                   <button
                     type="button"
                     key={exercise.id}
-                    className={`w-full rounded-md border p-3 text-left transition ${
+                    aria-pressed={activeExercise?.id === exercise.id}
+                    onClick={() => setActiveExerciseId(exercise.id)}
+                    className={`w-full rounded-md border p-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                       activeExercise?.id === exercise.id
                         ? "border-cyan-800 bg-cyan-50"
                         : "border-border bg-card hover:bg-accent/50"
                     }`}
-                    onClick={() => setActiveExerciseId(exercise.id)}
                   >
                     <div className="flex gap-3">
                       <div className="flex size-12 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-cyan-800">

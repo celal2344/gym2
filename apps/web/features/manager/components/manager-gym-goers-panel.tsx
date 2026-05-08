@@ -5,15 +5,31 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Pencil, Plus, RefreshCw, UserMinus } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { customerFormSchema, type CustomerFormInput, type CustomerRecord } from "@repo/domain";
+import {
+  customerFormSchema,
+  type CustomerFormInput,
+  type CustomerRecord,
+} from "@repo/domain";
 
 import { DataTable } from "@/components/data/data-table";
 import { CustomerFormFields } from "@/components/domain/customer-form-fields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   createManagerGymGoer,
   deactivateManagerGymGoer,
@@ -65,7 +81,9 @@ export function ManagerGymGoersPanel() {
     try {
       setCustomers(await listManagerGymGoers());
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to load gym goers.");
+      setError(
+        err instanceof Error ? err.message : "Unable to load gym goers.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +130,9 @@ export function ManagerGymGoersPanel() {
       await deactivateManagerGymGoer(customer);
       await refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to remove gym goer.");
+      setError(
+        err instanceof Error ? err.message : "Unable to remove gym goer.",
+      );
     }
   }
 
@@ -123,7 +143,9 @@ export function ManagerGymGoersPanel() {
       cell: ({ row }) => (
         <div>
           <div className="font-medium">{row.original.fullName}</div>
-          <div className="text-xs text-zinc-500">{row.original.email || row.original.phone}</div>
+          <div className="text-xs text-zinc-500">
+            {row.original.email || row.original.phone}
+          </div>
         </div>
       ),
     },
@@ -134,23 +156,37 @@ export function ManagerGymGoersPanel() {
     {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => <Badge variant="secondary">{row.original.status}</Badge>,
+      cell: ({ row }) => (
+        <Badge variant="secondary">{row.original.status}</Badge>
+      ),
     },
     {
       accessorKey: "notes",
       header: "Notes",
-      cell: ({ row }) => <span className="block max-w-64 truncate">{row.original.notes || "-"}</span>,
+      cell: ({ row }) => (
+        <span className="block max-w-64 truncate">
+          {row.original.notes || "-"}
+        </span>
+      ),
     },
     {
       id: "actions",
       header: () => <div className="text-right">Actions</div>,
       cell: ({ row }) => (
         <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={() => openEdit(row.original)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => openEdit(row.original)}
+          >
             <Pencil className="size-3" />
             Edit
           </Button>
-          <Button variant="destructive" size="sm" onClick={() => void deactivate(row.original)}>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => void deactivate(row.original)}
+          >
             <UserMinus className="size-3" />
             Remove
           </Button>
@@ -164,10 +200,16 @@ export function ManagerGymGoersPanel() {
       <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <CardTitle>Gym goers</CardTitle>
-          <CardDescription>List, add, edit, and remove customer profiles.</CardDescription>
+          <CardDescription>
+            List, add, edit, and remove customer profiles.
+          </CardDescription>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => void refresh()} disabled={isLoading}>
+          <Button
+            variant="outline"
+            onClick={() => void refresh()}
+            disabled={isLoading}
+          >
             <RefreshCw className="size-4" />
             Refresh
           </Button>
@@ -178,10 +220,20 @@ export function ManagerGymGoersPanel() {
             </Button>
             <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
               <DialogHeader>
-                <DialogTitle>{editing ? "Edit gym goer" : "Add gym goer"}</DialogTitle>
-                <DialogDescription>Gym goers are customer profiles with organization membership codes.</DialogDescription>
+                <DialogTitle>
+                  {editing ? "Edit gym goer" : "Add gym goer"}
+                </DialogTitle>
+                <DialogDescription>
+                  Gym goers are customer profiles with organization membership
+                  codes.
+                </DialogDescription>
               </DialogHeader>
-              <form id="manager-gym-goer-form" className="space-y-5" onSubmit={form.handleSubmit(saveCustomer)} noValidate>
+              <form
+                id="manager-gym-goer-form"
+                className="space-y-5"
+                onSubmit={form.handleSubmit(saveCustomer)}
+                noValidate
+              >
                 <CustomerFormFields control={form.control} />
                 <Button type="submit" disabled={isSaving}>
                   {editing ? "Save changes" : "Create"}
@@ -198,7 +250,12 @@ export function ManagerGymGoersPanel() {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         ) : null}
-        <DataTable columns={columns} data={customers} emptyLabel={isLoading ? "Loading..." : "No active gym goers found."} />
+        <DataTable
+          columns={columns}
+          data={customers}
+          emptyLabel={isLoading ? "Loading..." : "No active gym goers found."}
+          label="Gym goers"
+        />
       </CardContent>
     </Card>
   );

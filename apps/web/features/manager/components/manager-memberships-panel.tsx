@@ -20,12 +20,29 @@ import {
 } from "@repo/domain";
 
 import { DataTable } from "@/components/data/data-table";
-import { NumberFormField, SelectFormField, TextareaFormField, TextFormField } from "@/components/forms/rhf-fields";
+import {
+  NumberFormField,
+  SelectFormField,
+  TextareaFormField,
+  TextFormField,
+} from "@/components/forms/rhf-fields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   createManagerMembership,
   createManagerMembershipPlan,
@@ -109,7 +126,9 @@ export function ManagerMembershipsPanel() {
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [customers, setCustomers] = useState<CustomerRecord[]>([]);
   const [editingPlan, setEditingPlan] = useState<MembershipPlan | null>(null);
-  const [editingMembership, setEditingMembership] = useState<Membership | null>(null);
+  const [editingMembership, setEditingMembership] = useState<Membership | null>(
+    null,
+  );
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [isMembershipOpen, setIsMembershipOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -140,7 +159,9 @@ export function ManagerMembershipsPanel() {
       setMemberships(nextMemberships);
       setCustomers(nextCustomers);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to load memberships.");
+      setError(
+        err instanceof Error ? err.message : "Unable to load memberships.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -150,9 +171,16 @@ export function ManagerMembershipsPanel() {
     void refresh();
   }, [refresh]);
 
-  const planOptions = useMemo(() => plans.map((plan) => ({ value: plan.id, label: plan.name })), [plans]);
+  const planOptions = useMemo(
+    () => plans.map((plan) => ({ value: plan.id, label: plan.name })),
+    [plans],
+  );
   const customerOptions = useMemo(
-    () => customers.map((customer) => ({ value: customer.id, label: `${customer.fullName} (${customer.membershipCode})` })),
+    () =>
+      customers.map((customer) => ({
+        value: customer.id,
+        label: `${customer.fullName} (${customer.membershipCode})`,
+      })),
     [customers],
   );
 
@@ -198,7 +226,9 @@ export function ManagerMembershipsPanel() {
       setIsPlanOpen(false);
       await refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to save membership plan.");
+      setError(
+        err instanceof Error ? err.message : "Unable to save membership plan.",
+      );
     } finally {
       setIsSaving(false);
     }
@@ -208,7 +238,10 @@ export function ManagerMembershipsPanel() {
     setError(null);
     setIsSaving(true);
     try {
-      const payload = membershipCreateSchema.parse({ ...values, validTo: values.validTo || null });
+      const payload = membershipCreateSchema.parse({
+        ...values,
+        validTo: values.validTo || null,
+      });
       if (editingMembership) {
         await updateManagerMembership(editingMembership.id, payload);
       } else {
@@ -217,7 +250,9 @@ export function ManagerMembershipsPanel() {
       setIsMembershipOpen(false);
       await refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to save membership.");
+      setError(
+        err instanceof Error ? err.message : "Unable to save membership.",
+      );
     } finally {
       setIsSaving(false);
     }
@@ -230,23 +265,44 @@ export function ManagerMembershipsPanel() {
       cell: ({ row }) => (
         <div>
           <div className="font-medium">{row.original.name}</div>
-          <div className="text-xs capitalize text-zinc-500">{label(row.original.accessRule)}</div>
+          <div className="text-xs capitalize text-zinc-500">
+            {label(row.original.accessRule)}
+          </div>
         </div>
       ),
     },
-    { accessorKey: "billingCycle", header: "Billing", cell: ({ row }) => label(row.original.billingCycle) },
-    { accessorKey: "priceAmount", header: "Price", cell: ({ row }) => `${row.original.priceAmount} ${row.original.priceCurrency}` },
+    {
+      accessorKey: "billingCycle",
+      header: "Billing",
+      cell: ({ row }) => label(row.original.billingCycle),
+    },
+    {
+      accessorKey: "priceAmount",
+      header: "Price",
+      cell: ({ row }) =>
+        `${row.original.priceAmount} ${row.original.priceCurrency}`,
+    },
     { accessorKey: "activeMembershipCount", header: "Active members" },
     {
       id: "actions",
       header: () => <div className="text-right">Actions</div>,
       cell: ({ row }) => (
         <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={() => openEditPlan(row.original)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => openEditPlan(row.original)}
+          >
             <Pencil className="size-3" />
             Edit
           </Button>
-          <Button variant="destructive" size="sm" onClick={() => void deactivateManagerMembershipPlan(row.original).then(refresh)}>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() =>
+              void deactivateManagerMembershipPlan(row.original).then(refresh)
+            }
+          >
             <XCircle className="size-3" />
             Deactivate
           </Button>
@@ -261,24 +317,53 @@ export function ManagerMembershipsPanel() {
       header: "Gym goer",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original.customerName || row.original.customerMembershipCode}</div>
-          <div className="text-xs text-zinc-500">{row.original.customerMembershipCode}</div>
+          <div className="font-medium">
+            {row.original.customerName || row.original.customerMembershipCode}
+          </div>
+          <div className="text-xs text-zinc-500">
+            {row.original.customerMembershipCode}
+          </div>
         </div>
       ),
     },
-    { accessorKey: "planName", header: "Plan", cell: ({ row }) => row.original.planName || label(row.original.productKind) },
-    { accessorKey: "status", header: "Status", cell: ({ row }) => <Badge variant="secondary">{label(row.original.status)}</Badge> },
-    { accessorKey: "validTo", header: "Valid to", cell: ({ row }) => row.original.validTo || "Open ended" },
+    {
+      accessorKey: "planName",
+      header: "Plan",
+      cell: ({ row }) =>
+        row.original.planName || label(row.original.productKind),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <Badge variant="secondary">{label(row.original.status)}</Badge>
+      ),
+    },
+    {
+      accessorKey: "validTo",
+      header: "Valid to",
+      cell: ({ row }) => row.original.validTo || "Open ended",
+    },
     {
       id: "actions",
       header: () => <div className="text-right">Actions</div>,
       cell: ({ row }) => (
         <div className="flex justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={() => openEditMembership(row.original)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => openEditMembership(row.original)}
+          >
             <Pencil className="size-3" />
             Edit
           </Button>
-          <Button variant="destructive" size="sm" onClick={() => void deactivateManagerMembership(row.original).then(refresh)}>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() =>
+              void deactivateManagerMembership(row.original).then(refresh)
+            }
+          >
             <XCircle className="size-3" />
             Cancel
           </Button>
@@ -296,10 +381,17 @@ export function ManagerMembershipsPanel() {
               <CreditCard className="size-5 text-cyan-800" />
               Membership lifecycle
             </CardTitle>
-            <CardDescription>Manage sellable plans, member status, freezes, cancellations, and external references.</CardDescription>
+            <CardDescription>
+              Manage sellable plans, member status, freezes, cancellations, and
+              external references.
+            </CardDescription>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" onClick={() => void refresh()} disabled={isLoading}>
+            <Button
+              variant="outline"
+              onClick={() => void refresh()}
+              disabled={isLoading}
+            >
               <RefreshCw className="size-4" />
               Refresh
             </Button>
@@ -307,7 +399,10 @@ export function ManagerMembershipsPanel() {
               <Plus className="size-4" />
               New plan
             </Button>
-            <Button onClick={openCreateMembership} disabled={!customerOptions.length}>
+            <Button
+              onClick={openCreateMembership}
+              disabled={!customerOptions.length}
+            >
               <Plus className="size-4" />
               Assign membership
             </Button>
@@ -320,36 +415,96 @@ export function ManagerMembershipsPanel() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           ) : null}
-          <DataTable columns={planColumns} data={plans} emptyLabel={isLoading ? "Loading..." : "No membership plans found."} />
+          <DataTable
+            columns={planColumns}
+            data={plans}
+            emptyLabel={isLoading ? "Loading..." : "No membership plans found."}
+            label="Membership plans"
+          />
         </CardContent>
       </Card>
 
       <Card className="rounded-md border-zinc-200 shadow-none">
         <CardHeader>
           <CardTitle>Member memberships</CardTitle>
-          <CardDescription>Current memberships, credit packs, trials, freezes, cancellations, and expirations.</CardDescription>
+          <CardDescription>
+            Current memberships, credit packs, trials, freezes, cancellations,
+            and expirations.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable columns={membershipColumns} data={memberships} emptyLabel={isLoading ? "Loading..." : "No memberships found."} />
+          <DataTable
+            columns={membershipColumns}
+            data={memberships}
+            emptyLabel={isLoading ? "Loading..." : "No memberships found."}
+            label="Member memberships"
+          />
         </CardContent>
       </Card>
 
       <Dialog open={isPlanOpen} onOpenChange={setIsPlanOpen}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{editingPlan ? "Edit membership plan" : "New membership plan"}</DialogTitle>
-            <DialogDescription>Plan pricing is recorded only; payment collection is handled externally.</DialogDescription>
+            <DialogTitle>
+              {editingPlan ? "Edit membership plan" : "New membership plan"}
+            </DialogTitle>
+            <DialogDescription>
+              Plan pricing is recorded only; payment collection is handled
+              externally.
+            </DialogDescription>
           </DialogHeader>
-          <form className="space-y-5" onSubmit={planForm.handleSubmit(savePlan)} noValidate>
+          <form
+            className="space-y-5"
+            onSubmit={planForm.handleSubmit(savePlan)}
+            noValidate
+          >
             <div className="grid gap-4 md:grid-cols-2">
-              <TextFormField control={planForm.control} name="name" label="Name" />
-              <SelectFormField control={planForm.control} name="productKind" label="Product" options={options(membershipProductKinds)} />
-              <SelectFormField control={planForm.control} name="billingCycle" label="Billing cycle" options={options(membershipBillingCycles)} />
-              <SelectFormField control={planForm.control} name="accessRule" label="Access rule" options={options(membershipAccessRules)} />
-              <NumberFormField control={planForm.control} name="visitLimitPerPeriod" label="Visit limit" min={0} />
-              <NumberFormField control={planForm.control} name="sessionCreditAmount" label="Session credits" min={0} />
-              <NumberFormField control={planForm.control} name="priceAmount" label="Price amount" min={0} />
-              <TextFormField control={planForm.control} name="priceCurrency" label="Currency" />
+              <TextFormField
+                control={planForm.control}
+                name="name"
+                label="Name"
+              />
+              <SelectFormField
+                control={planForm.control}
+                name="productKind"
+                label="Product"
+                options={options(membershipProductKinds)}
+              />
+              <SelectFormField
+                control={planForm.control}
+                name="billingCycle"
+                label="Billing cycle"
+                options={options(membershipBillingCycles)}
+              />
+              <SelectFormField
+                control={planForm.control}
+                name="accessRule"
+                label="Access rule"
+                options={options(membershipAccessRules)}
+              />
+              <NumberFormField
+                control={planForm.control}
+                name="visitLimitPerPeriod"
+                label="Visit limit"
+                min={0}
+              />
+              <NumberFormField
+                control={planForm.control}
+                name="sessionCreditAmount"
+                label="Session credits"
+                min={0}
+              />
+              <NumberFormField
+                control={planForm.control}
+                name="priceAmount"
+                label="Price amount"
+                min={0}
+              />
+              <TextFormField
+                control={planForm.control}
+                name="priceCurrency"
+                label="Currency"
+              />
             </div>
             <Button type="submit" disabled={isSaving}>
               Save plan
@@ -361,22 +516,78 @@ export function ManagerMembershipsPanel() {
       <Dialog open={isMembershipOpen} onOpenChange={setIsMembershipOpen}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{editingMembership ? "Edit membership" : "Assign membership"}</DialogTitle>
-            <DialogDescription>Track lifecycle state without collecting payment inside GymOps.</DialogDescription>
+            <DialogTitle>
+              {editingMembership ? "Edit membership" : "Assign membership"}
+            </DialogTitle>
+            <DialogDescription>
+              Track lifecycle state without collecting payment inside GymOps.
+            </DialogDescription>
           </DialogHeader>
-          <form className="space-y-5" onSubmit={membershipForm.handleSubmit(saveMembership)} noValidate>
+          <form
+            className="space-y-5"
+            onSubmit={membershipForm.handleSubmit(saveMembership)}
+            noValidate
+          >
             <div className="grid gap-4 md:grid-cols-2">
-              <SelectFormField control={membershipForm.control} name="customer" label="Gym goer" options={customerOptions} />
-              <SelectFormField control={membershipForm.control} name="plan" label="Plan" options={planOptions} disabled={!planOptions.length} />
-              <SelectFormField control={membershipForm.control} name="productKind" label="Product" options={options(membershipProductKinds)} />
-              <SelectFormField control={membershipForm.control} name="status" label="Status" options={options(membershipStatuses)} />
-              <TextFormField control={membershipForm.control} name="validFrom" label="Valid from" type="date" />
-              <TextFormField control={membershipForm.control} name="validTo" label="Valid to" type="date" />
-              <NumberFormField control={membershipForm.control} name="remainingCredits" label="Remaining credits" min={0} />
-              <TextFormField control={membershipForm.control} name="externalPaymentReference" label="External reference" />
-              <TextareaFormField control={membershipForm.control} name="cancellationReason" label="Cancellation reason" className="md:col-span-2" />
+              <SelectFormField
+                control={membershipForm.control}
+                name="customer"
+                label="Gym goer"
+                options={customerOptions}
+              />
+              <SelectFormField
+                control={membershipForm.control}
+                name="plan"
+                label="Plan"
+                options={planOptions}
+                disabled={!planOptions.length}
+              />
+              <SelectFormField
+                control={membershipForm.control}
+                name="productKind"
+                label="Product"
+                options={options(membershipProductKinds)}
+              />
+              <SelectFormField
+                control={membershipForm.control}
+                name="status"
+                label="Status"
+                options={options(membershipStatuses)}
+              />
+              <TextFormField
+                control={membershipForm.control}
+                name="validFrom"
+                label="Valid from"
+                type="date"
+              />
+              <TextFormField
+                control={membershipForm.control}
+                name="validTo"
+                label="Valid to"
+                type="date"
+              />
+              <NumberFormField
+                control={membershipForm.control}
+                name="remainingCredits"
+                label="Remaining credits"
+                min={0}
+              />
+              <TextFormField
+                control={membershipForm.control}
+                name="externalPaymentReference"
+                label="External reference"
+              />
+              <TextareaFormField
+                control={membershipForm.control}
+                name="cancellationReason"
+                label="Cancellation reason"
+                className="md:col-span-2"
+              />
             </div>
-            <Button type="submit" disabled={isSaving || !customerOptions.length}>
+            <Button
+              type="submit"
+              disabled={isSaving || !customerOptions.length}
+            >
               Save membership
             </Button>
           </form>

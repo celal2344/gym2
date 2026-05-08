@@ -16,6 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { managerSections, type ManagerSectionId } from "../constants";
 
@@ -28,6 +29,15 @@ export function ManagerSidebar({
   activeSection,
   onSectionChange,
 }: ManagerSidebarProps) {
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  function selectSection(section: ManagerSectionId) {
+    onSectionChange(section);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }
+
   return (
     <Sidebar
       collapsible="icon"
@@ -69,7 +79,8 @@ export function ManagerSidebar({
                     <SidebarMenuButton
                       isActive={section.id === activeSection}
                       tooltip={section.label}
-                      onClick={() => onSectionChange(section.id)}
+                      aria-pressed={section.id === activeSection}
+                      onClick={() => selectSection(section.id)}
                     >
                       <Icon className="size-4" />
                       <span>{section.label}</span>
@@ -88,6 +99,11 @@ export function ManagerSidebar({
             <SidebarMenuButton
               tooltip="Profile"
               render={<Link href="/profile" />}
+              onClick={() => {
+                if (isMobile) {
+                  setOpenMobile(false);
+                }
+              }}
             >
               <span>Profile</span>
             </SidebarMenuButton>

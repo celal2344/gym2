@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -55,6 +56,7 @@ export function DataTable<TData, TValue>({
           </span>
         </div>
         <Table>
+          <TableCaption className="sr-only">{label}</TableCaption>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -113,6 +115,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            aria-label={`Go to the previous page of ${label}`}
           >
             Previous
           </Button>
@@ -121,6 +124,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            aria-label={`Go to the next page of ${label}`}
           >
             Next
           </Button>
