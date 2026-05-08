@@ -201,7 +201,7 @@ export function ProgramsPanel({
       cell: ({ row }) => (
         <div>
           <div className="font-medium">{row.original.title}</div>
-          <div className="text-xs text-zinc-500">
+          <div className="text-xs text-muted-foreground">
             {row.original.goal || row.original.summary || "Blank program shell"}
           </div>
         </div>
@@ -266,7 +266,7 @@ export function ProgramsPanel({
           <div className="font-medium">
             {row.original.customerName || row.original.customerMembershipCode}
           </div>
-          <div className="text-xs text-zinc-500">
+          <div className="text-xs text-muted-foreground">
             {row.original.customerMembershipCode}
           </div>
         </div>
@@ -331,7 +331,7 @@ export function ProgramsPanel({
 
   return (
     <div className="space-y-4">
-      <Card className="rounded-md border-zinc-200 shadow-none">
+      <Card>
         <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
@@ -373,11 +373,12 @@ export function ProgramsPanel({
             columns={programColumns}
             data={programs}
             emptyLabel={isLoading ? "Loading..." : "No programs found."}
+            label="Programs"
           />
         </CardContent>
       </Card>
 
-      <Card className="rounded-md border-zinc-200 shadow-none">
+      <Card>
         <CardHeader>
           <CardTitle>Program assignments</CardTitle>
           <CardDescription>
@@ -391,6 +392,7 @@ export function ProgramsPanel({
             emptyLabel={
               isLoading ? "Loading..." : "No program assignments found."
             }
+            label="Assignments"
           />
         </CardContent>
       </Card>

@@ -160,7 +160,7 @@ export function ExerciseInspector({
           }
         />
       </Field>
-      <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-600">
+      <div className="rounded-md border border-border bg-muted/60 p-3 text-xs text-muted-foreground">
         Free visual source option: Free Exercise DB is Unlicense and exposes
         hosted image paths through GitHub raw URLs.
       </div>

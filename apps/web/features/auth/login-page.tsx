@@ -8,7 +8,13 @@ import { sampleUsers } from "@repo/domain/auth";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { defaultPanelPath, getCurrentProfile } from "@/lib/api/auth";
@@ -31,7 +37,8 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const isSupabaseConfigured = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   );
 
   const selectedSampleUser = useMemo(
@@ -48,7 +55,10 @@ function LoginForm() {
       }
 
       const supabase = createSupabaseBrowserClient();
-      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (signInError) {
         throw signInError;
       }
@@ -113,37 +123,41 @@ function LoginShell({
   onLogin?: () => void;
 }) {
   return (
-    <main className="min-h-screen bg-[#f6f4ef] text-zinc-950">
+    <main className="min-h-screen bg-background text-foreground">
       <section className="mx-auto grid min-h-screen max-w-6xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
         <div className="flex flex-col justify-center">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-md bg-emerald-700 text-white">
+            <div className="flex size-10 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm shadow-primary/20">
               <Dumbbell className="size-5" />
             </div>
             <div>
               <p className="text-sm font-semibold">GymOps</p>
-              <p className="text-xs text-zinc-500">Secure role-based access</p>
+              <p className="text-xs text-muted-foreground">
+                Secure role-based access
+              </p>
             </div>
           </div>
           <h1 className="mt-6 max-w-xl text-3xl font-semibold tracking-normal sm:text-4xl">
             Sign in to your operations workspace.
           </h1>
-          <p className="mt-3 max-w-xl text-sm text-zinc-600">
-            Supabase handles credentials. Django resolves your organization, role, and permitted panels after login.
+          <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">
+            Supabase handles credentials. Django resolves your organization,
+            role, and permitted panels after login.
           </p>
         </div>
 
         <div className="flex items-center">
-          <Card className="w-full rounded-md border-zinc-200 shadow-none">
+          <Card className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <CardTitle>Login</CardTitle>
-                  <CardDescription>Use one of the sample users or a Supabase user linked to a GymOps profile.</CardDescription>
+                  <CardDescription>
+                    Use one of the sample users or a Supabase user linked to a
+                    GymOps profile.
+                  </CardDescription>
                 </div>
-                <Badge variant="secondary" className="rounded-md">
-                  Supabase
-                </Badge>
+                <Badge variant="secondary">Supabase</Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-5">
@@ -151,7 +165,8 @@ function LoginShell({
                 <Alert variant="destructive">
                   <AlertTitle>Supabase is not configured</AlertTitle>
                   <AlertDescription>
-                    Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` before logging in.
+                    Set `NEXT_PUBLIC_SUPABASE_URL` and
+                    `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` before logging in.
                   </AlertDescription>
                 </Alert>
               ) : null}
@@ -168,7 +183,7 @@ function LoginShell({
                     key={user.id}
                     type="button"
                     variant={user.email === email ? "default" : "outline"}
-                    className="h-auto justify-start rounded-md py-3"
+                    className="h-auto justify-start py-3"
                     onClick={() => onSampleUserSelect?.(user.email)}
                   >
                     <UserRound className="size-4" />
@@ -183,7 +198,11 @@ function LoginShell({
               <div className="grid gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" value={email} onChange={(event) => onEmailChange?.(event.target.value)} />
+                  <Input
+                    id="email"
+                    value={email}
+                    onChange={(event) => onEmailChange?.(event.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
@@ -196,13 +215,17 @@ function LoginShell({
                 </div>
               </div>
 
-              <Button className="w-full" onClick={onLogin} disabled={isLoading || !email || !password}>
+              <Button
+                className="w-full"
+                onClick={onLogin}
+                disabled={isLoading || !email || !password}
+              >
                 <LogIn className="size-4" />
                 {isLoading ? "Signing in" : "Sign in"}
               </Button>
 
               {selectedSampleUserPanelPath ? (
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-muted-foreground">
                   Sample route after login: {selectedSampleUserPanelPath}
                 </p>
               ) : null}

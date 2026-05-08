@@ -75,7 +75,7 @@ export function MemberProgramsPanel() {
   );
 
   return (
-    <Card className="rounded-md border-zinc-200 shadow-none">
+    <Card>
       <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <CardTitle className="flex items-center gap-2">
@@ -110,7 +110,7 @@ export function MemberProgramsPanel() {
             ))}
           </div>
         ) : (
-          <div className="rounded-md border border-dashed border-zinc-300 bg-white p-8 text-center text-sm text-zinc-500">
+          <div className="rounded-md border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
             {isLoading ? "Loading..." : "No assigned programs yet."}
           </div>
         )}
@@ -127,11 +127,11 @@ function MemberProgramCard({
   const structure = programStructure(assignment);
 
   return (
-    <div className="rounded-md border border-zinc-200 bg-white p-4">
+    <div className="rounded-lg border border-border bg-card p-4 shadow-sm shadow-slate-900/5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-semibold">{assignment.programTitle}</h2>
-          <p className="mt-1 text-sm text-zinc-600">
+          <p className="mt-1 text-sm text-muted-foreground">
             {assignment.programGoal ||
               assignment.programSummary ||
               "Program details will be added by your trainer."}
@@ -142,41 +142,43 @@ function MemberProgramCard({
         </Badge>
       </div>
 
-      <div className="mt-4 grid gap-2 text-sm text-zinc-600">
+      <div className="mt-4 grid gap-2 text-sm text-muted-foreground">
         <div className="flex justify-between gap-3">
           <span>Difficulty</span>
-          <span className="font-medium capitalize text-zinc-950">
+          <span className="font-medium capitalize text-foreground">
             {assignment.programDifficulty || "-"}
           </span>
         </div>
         <div className="flex justify-between gap-3">
           <span>Trainer</span>
-          <span className="font-medium text-zinc-950">
+          <span className="font-medium text-foreground">
             {assignment.assignedByName || "-"}
           </span>
         </div>
         <div className="flex justify-between gap-3">
           <span>Dates</span>
-          <span className="font-medium text-zinc-950">
+          <span className="font-medium text-foreground">
             {assignment.startsOn || "Open"} - {assignment.endsOn || "Open"}
           </span>
         </div>
         <div className="flex justify-between gap-3">
           <span>Structure</span>
-          <span className="font-medium text-zinc-950">{structure.summary}</span>
+          <span className="font-medium text-foreground">
+            {structure.summary}
+          </span>
         </div>
       </div>
 
       {structure.firstExercises.length ? (
-        <div className="mt-4 space-y-2 rounded-md border border-zinc-200 bg-zinc-50 p-3">
+        <div className="mt-4 space-y-2 rounded-md border border-border bg-muted/50 p-3">
           {structure.firstExercises.map((exercise) => (
             <div key={exercise.id} className="flex gap-2 text-sm">
               <Dumbbell className="mt-0.5 size-4 shrink-0 text-cyan-800" />
               <div>
-                <div className="font-medium text-zinc-950">
+                <div className="font-medium text-foreground">
                   {exercise.exerciseName}
                 </div>
-                <div className="text-xs text-zinc-600">
+                <div className="text-xs text-muted-foreground">
                   {exercise.sets} sets - {exercise.reps} -{" "}
                   {exercise.visualCue.action || exercise.visualCue.setup}
                 </div>
@@ -187,7 +189,7 @@ function MemberProgramCard({
       ) : null}
 
       {assignment.notes ? (
-        <p className="mt-4 text-sm text-zinc-600">{assignment.notes}</p>
+        <p className="mt-4 text-sm text-muted-foreground">{assignment.notes}</p>
       ) : null}
     </div>
   );

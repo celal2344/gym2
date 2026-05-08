@@ -39,7 +39,7 @@ export function ProgramBuilderSidebar({
 }: ProgramBuilderSidebarProps) {
   return (
     <div className="min-w-0 space-y-4">
-      <Card className="rounded-md border-zinc-200 shadow-none">
+      <Card>
         <CardHeader>
           <CardTitle>Program info</CardTitle>
           <CardDescription>
@@ -68,7 +68,7 @@ export function ProgramBuilderSidebar({
         </CardContent>
       </Card>
 
-      <Card className="rounded-md border-zinc-200 shadow-none">
+      <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Weeks</CardTitle>
@@ -86,13 +86,13 @@ export function ProgramBuilderSidebar({
               key={week.id}
               className={`w-full rounded-md border p-3 text-left text-sm transition ${
                 index === activeWeekIndex
-                  ? "border-cyan-800 bg-cyan-50"
-                  : "border-zinc-200 bg-white hover:bg-zinc-50"
+                  ? "border-primary bg-accent"
+                  : "border-border bg-card hover:bg-accent/50"
               }`}
               onClick={() => onSelectWeek(index)}
             >
               <span className="block font-medium">{week.title}</span>
-              <span className="text-xs text-zinc-500">
+              <span className="text-xs text-muted-foreground">
                 {week.days.length} days -{" "}
                 {week.days.reduce(
                   (total, day) => total + day.exercises.length,

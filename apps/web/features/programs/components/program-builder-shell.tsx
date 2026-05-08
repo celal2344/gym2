@@ -262,7 +262,7 @@ export function ProgramBuilderShell({
       onSubmit={form.handleSubmit((values) => save(values))}
       noValidate
     >
-      <div className="sticky top-0 z-20 -mx-4 border-b border-zinc-200 bg-[#f6f4ef]/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div className="sticky top-0 z-20 -mx-4 border-b border-border/70 bg-background/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
             <Button type="button" variant="outline" onClick={onCancel}>
@@ -273,7 +273,9 @@ export function ProgramBuilderShell({
               <h2 className="text-xl font-semibold">
                 {program ? "Edit program" : "Create program"}
               </h2>
-              <p className="text-sm text-zinc-500">{structureSummary}</p>
+              <p className="text-sm text-muted-foreground">
+                {structureSummary}
+              </p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -318,7 +320,7 @@ export function ProgramBuilderShell({
           }}
         />
 
-        <Card className="min-w-0 rounded-md border-zinc-200 shadow-none">
+        <Card className="min-w-0">
           <CardHeader>
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
@@ -435,7 +437,7 @@ export function ProgramBuilderShell({
                     className={`w-full rounded-md border p-3 text-left transition ${
                       activeExercise?.id === exercise.id
                         ? "border-cyan-800 bg-cyan-50"
-                        : "border-zinc-200 bg-white hover:bg-zinc-50"
+                        : "border-border bg-card hover:bg-accent/50"
                     }`}
                     onClick={() => setActiveExerciseId(exercise.id)}
                   >
@@ -452,11 +454,11 @@ export function ProgramBuilderShell({
                             {exercise.sets} sets
                           </Badge>
                         </div>
-                        <p className="mt-1 text-xs text-zinc-500">
+                        <p className="mt-1 text-xs text-muted-foreground">
                           {exercise.reps} - {exercise.restSeconds}s rest -{" "}
                           {exercise.equipment || "no equipment"}
                         </p>
-                        <p className="mt-2 line-clamp-2 text-sm text-zinc-600">
+                        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
                           {exerciseCueSummary(exercise)}
                         </p>
                       </div>
@@ -464,9 +466,9 @@ export function ProgramBuilderShell({
                   </button>
                 ))
               ) : (
-                <div className="rounded-md border border-dashed border-zinc-300 bg-white p-8 text-center">
+                <div className="rounded-md border border-dashed border-border bg-card p-8 text-center">
                   <Activity className="mx-auto size-8 text-zinc-400" />
-                  <p className="mt-2 text-sm text-zinc-500">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     No exercises yet.
                   </p>
                   <Button type="button" className="mt-3" onClick={addExercise}>
@@ -479,7 +481,7 @@ export function ProgramBuilderShell({
           </CardContent>
         </Card>
 
-        <Card className="min-w-0 rounded-md border-zinc-200 shadow-none">
+        <Card className="min-w-0">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Eye className="size-4 text-cyan-800" />
@@ -497,7 +499,7 @@ export function ProgramBuilderShell({
                 onDelete={() => removeExercise(activeExercise.id)}
               />
             ) : (
-              <p className="text-sm text-zinc-500">
+              <p className="text-sm text-muted-foreground">
                 Select or add an exercise to edit cues.
               </p>
             )}

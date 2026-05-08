@@ -6,13 +6,15 @@ import { MemberProgramsPanel } from "./components/member-programs-panel";
 
 export default function UserAppPage() {
   return (
-    <main className="min-h-screen bg-[#f7f7f2] text-zinc-950">
-      <header className="border-b border-zinc-200 bg-white">
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border/70 bg-card/90">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="text-3xl font-semibold tracking-normal sm:text-4xl">Member workspace</h1>
-              <p className="mt-2 max-w-2xl text-sm text-zinc-600">
+              <h1 className="text-3xl font-semibold tracking-normal sm:text-4xl">
+                Member workspace
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                 Review assigned programs and upcoming self-service workflows.
               </p>
             </div>
