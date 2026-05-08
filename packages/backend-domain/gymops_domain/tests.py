@@ -10,10 +10,14 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APIClient
 
+from .errors import DomainError
 from .models import (
+    Attachment,
     Booking,
     Customer,
     Location,
+    Membership,
+    MembershipPlan,
     Organization,
     Profile,
     Service,
@@ -58,25 +62,13 @@ class ReservationServiceTests(TestCase):
         self.assertEqual(booking.service, self.service)
         self.assertEqual(self.slot.capacity_reserved, 2)
 
-    def test_full_slot_returns_localized_error_from_api(self):
+    def test_full_slot_is_rejected(self):
         reserve_slot(customer=self.customer, slot_id=self.slot.id, attendee_count=2, channel=Booking.Channel.WEB)
 
-        client = APIClient()
-        response = client.post(
-            reverse("booking-list"),
-            {
-                "customer": str(self.customer.id),
-                "slot": str(self.slot.id),
-                "attendee_count": 1,
-                "channel": Booking.Channel.WEB,
-            },
-            format="json",
-            HTTP_ACCEPT_LANGUAGE="tr",
-        )
+        with self.assertRaises(DomainError) as exc:
+            reserve_slot(customer=self.customer, slot_id=self.slot.id, attendee_count=1, channel=Booking.Channel.WEB)
 
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data["code"], "errors.booking.slot_full")
-        self.assertEqual(response.data["message"], "Bu slot dolu.")
+        self.assertEqual(exc.exception.code, "errors.booking.slot_full")
 
     def test_cancel_booking_releases_capacity(self):
         booking = reserve_slot(customer=self.customer, slot_id=self.slot.id, attendee_count=1, channel=Booking.Channel.WEB)
@@ -92,11 +84,148 @@ class ReservationServiceTests(TestCase):
         booking = reserve_slot(customer=self.customer, slot_id=self.slot.id, attendee_count=1, channel=Booking.Channel.WEB)
         check_in_booking(booking=booking, method="qr")
 
-        client = APIClient()
-        response = client.post(reverse("booking-check-in", args=[booking.id]), {"method": "qr"}, format="json")
+        with self.assertRaises(DomainError) as exc:
+            check_in_booking(booking=booking, method="qr")
 
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data["code"], "errors.booking.already_checked_in")
+        self.assertEqual(exc.exception.code, "errors.booking.already_checked_in")
+
+
+@override_settings(SUPABASE_JWT_SECRET="test-secret-with-at-least-32-bytes")
+class LegacyApiSecurityTests(TestCase):
+    def setUp(self):
+        self.organization = Organization.objects.create(name="Fit Club", slug="fit-club")
+        self.other_organization = Organization.objects.create(name="Other Club", slug="other-club")
+        self.manager_user_id = uuid4()
+        self.manager_profile = Profile.objects.create(
+            supabase_user_id=self.manager_user_id,
+            full_name="Manager User",
+            email="manager@example.com",
+        )
+        StaffMember.objects.create(
+            organization=self.organization,
+            profile=self.manager_profile,
+            display_name="Manager User",
+            role_kind=StaffMember.RoleKind.MANAGER,
+        )
+
+        self.location = Location.objects.create(organization=self.organization, name="Main")
+        self.service = Service.objects.create(
+            location=self.location,
+            name="Pool",
+            service_kind=Service.ServiceKind.POOL,
+            duration_min=60,
+            capacity_mode=Service.CapacityMode.SHARED_CAPACITY,
+        )
+        self.slot = SlotInventory.objects.create(
+            service=self.service,
+            starts_at=timezone.now() + timedelta(hours=4),
+            ends_at=timezone.now() + timedelta(hours=5),
+            capacity_total=4,
+        )
+        self.customer = Customer.objects.create(
+            organization=self.organization,
+            profile=Profile.objects.create(full_name="Same Org Customer", email="same-org@example.com"),
+            membership_code="M-1002",
+        )
+        self.plan = MembershipPlan.objects.create(
+            organization=self.organization,
+            name="Monthly",
+            product_kind=MembershipPlan.ProductKind.MEMBERSHIP,
+        )
+        self.membership = Membership.objects.create(
+            customer=self.customer,
+            plan=self.plan,
+            product_kind=Membership.ProductKind.MEMBERSHIP,
+            status=Membership.Status.ACTIVE,
+            valid_from=timezone.localdate(),
+        )
+        self.booking = reserve_slot(customer=self.customer, slot_id=self.slot.id, attendee_count=1, channel=Booking.Channel.WEB)
+        self.attachment = Attachment.objects.create(
+            bucket="private",
+            path="receipts/receipt-1.pdf",
+            kind=Attachment.Kind.RECEIPT,
+            owner_customer=self.customer,
+            booking=self.booking,
+        )
+
+        other_location = Location.objects.create(organization=self.other_organization, name="Other Main")
+        other_service = Service.objects.create(
+            location=other_location,
+            name="Other Pool",
+            service_kind=Service.ServiceKind.POOL,
+            duration_min=60,
+            capacity_mode=Service.CapacityMode.SHARED_CAPACITY,
+        )
+        other_slot = SlotInventory.objects.create(
+            service=other_service,
+            starts_at=timezone.now() + timedelta(hours=6),
+            ends_at=timezone.now() + timedelta(hours=7),
+            capacity_total=4,
+        )
+        other_customer = Customer.objects.create(
+            organization=self.other_organization,
+            profile=Profile.objects.create(full_name="Other Org Customer", email="other-org@example.com"),
+            membership_code="OTHER-1001",
+        )
+        self.other_booking = reserve_slot(
+            customer=other_customer,
+            slot_id=other_slot.id,
+            attendee_count=1,
+            channel=Booking.Channel.WEB,
+        )
+
+        self.client = APIClient()
+
+    def token_for(self, user_id):
+        return jwt.encode({"sub": str(user_id)}, settings.SUPABASE_JWT_SECRET, algorithm="HS256")
+
+    def authenticate_as_manager(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token_for(self.manager_user_id)}")
+
+    def test_slots_list_remains_public(self):
+        response = self.client.get(reverse("slots-list"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+    def test_sensitive_legacy_lists_require_authentication(self):
+        endpoints = ["customer-list", "booking-list", "membership-list", "attachment-list"]
+
+        for endpoint in endpoints:
+            with self.subTest(endpoint=endpoint):
+                response = self.client.get(reverse(endpoint))
+                self.assertEqual(response.status_code, 401)
+
+    def test_legacy_booking_mutations_are_disabled(self):
+        self.authenticate_as_manager()
+
+        create_response = self.client.post(
+            reverse("booking-list"),
+            {
+                "customer": str(self.customer.id),
+                "slot": str(self.slot.id),
+                "attendee_count": 1,
+                "channel": Booking.Channel.WEB,
+            },
+            format="json",
+        )
+        cancel_response = self.client.post(reverse("booking-cancel", args=[self.booking.id]), format="json")
+        check_in_response = self.client.post(
+            reverse("booking-check-in", args=[self.booking.id]),
+            {"method": "qr"},
+            format="json",
+        )
+
+        self.assertEqual(create_response.status_code, 405)
+        self.assertEqual(cancel_response.status_code, 405)
+        self.assertEqual(check_in_response.status_code, 405)
+
+    def test_legacy_booking_detail_is_scoped_to_request_organization(self):
+        self.authenticate_as_manager()
+
+        response = self.client.get(reverse("booking-detail", args=[self.other_booking.id]))
+
+        self.assertEqual(response.status_code, 404)
 
 
 @override_settings(SUPABASE_JWT_SECRET="test-secret-with-at-least-32-bytes")

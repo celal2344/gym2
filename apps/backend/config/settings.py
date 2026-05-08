@@ -110,6 +110,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "gymops_domain.authentication.SupabaseJWTAuthentication",
     ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "gymops_domain.permissions.IsAuthenticatedProfile",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "EXCEPTION_HANDLER": "gymops_domain.errors.localized_exception_handler",
 }

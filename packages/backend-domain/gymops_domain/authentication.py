@@ -39,6 +39,9 @@ class RequestIdentity:
 class SupabaseJWTAuthentication(authentication.BaseAuthentication):
     keyword = "Bearer"
 
+    def authenticate_header(self, request):
+        return self.keyword
+
     def authenticate(self, request):
         auth = authentication.get_authorization_header(request).decode("utf-8")
         if not auth:

@@ -1,7 +1,9 @@
+from django.db.models import Q
 from django.utils import timezone
-from rest_framework import mixins, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework.exceptions import MethodNotAllowed
+from rest_framework.permissions import AllowAny
 
 from .models import (
     Attachment,
@@ -17,10 +19,7 @@ from .models import (
 )
 from .serializers import (
     AttachmentSerializer,
-    BookingCreateSerializer,
     BookingSerializer,
-    CheckInCreateSerializer,
-    CheckInSerializer,
     CustomerSerializer,
     LocationSerializer,
     MembershipSerializer,
@@ -30,40 +29,68 @@ from .serializers import (
     SlotInventorySerializer,
     StaffMemberSerializer,
 )
-from .services import cancel_booking, check_in_booking, reserve_slot
+from .permissions import IsOrganizationManagerOrAdmin
 
 
-class OrganizationViewSet(viewsets.ModelViewSet):
+class PublicReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
+
+
+class LegacyOrganizationScopedReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsOrganizationManagerOrAdmin]
+
+    def get_request_organization(self):
+        return getattr(getattr(self.request, "user", None), "organization", None)
+
+
+class OrganizationViewSet(PublicReadOnlyViewSet):
     queryset = Organization.objects.all().order_by("name")
     serializer_class = OrganizationSerializer
 
 
-class LocationViewSet(viewsets.ModelViewSet):
+class LocationViewSet(PublicReadOnlyViewSet):
     queryset = Location.objects.select_related("organization").all()
     serializer_class = LocationSerializer
 
 
-class CustomerViewSet(viewsets.ModelViewSet):
-    queryset = Customer.objects.select_related("organization", "profile").all()
+class CustomerViewSet(LegacyOrganizationScopedReadOnlyViewSet):
     serializer_class = CustomerSerializer
 
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return Customer.objects.none()
+        return Customer.objects.select_related("organization", "profile").filter(organization=organization)
 
-class StaffMemberViewSet(viewsets.ModelViewSet):
-    queryset = StaffMember.objects.select_related("organization", "profile").all()
+
+class StaffMemberViewSet(LegacyOrganizationScopedReadOnlyViewSet):
     serializer_class = StaffMemberSerializer
 
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return StaffMember.objects.none()
+        return StaffMember.objects.select_related("organization", "profile").filter(organization=organization)
 
-class ResourceViewSet(viewsets.ModelViewSet):
-    queryset = Resource.objects.select_related("location").all()
+
+class ResourceViewSet(LegacyOrganizationScopedReadOnlyViewSet):
     serializer_class = ResourceSerializer
 
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return Resource.objects.none()
+        return Resource.objects.select_related("location", "location__organization").filter(
+            location__organization=organization
+        )
 
-class ServiceViewSet(viewsets.ModelViewSet):
+
+class ServiceViewSet(PublicReadOnlyViewSet):
     queryset = Service.objects.select_related("location").all()
     serializer_class = ServiceSerializer
 
 
-class SlotInventoryViewSet(viewsets.ModelViewSet):
+class SlotInventoryViewSet(PublicReadOnlyViewSet):
     serializer_class = SlotInventorySerializer
 
     def get_queryset(self):
@@ -76,44 +103,48 @@ class SlotInventoryViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class BookingViewSet(viewsets.ModelViewSet):
-    queryset = Booking.objects.select_related("customer", "service", "slot").all()
+class BookingViewSet(LegacyOrganizationScopedReadOnlyViewSet):
     serializer_class = BookingSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = BookingCreateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        booking = reserve_slot(
-            customer=serializer.validated_data["customer"],
-            slot_id=serializer.validated_data["slot"].id,
-            attendee_count=serializer.validated_data["attendee_count"],
-            channel=serializer.validated_data["channel"],
-            external_payment_reference=serializer.validated_data.get("external_payment_reference", ""),
-        )
-        return Response(BookingSerializer(booking).data, status=201)
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return Booking.objects.none()
+        return Booking.objects.select_related("customer", "service", "slot").filter(customer__organization=organization)
 
     @action(detail=True, methods=["post"])
     def cancel(self, request, pk=None):
-        booking = self.get_object()
-        return Response(BookingSerializer(cancel_booking(booking=booking)).data)
+        raise MethodNotAllowed("POST", detail="Legacy booking cancellation is disabled on this route.")
 
     @action(detail=True, methods=["post"], url_path="check-in")
     def check_in(self, request, pk=None):
-        serializer = CheckInCreateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        check_in = check_in_booking(
-            booking=self.get_object(),
-            method=serializer.validated_data["method"],
-            handled_by=serializer.validated_data.get("handled_by"),
-        )
-        return Response(CheckInSerializer(check_in).data, status=201)
+        raise MethodNotAllowed("POST", detail="Legacy booking check-in is disabled on this route.")
 
 
-class MembershipViewSet(viewsets.ModelViewSet):
-    queryset = Membership.objects.select_related("customer").all()
+class MembershipViewSet(LegacyOrganizationScopedReadOnlyViewSet):
     serializer_class = MembershipSerializer
 
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return Membership.objects.none()
+        return Membership.objects.select_related("customer", "customer__profile", "plan").filter(
+            customer__organization=organization
+        )
 
-class AttachmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    queryset = Attachment.objects.select_related("owner_customer", "booking").all()
+
+class AttachmentViewSet(LegacyOrganizationScopedReadOnlyViewSet):
     serializer_class = AttachmentSerializer
+
+    def get_queryset(self):
+        organization = self.get_request_organization()
+        if organization is None:
+            return Attachment.objects.none()
+        return (
+            Attachment.objects.select_related("owner_customer", "booking", "booking__customer")
+            .filter(
+                Q(owner_customer__organization=organization)
+                | Q(booking__customer__organization=organization)
+            )
+            .distinct()
+        )
