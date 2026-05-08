@@ -41,4 +41,24 @@ test.describe("web smoke coverage", () => {
     await expect(page.getByText("Session API unavailable")).toBeVisible();
     await expect(page.getByText("You need to log in before using this workspace.")).toBeVisible();
   });
+
+  test("manager sidebar switches every operational section", async ({ page }) => {
+    await page.goto("/manager");
+
+    await page.getByRole("button", { name: "Memberships" }).click();
+    await expect(page.getByRole("heading", { name: "Membership lifecycle" })).toBeVisible();
+    await expect(page.getByText("Membership API unavailable")).toBeVisible();
+
+    await page.getByRole("button", { name: "Check-ins" }).click();
+    await expect(page.getByRole("heading", { name: "Check-ins and attendance" })).toBeVisible();
+    await expect(page.getByText("Check-in API unavailable")).toBeVisible();
+
+    await page.getByRole("button", { name: "Programs" }).click();
+    await expect(page.getByRole("heading", { name: "Programs" })).toBeVisible();
+    await expect(page.getByText("Program API unavailable")).toBeVisible();
+
+    await page.getByRole("button", { name: "Dashboard" }).click();
+    await expect(page.getByRole("heading", { name: "Manager operations" })).toBeVisible();
+    await expect(page.getByText("Recent activity")).toBeVisible();
+  });
 });
