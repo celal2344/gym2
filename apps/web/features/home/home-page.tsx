@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -55,10 +55,13 @@ export default function Home() {
               </h1>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" render={<Link href="/login" />}>
+              <Link
+                href="/login"
+                className={buttonVariants({ variant: "outline" })}
+              >
                 <LogIn className="size-4" />
                 Login
-              </Button>
+              </Link>
               <Button variant="outline">
                 <QrCode className="size-4" />
                 Check-in

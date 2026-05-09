@@ -340,7 +340,6 @@ paths:
       - attachments
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -349,32 +348,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Attachment'
-          description: ''
-    post:
-      operationId: attachments_create
-      tags:
-      - attachments
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Attachment'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Attachment'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Attachment'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Attachment'
           description: ''
   /api/attachments/{id}/:
     get:
@@ -391,7 +364,6 @@ paths:
       - attachments
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -416,7 +388,6 @@ paths:
       - bookings
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -425,32 +396,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Booking'
-          description: ''
-    post:
-      operationId: bookings_create
-      tags:
-      - bookings
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Booking'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Booking'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Booking'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
           description: ''
   /api/bookings/{id}/:
     get:
@@ -467,7 +412,6 @@ paths:
       - bookings
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -475,91 +419,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Booking'
           description: ''
-    put:
-      operationId: bookings_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this booking.
-        required: true
-      tags:
-      - bookings
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Booking'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Booking'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Booking'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-          description: ''
-    patch:
-      operationId: bookings_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this booking.
-        required: true
-      tags:
-      - bookings
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedBooking'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedBooking'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedBooking'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-          description: ''
-    delete:
-      operationId: bookings_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this booking.
-        required: true
-      tags:
-      - bookings
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/bookings/{id}/cancel/:
     post:
       operationId: bookings_cancel_create
@@ -587,7 +446,6 @@ paths:
         required: true
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -622,7 +480,6 @@ paths:
         required: true
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -637,7 +494,6 @@ paths:
       - customers
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -646,32 +502,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Customer'
-          description: ''
-    post:
-      operationId: customers_create
-      tags:
-      - customers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Customer'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Customer'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Customer'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
           description: ''
   /api/customers/{id}/:
     get:
@@ -688,7 +518,6 @@ paths:
       - customers
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -696,91 +525,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
           description: ''
-    put:
-      operationId: customers_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this customer.
-        required: true
-      tags:
-      - customers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Customer'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Customer'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Customer'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-          description: ''
-    patch:
-      operationId: customers_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this customer.
-        required: true
-      tags:
-      - customers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedCustomer'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedCustomer'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedCustomer'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-          description: ''
-    delete:
-      operationId: customers_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this customer.
-        required: true
-      tags:
-      - customers
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/locations/:
     get:
       operationId: locations_list
@@ -797,32 +541,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Location'
-          description: ''
-    post:
-      operationId: locations_create
-      tags:
-      - locations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Location'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Location'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Location'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Location'
           description: ''
   /api/locations/{id}/:
     get:
@@ -847,91 +565,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Location'
           description: ''
-    put:
-      operationId: locations_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this location.
-        required: true
-      tags:
-      - locations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Location'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Location'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Location'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Location'
-          description: ''
-    patch:
-      operationId: locations_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this location.
-        required: true
-      tags:
-      - locations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedLocation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedLocation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedLocation'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Location'
-          description: ''
-    delete:
-      operationId: locations_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this location.
-        required: true
-      tags:
-      - locations
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/manager/check-ins/:
     get:
       operationId: manager_check_ins_list
@@ -2161,7 +1794,6 @@ paths:
       - memberships
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -2170,32 +1802,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Membership'
-          description: ''
-    post:
-      operationId: memberships_create
-      tags:
-      - memberships
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Membership'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Membership'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Membership'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Membership'
           description: ''
   /api/memberships/{id}/:
     get:
@@ -2212,7 +1818,6 @@ paths:
       - memberships
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -2220,91 +1825,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Membership'
           description: ''
-    put:
-      operationId: memberships_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this membership.
-        required: true
-      tags:
-      - memberships
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Membership'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Membership'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Membership'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Membership'
-          description: ''
-    patch:
-      operationId: memberships_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this membership.
-        required: true
-      tags:
-      - memberships
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedMembership'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedMembership'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedMembership'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Membership'
-          description: ''
-    delete:
-      operationId: memberships_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this membership.
-        required: true
-      tags:
-      - memberships
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/organizations/:
     get:
       operationId: organizations_list
@@ -2321,32 +1841,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Organization'
-          description: ''
-    post:
-      operationId: organizations_create
-      tags:
-      - organizations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Organization'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Organization'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Organization'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
           description: ''
   /api/organizations/{id}/:
     get:
@@ -2371,91 +1865,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organization'
           description: ''
-    put:
-      operationId: organizations_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this organization.
-        required: true
-      tags:
-      - organizations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Organization'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Organization'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Organization'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-          description: ''
-    patch:
-      operationId: organizations_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this organization.
-        required: true
-      tags:
-      - organizations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedOrganization'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedOrganization'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedOrganization'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-          description: ''
-    delete:
-      operationId: organizations_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this organization.
-        required: true
-      tags:
-      - organizations
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/program-assignments/:
     get:
       operationId: program_assignments_list
@@ -2753,7 +2162,6 @@ paths:
       - resources
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -2762,32 +2170,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Resource'
-          description: ''
-    post:
-      operationId: resources_create
-      tags:
-      - resources
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Resource'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Resource'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Resource'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resource'
           description: ''
   /api/resources/{id}/:
     get:
@@ -2804,7 +2186,6 @@ paths:
       - resources
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -2812,91 +2193,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Resource'
           description: ''
-    put:
-      operationId: resources_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this resource.
-        required: true
-      tags:
-      - resources
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Resource'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Resource'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Resource'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resource'
-          description: ''
-    patch:
-      operationId: resources_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this resource.
-        required: true
-      tags:
-      - resources
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedResource'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedResource'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedResource'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Resource'
-          description: ''
-    delete:
-      operationId: resources_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this resource.
-        required: true
-      tags:
-      - resources
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/schema/:
     get:
       operationId: schema_retrieve
@@ -2962,32 +2258,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Service'
           description: ''
-    post:
-      operationId: services_create
-      tags:
-      - services
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Service'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Service'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Service'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Service'
-          description: ''
   /api/services/{id}/:
     get:
       operationId: services_retrieve
@@ -3011,91 +2281,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Service'
           description: ''
-    put:
-      operationId: services_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this service.
-        required: true
-      tags:
-      - services
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Service'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Service'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Service'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Service'
-          description: ''
-    patch:
-      operationId: services_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this service.
-        required: true
-      tags:
-      - services
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedService'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedService'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedService'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Service'
-          description: ''
-    delete:
-      operationId: services_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this service.
-        required: true
-      tags:
-      - services
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/slots/:
     get:
       operationId: slots_list
@@ -3112,32 +2297,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SlotInventory'
-          description: ''
-    post:
-      operationId: slots_create
-      tags:
-      - slots
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SlotInventory'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SlotInventory'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/SlotInventory'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SlotInventory'
           description: ''
   /api/slots/{id}/:
     get:
@@ -3162,91 +2321,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SlotInventory'
           description: ''
-    put:
-      operationId: slots_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this slot inventory.
-        required: true
-      tags:
-      - slots
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SlotInventory'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/SlotInventory'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/SlotInventory'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SlotInventory'
-          description: ''
-    patch:
-      operationId: slots_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this slot inventory.
-        required: true
-      tags:
-      - slots
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedSlotInventory'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedSlotInventory'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedSlotInventory'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SlotInventory'
-          description: ''
-    delete:
-      operationId: slots_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this slot inventory.
-        required: true
-      tags:
-      - slots
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
   /api/staff/:
     get:
       operationId: staff_list
@@ -3254,7 +2328,6 @@ paths:
       - staff
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -3263,32 +2336,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/StaffMember'
-          description: ''
-    post:
-      operationId: staff_create
-      tags:
-      - staff
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StaffMember'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/StaffMember'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/StaffMember'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StaffMember'
           description: ''
   /api/staff/{id}/:
     get:
@@ -3305,7 +2352,6 @@ paths:
       - staff
       security:
       - SupabaseJWT: []
-      - {}
       responses:
         '200':
           content:
@@ -3313,91 +2359,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/StaffMember'
           description: ''
-    put:
-      operationId: staff_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this staff member.
-        required: true
-      tags:
-      - staff
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StaffMember'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/StaffMember'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/StaffMember'
-        required: true
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StaffMember'
-          description: ''
-    patch:
-      operationId: staff_partial_update
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this staff member.
-        required: true
-      tags:
-      - staff
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedStaffMember'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedStaffMember'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedStaffMember'
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StaffMember'
-          description: ''
-    delete:
-      operationId: staff_destroy
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-          format: uuid
-        description: A UUID string identifying this staff member.
-        required: true
-      tags:
-      - staff
-      security:
-      - SupabaseJWT: []
-      - {}
-      responses:
-        '204':
-          description: No response body
 components:
   schemas:
     AccessRuleEnum:
@@ -4218,114 +3179,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-    PatchedBooking:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        customer:
-          type: string
-          format: uuid
-        service:
-          type: string
-          format: uuid
-          readOnly: true
-        service_name:
-          type: string
-          readOnly: true
-        slot:
-          type: string
-          format: uuid
-        slot_starts_at:
-          type: string
-          format: date-time
-          readOnly: true
-        status:
-          allOf:
-          - $ref: '#/components/schemas/BookingStatusEnum'
-          readOnly: true
-        channel:
-          $ref: '#/components/schemas/ChannelEnum'
-        attendee_count:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        qr_token:
-          type: string
-          format: uuid
-          readOnly: true
-        external_payment_reference:
-          type: string
-          maxLength: 160
-        cancelled_at:
-          type: string
-          format: date-time
-          readOnly: true
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-    PatchedCustomer:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        organization:
-          type: string
-          format: uuid
-        profile:
-          allOf:
-          - $ref: '#/components/schemas/Profile'
-          readOnly: true
-        membership_code:
-          type: string
-          maxLength: 40
-        status:
-          $ref: '#/components/schemas/StatusD27Enum'
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-    PatchedLocation:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        organization:
-          type: string
-          format: uuid
-        name:
-          type: string
-          maxLength: 160
-        timezone:
-          type: string
-          maxLength: 64
-        address:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
     PatchedMemberCheckIn:
       type: object
       properties:
@@ -4499,154 +3352,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-    PatchedOrganization:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 160
-        slug:
-          type: string
-          maxLength: 50
-          pattern: ^[-a-zA-Z0-9_]+$
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-    PatchedResource:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        location:
-          type: string
-          format: uuid
-        name:
-          type: string
-          maxLength: 160
-        resource_kind:
-          $ref: '#/components/schemas/ResourceKindEnum'
-        capacity:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        is_active:
-          type: boolean
-    PatchedService:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        location:
-          type: string
-          format: uuid
-        name:
-          type: string
-          maxLength: 160
-        service_kind:
-          $ref: '#/components/schemas/ServiceKindEnum'
-        duration_min:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 1
-          format: int64
-        slot_interval_min:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 1
-          format: int64
-        capacity_mode:
-          $ref: '#/components/schemas/CapacityModeEnum'
-        requires_staff:
-          type: boolean
-        requires_resource:
-          type: boolean
-        price_amount:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        price_currency:
-          type: string
-          maxLength: 3
-        is_active:
-          type: boolean
-    PatchedSlotInventory:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        service:
-          type: string
-          format: uuid
-        service_name:
-          type: string
-          readOnly: true
-        staff_member:
-          type: string
-          format: uuid
-          nullable: true
-        resource:
-          type: string
-          format: uuid
-          nullable: true
-        starts_at:
-          type: string
-          format: date-time
-        ends_at:
-          type: string
-          format: date-time
-        capacity_total:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        capacity_reserved:
-          type: integer
-          maximum: 9223372036854775807
-          minimum: 0
-          format: int64
-        available_capacity:
-          type: integer
-          readOnly: true
-        is_published:
-          type: boolean
-    PatchedStaffMember:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        organization:
-          type: string
-          format: uuid
-        profile:
-          type: string
-          format: uuid
-          nullable: true
-        display_name:
-          type: string
-          maxLength: 160
-        role_kind:
-          $ref: '#/components/schemas/RoleKindEnum'
-        is_active:
-          type: boolean
     PatchedTrainingProgram:
       type: object
       properties:

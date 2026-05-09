@@ -109,7 +109,7 @@ export interface paths {
         };
         get: operations["attachments_list"];
         put?: never;
-        post: operations["attachments_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -157,7 +157,7 @@ export interface paths {
         };
         get: operations["bookings_list"];
         put?: never;
-        post: operations["bookings_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -172,12 +172,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["bookings_retrieve"];
-        put: operations["bookings_update"];
+        put?: never;
         post?: never;
-        delete: operations["bookings_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["bookings_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/bookings/{id}/cancel/": {
@@ -221,7 +221,7 @@ export interface paths {
         };
         get: operations["customers_list"];
         put?: never;
-        post: operations["customers_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -236,12 +236,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["customers_retrieve"];
-        put: operations["customers_update"];
+        put?: never;
         post?: never;
-        delete: operations["customers_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["customers_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/locations/": {
@@ -253,7 +253,7 @@ export interface paths {
         };
         get: operations["locations_list"];
         put?: never;
-        post: operations["locations_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -268,12 +268,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["locations_retrieve"];
-        put: operations["locations_update"];
+        put?: never;
         post?: never;
-        delete: operations["locations_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["locations_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/manager/check-ins/": {
@@ -589,7 +589,7 @@ export interface paths {
         };
         get: operations["memberships_list"];
         put?: never;
-        post: operations["memberships_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -604,12 +604,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["memberships_retrieve"];
-        put: operations["memberships_update"];
+        put?: never;
         post?: never;
-        delete: operations["memberships_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["memberships_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/organizations/": {
@@ -621,7 +621,7 @@ export interface paths {
         };
         get: operations["organizations_list"];
         put?: never;
-        post: operations["organizations_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -636,12 +636,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["organizations_retrieve"];
-        put: operations["organizations_update"];
+        put?: never;
         post?: never;
-        delete: operations["organizations_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["organizations_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/program-assignments/": {
@@ -717,7 +717,7 @@ export interface paths {
         };
         get: operations["resources_list"];
         put?: never;
-        post: operations["resources_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -732,12 +732,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["resources_retrieve"];
-        put: operations["resources_update"];
+        put?: never;
         post?: never;
-        delete: operations["resources_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["resources_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/schema/": {
@@ -771,7 +771,7 @@ export interface paths {
         };
         get: operations["services_list"];
         put?: never;
-        post: operations["services_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -786,12 +786,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["services_retrieve"];
-        put: operations["services_update"];
+        put?: never;
         post?: never;
-        delete: operations["services_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["services_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/slots/": {
@@ -803,7 +803,7 @@ export interface paths {
         };
         get: operations["slots_list"];
         put?: never;
-        post: operations["slots_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -818,12 +818,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["slots_retrieve"];
-        put: operations["slots_update"];
+        put?: never;
         post?: never;
-        delete: operations["slots_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["slots_partial_update"];
+        patch?: never;
         trace?: never;
     };
     "/api/staff/": {
@@ -835,7 +835,7 @@ export interface paths {
         };
         get: operations["staff_list"];
         put?: never;
-        post: operations["staff_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -850,12 +850,12 @@ export interface paths {
             cookie?: never;
         };
         get: operations["staff_retrieve"];
-        put: operations["staff_update"];
+        put?: never;
         post?: never;
-        delete: operations["staff_destroy"];
+        delete?: never;
         options?: never;
         head?: never;
-        patch: operations["staff_partial_update"];
+        patch?: never;
         trace?: never;
     };
 }
@@ -1211,58 +1211,6 @@ export interface components {
             /** Format: date-time */
             readonly updated_at?: string;
         };
-        PatchedBooking: {
-            /** Format: uuid */
-            readonly id?: string;
-            /** Format: uuid */
-            customer?: string;
-            /** Format: uuid */
-            readonly service?: string;
-            readonly service_name?: string;
-            /** Format: uuid */
-            slot?: string;
-            /** Format: date-time */
-            readonly slot_starts_at?: string;
-            readonly status?: components["schemas"]["BookingStatusEnum"];
-            channel?: components["schemas"]["ChannelEnum"];
-            /** Format: int64 */
-            attendee_count?: number;
-            /** Format: uuid */
-            readonly qr_token?: string;
-            external_payment_reference?: string;
-            /** Format: date-time */
-            readonly cancelled_at?: string | null;
-            /** Format: date-time */
-            readonly created_at?: string;
-            /** Format: date-time */
-            readonly updated_at?: string;
-        };
-        PatchedCustomer: {
-            /** Format: uuid */
-            readonly id?: string;
-            /** Format: uuid */
-            organization?: string;
-            readonly profile?: components["schemas"]["Profile"];
-            membership_code?: string;
-            status?: components["schemas"]["StatusD27Enum"];
-            /** Format: date-time */
-            readonly created_at?: string;
-            /** Format: date-time */
-            readonly updated_at?: string;
-        };
-        PatchedLocation: {
-            /** Format: uuid */
-            readonly id?: string;
-            /** Format: uuid */
-            organization?: string;
-            name?: string;
-            timezone?: string;
-            address?: string;
-            /** Format: date-time */
-            readonly created_at?: string;
-            /** Format: date-time */
-            readonly updated_at?: string;
-        };
         PatchedMemberCheckIn: {
             /** Format: uuid */
             readonly id?: string;
@@ -1343,78 +1291,6 @@ export interface components {
             readonly created_at?: string;
             /** Format: date-time */
             readonly updated_at?: string;
-        };
-        PatchedOrganization: {
-            /** Format: uuid */
-            readonly id?: string;
-            name?: string;
-            slug?: string;
-            /** Format: date-time */
-            readonly created_at?: string;
-            /** Format: date-time */
-            readonly updated_at?: string;
-        };
-        PatchedResource: {
-            /** Format: uuid */
-            readonly id?: string;
-            /** Format: uuid */
-            location?: string;
-            name?: string;
-            resource_kind?: components["schemas"]["ResourceKindEnum"];
-            /** Format: int64 */
-            capacity?: number;
-            is_active?: boolean;
-        };
-        PatchedService: {
-            /** Format: uuid */
-            readonly id?: string;
-            /** Format: uuid */
-            location?: string;
-            name?: string;
-            service_kind?: components["schemas"]["ServiceKindEnum"];
-            /** Format: int64 */
-            duration_min?: number;
-            /** Format: int64 */
-            slot_interval_min?: number;
-            capacity_mode?: components["schemas"]["CapacityModeEnum"];
-            requires_staff?: boolean;
-            requires_resource?: boolean;
-            /** Format: int64 */
-            price_amount?: number;
-            price_currency?: string;
-            is_active?: boolean;
-        };
-        PatchedSlotInventory: {
-            /** Format: uuid */
-            readonly id?: string;
-            /** Format: uuid */
-            service?: string;
-            readonly service_name?: string;
-            /** Format: uuid */
-            staff_member?: string | null;
-            /** Format: uuid */
-            resource?: string | null;
-            /** Format: date-time */
-            starts_at?: string;
-            /** Format: date-time */
-            ends_at?: string;
-            /** Format: int64 */
-            capacity_total?: number;
-            /** Format: int64 */
-            capacity_reserved?: number;
-            readonly available_capacity?: number;
-            is_published?: boolean;
-        };
-        PatchedStaffMember: {
-            /** Format: uuid */
-            readonly id?: string;
-            /** Format: uuid */
-            organization?: string;
-            /** Format: uuid */
-            profile?: string | null;
-            display_name?: string;
-            role_kind?: components["schemas"]["RoleKindEnum"];
-            is_active?: boolean;
         };
         PatchedTrainingProgram: {
             /** Format: uuid */
@@ -2182,31 +2058,6 @@ export interface operations {
             };
         };
     };
-    attachments_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Attachment"];
-                "application/x-www-form-urlencoded": components["schemas"]["Attachment"];
-                "multipart/form-data": components["schemas"]["Attachment"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Attachment"];
-                };
-            };
-        };
-    };
     attachments_retrieve: {
         parameters: {
             query?: never;
@@ -2266,31 +2117,6 @@ export interface operations {
             };
         };
     };
-    bookings_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Booking"];
-                "application/x-www-form-urlencoded": components["schemas"]["Booking"];
-                "multipart/form-data": components["schemas"]["Booking"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Booking"];
-                };
-            };
-        };
-    };
     bookings_retrieve: {
         parameters: {
             query?: never;
@@ -2302,83 +2128,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Booking"];
-                };
-            };
-        };
-    };
-    bookings_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Booking"];
-                "application/x-www-form-urlencoded": components["schemas"]["Booking"];
-                "multipart/form-data": components["schemas"]["Booking"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Booking"];
-                };
-            };
-        };
-    };
-    bookings_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    bookings_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedBooking"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedBooking"];
-                "multipart/form-data": components["schemas"]["PatchedBooking"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -2465,31 +2214,6 @@ export interface operations {
             };
         };
     };
-    customers_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Customer"];
-                "application/x-www-form-urlencoded": components["schemas"]["Customer"];
-                "multipart/form-data": components["schemas"]["Customer"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Customer"];
-                };
-            };
-        };
-    };
     customers_retrieve: {
         parameters: {
             query?: never;
@@ -2501,83 +2225,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Customer"];
-                };
-            };
-        };
-    };
-    customers_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this customer. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Customer"];
-                "application/x-www-form-urlencoded": components["schemas"]["Customer"];
-                "multipart/form-data": components["schemas"]["Customer"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Customer"];
-                };
-            };
-        };
-    };
-    customers_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this customer. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    customers_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this customer. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedCustomer"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedCustomer"];
-                "multipart/form-data": components["schemas"]["PatchedCustomer"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -2608,31 +2255,6 @@ export interface operations {
             };
         };
     };
-    locations_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Location"];
-                "application/x-www-form-urlencoded": components["schemas"]["Location"];
-                "multipart/form-data": components["schemas"]["Location"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Location"];
-                };
-            };
-        };
-    };
     locations_retrieve: {
         parameters: {
             query?: never;
@@ -2644,83 +2266,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Location"];
-                };
-            };
-        };
-    };
-    locations_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this location. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Location"];
-                "application/x-www-form-urlencoded": components["schemas"]["Location"];
-                "multipart/form-data": components["schemas"]["Location"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Location"];
-                };
-            };
-        };
-    };
-    locations_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this location. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    locations_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this location. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedLocation"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedLocation"];
-                "multipart/form-data": components["schemas"]["PatchedLocation"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -3961,31 +3506,6 @@ export interface operations {
             };
         };
     };
-    memberships_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Membership"];
-                "application/x-www-form-urlencoded": components["schemas"]["Membership"];
-                "multipart/form-data": components["schemas"]["Membership"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Membership"];
-                };
-            };
-        };
-    };
     memberships_retrieve: {
         parameters: {
             query?: never;
@@ -3997,83 +3517,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Membership"];
-                };
-            };
-        };
-    };
-    memberships_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this membership. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Membership"];
-                "application/x-www-form-urlencoded": components["schemas"]["Membership"];
-                "multipart/form-data": components["schemas"]["Membership"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Membership"];
-                };
-            };
-        };
-    };
-    memberships_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this membership. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    memberships_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this membership. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedMembership"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedMembership"];
-                "multipart/form-data": components["schemas"]["PatchedMembership"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -4104,31 +3547,6 @@ export interface operations {
             };
         };
     };
-    organizations_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Organization"];
-                "application/x-www-form-urlencoded": components["schemas"]["Organization"];
-                "multipart/form-data": components["schemas"]["Organization"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Organization"];
-                };
-            };
-        };
-    };
     organizations_retrieve: {
         parameters: {
             query?: never;
@@ -4140,83 +3558,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Organization"];
-                };
-            };
-        };
-    };
-    organizations_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this organization. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Organization"];
-                "application/x-www-form-urlencoded": components["schemas"]["Organization"];
-                "multipart/form-data": components["schemas"]["Organization"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Organization"];
-                };
-            };
-        };
-    };
-    organizations_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this organization. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    organizations_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this organization. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedOrganization"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedOrganization"];
-                "multipart/form-data": components["schemas"]["PatchedOrganization"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -4533,31 +3874,6 @@ export interface operations {
             };
         };
     };
-    resources_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Resource"];
-                "application/x-www-form-urlencoded": components["schemas"]["Resource"];
-                "multipart/form-data": components["schemas"]["Resource"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Resource"];
-                };
-            };
-        };
-    };
     resources_retrieve: {
         parameters: {
             query?: never;
@@ -4569,83 +3885,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Resource"];
-                };
-            };
-        };
-    };
-    resources_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this resource. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Resource"];
-                "application/x-www-form-urlencoded": components["schemas"]["Resource"];
-                "multipart/form-data": components["schemas"]["Resource"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Resource"];
-                };
-            };
-        };
-    };
-    resources_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this resource. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    resources_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this resource. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedResource"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedResource"];
-                "multipart/form-data": components["schemas"]["PatchedResource"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -4709,31 +3948,6 @@ export interface operations {
             };
         };
     };
-    services_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Service"];
-                "application/x-www-form-urlencoded": components["schemas"]["Service"];
-                "multipart/form-data": components["schemas"]["Service"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Service"];
-                };
-            };
-        };
-    };
     services_retrieve: {
         parameters: {
             query?: never;
@@ -4745,83 +3959,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Service"];
-                };
-            };
-        };
-    };
-    services_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this service. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Service"];
-                "application/x-www-form-urlencoded": components["schemas"]["Service"];
-                "multipart/form-data": components["schemas"]["Service"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Service"];
-                };
-            };
-        };
-    };
-    services_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this service. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    services_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this service. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedService"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedService"];
-                "multipart/form-data": components["schemas"]["PatchedService"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -4852,31 +3989,6 @@ export interface operations {
             };
         };
     };
-    slots_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SlotInventory"];
-                "application/x-www-form-urlencoded": components["schemas"]["SlotInventory"];
-                "multipart/form-data": components["schemas"]["SlotInventory"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SlotInventory"];
-                };
-            };
-        };
-    };
     slots_retrieve: {
         parameters: {
             query?: never;
@@ -4888,83 +4000,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SlotInventory"];
-                };
-            };
-        };
-    };
-    slots_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this slot inventory. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SlotInventory"];
-                "application/x-www-form-urlencoded": components["schemas"]["SlotInventory"];
-                "multipart/form-data": components["schemas"]["SlotInventory"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SlotInventory"];
-                };
-            };
-        };
-    };
-    slots_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this slot inventory. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    slots_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this slot inventory. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedSlotInventory"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedSlotInventory"];
-                "multipart/form-data": components["schemas"]["PatchedSlotInventory"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -4995,31 +4030,6 @@ export interface operations {
             };
         };
     };
-    staff_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["StaffMember"];
-                "application/x-www-form-urlencoded": components["schemas"]["StaffMember"];
-                "multipart/form-data": components["schemas"]["StaffMember"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StaffMember"];
-                };
-            };
-        };
-    };
     staff_retrieve: {
         parameters: {
             query?: never;
@@ -5031,83 +4041,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StaffMember"];
-                };
-            };
-        };
-    };
-    staff_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this staff member. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["StaffMember"];
-                "application/x-www-form-urlencoded": components["schemas"]["StaffMember"];
-                "multipart/form-data": components["schemas"]["StaffMember"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StaffMember"];
-                };
-            };
-        };
-    };
-    staff_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this staff member. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    staff_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A UUID string identifying this staff member. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedStaffMember"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedStaffMember"];
-                "multipart/form-data": components["schemas"]["PatchedStaffMember"];
-            };
-        };
         responses: {
             200: {
                 headers: {
