@@ -7,3 +7,4 @@ psycopg[binary]==3.3.4
 httpx==0.28.1
 PyJWT==2.12.1
 cryptography==47.0.0
+gunicorn==23.0.0

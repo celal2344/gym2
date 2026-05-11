@@ -11,6 +11,19 @@ Use Vercel for `apps/web`, managed Supabase for Postgres/Auth/Storage/RLS, Djang
 5. Deploy Django to a Python host such as Render, Fly.io, Railway, or a container platform with `DATABASE_URL` pointing at Supabase Postgres.
 6. Build mobile through EAS with `EXPO_PUBLIC_API_BASE_URL`, `EXPO_PUBLIC_SUPABASE_URL`, and `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 
+## Render Backend
+
+Use `apps/backend` as the Render root directory.
+
+- Build command: `python -m pip install --upgrade pip && pip install -r requirements.txt`
+- Start command: `bun run start`
+
+The Bun start script delegates to Gunicorn:
+
+```bash
+gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+```
+
 ## Alternatives
 
 - Web: Netlify with OpenNext if the team prefers Netlify previews and branch contexts.
