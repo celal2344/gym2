@@ -1,13 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+import { getApiBaseUrl } from "@/lib/api/runtime";
 import {
   isSupabaseConfigured,
   isUnconfiguredProtectedRouteBypassEnabled,
 } from "@/lib/supabase/runtime";
 
 const protectedPrefixes = ["/admin", "/manager", "/trainer", "/profile", "/app"];
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api";
 
 const pathPanelMap = {
   "/admin": "admin",
@@ -70,10 +70,15 @@ export async function proxy(request: NextRequest) {
 
   const requiredPanel = Object.entries(pathPanelMap).find(([prefix]) => request.nextUrl.pathname.startsWith(prefix))?.[1];
   if (requiredPanel && requiredPanel !== "profile") {
+    const apiBaseUrl = getApiBaseUrl();
+    if (!apiBaseUrl) {
+      return redirectToLogin(request, "service-unavailable");
+    }
+
     let profileResponse: Response;
 
     try {
-      profileResponse = await fetch(`${API_BASE_URL}/auth/me/`, {
+      profileResponse = await fetch(`${apiBaseUrl}/auth/me/`, {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },

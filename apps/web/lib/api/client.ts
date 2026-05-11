@@ -1,8 +1,7 @@
 "use client";
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api";
+import { getApiBaseUrlOrThrow } from "@/lib/api/runtime";
 
 type ApiError = {
   code?: string;
@@ -62,7 +61,8 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}, label 
     throw new Error("You need to log in before using this workspace.");
   }
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const apiBaseUrl = getApiBaseUrlOrThrow();
+  const response = await fetch(`${apiBaseUrl}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
