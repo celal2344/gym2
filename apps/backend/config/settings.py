@@ -125,4 +125,12 @@ SPECTACULAR_SETTINGS = {
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY", "")
+SUPABASE_JWKS_URL = os.getenv("SUPABASE_JWKS_URL", "")
+SUPABASE_JWT_ISSUER = os.getenv("SUPABASE_JWT_ISSUER", "")
+SUPABASE_JWT_AUDIENCE = os.getenv("SUPABASE_JWT_AUDIENCE", "")
+SUPABASE_JWT_ALGORITHMS = [
+    algorithm
+    for algorithm in os.getenv("SUPABASE_JWT_ALGORITHMS", "ES256,RS256").split(",")
+    if algorithm
+]
 SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET", "")

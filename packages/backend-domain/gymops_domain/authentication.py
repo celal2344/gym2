@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 import jwt
+from jwt import PyJWKClient
 from django.conf import settings
 from rest_framework import authentication
 from rest_framework.exceptions import AuthenticationFailed
@@ -51,12 +52,14 @@ class SupabaseJWTAuthentication(authentication.BaseAuthentication):
         if len(parts) != 2 or parts[0] != self.keyword:
             raise AuthenticationFailed("Invalid authorization header.")
 
+        token = parts[1]
+        jwks_url = getattr(settings, "SUPABASE_JWKS_URL", "")
         secret = getattr(settings, "SUPABASE_JWT_SECRET", "")
-        if not secret:
+        if not jwks_url and not secret:
             raise AuthenticationFailed("Supabase JWT verification is not configured.")
 
         try:
-            payload = jwt.decode(parts[1], secret, algorithms=["HS256"], options={"verify_aud": False})
+            payload = self._decode_token(token=token, jwks_url=jwks_url, secret=secret)
             supabase_user_id = UUID(payload["sub"])
         except Exception as exc:
             raise AuthenticationFailed("Invalid Supabase token.") from exc
@@ -78,3 +81,28 @@ class SupabaseJWTAuthentication(authentication.BaseAuthentication):
         )
 
         return RequestIdentity(profile=profile, staff_member=staff_member, customer=customer), payload
+
+    def _decode_token(self, *, token: str, jwks_url: str, secret: str) -> dict:
+        audience = getattr(settings, "SUPABASE_JWT_AUDIENCE", "")
+        issuer = getattr(settings, "SUPABASE_JWT_ISSUER", "")
+
+        decode_options = {
+            "verify_aud": bool(audience),
+            "verify_iss": bool(issuer),
+        }
+        decode_kwargs = {
+            "audience": audience or None,
+            "issuer": issuer or None,
+            "options": decode_options,
+        }
+
+        if jwks_url:
+            signing_key = PyJWKClient(jwks_url).get_signing_key_from_jwt(token)
+            return jwt.decode(
+                token,
+                signing_key.key,
+                algorithms=getattr(settings, "SUPABASE_JWT_ALGORITHMS", ["ES256", "RS256"]),
+                **decode_kwargs,
+            )
+
+        return jwt.decode(token, secret, algorithms=["HS256"], **decode_kwargs)

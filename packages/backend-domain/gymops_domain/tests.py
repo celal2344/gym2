@@ -90,7 +90,7 @@ class ReservationServiceTests(TestCase):
         self.assertEqual(exc.exception.code, "errors.booking.already_checked_in")
 
 
-@override_settings(SUPABASE_JWT_SECRET="test-secret-with-at-least-32-bytes")
+@override_settings(SUPABASE_JWKS_URL="", SUPABASE_JWT_SECRET="test-secret-with-at-least-32-bytes")
 class LegacyApiSecurityTests(TestCase):
     def setUp(self):
         self.organization = Organization.objects.create(name="Fit Club", slug="fit-club")
@@ -228,7 +228,7 @@ class LegacyApiSecurityTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
 
-@override_settings(SUPABASE_JWT_SECRET="test-secret-with-at-least-32-bytes")
+@override_settings(SUPABASE_JWKS_URL="", SUPABASE_JWT_SECRET="test-secret-with-at-least-32-bytes")
 class AdminAuthorizationTests(TestCase):
     def setUp(self):
         self.organization = Organization.objects.create(name="Fit Club", slug="fit-club")
