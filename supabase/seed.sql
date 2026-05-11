@@ -1,4 +1,4 @@
-create extension if not exists "pgcrypto";
+create extension if not exists "pgcrypto" with schema extensions;
 
 insert into auth.users (
   id,
@@ -24,7 +24,7 @@ values
     'authenticated',
     'authenticated',
     'admin@gymops.dev',
-    crypt('GymOpsAdmin123!', gen_salt('bf')),
+    extensions.crypt('GymOpsAdmin123!', extensions.gen_salt('bf')),
     now(),
     '{"provider":"email","providers":["email"]}',
     '{"full_name":"Admin User"}',
@@ -41,7 +41,7 @@ values
     'authenticated',
     'authenticated',
     'manager@gymops.dev',
-    crypt('GymOpsManager123!', gen_salt('bf')),
+    extensions.crypt('GymOpsManager123!', extensions.gen_salt('bf')),
     now(),
     '{"provider":"email","providers":["email"]}',
     '{"full_name":"Manager User"}',
@@ -58,7 +58,7 @@ values
     'authenticated',
     'authenticated',
     'trainer@gymops.dev',
-    crypt('GymOpsTrainer123!', gen_salt('bf')),
+    extensions.crypt('GymOpsTrainer123!', extensions.gen_salt('bf')),
     now(),
     '{"provider":"email","providers":["email"]}',
     '{"full_name":"Trainer User"}',
@@ -75,7 +75,7 @@ values
     'authenticated',
     'authenticated',
     'member@gymops.dev',
-    crypt('GymOpsMember123!', gen_salt('bf')),
+    extensions.crypt('GymOpsMember123!', extensions.gen_salt('bf')),
     now(),
     '{"provider":"email","providers":["email"]}',
     '{"full_name":"Member User"}',

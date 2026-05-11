@@ -28,6 +28,9 @@ db.sqlite3
 # Turbo
 .turbo
 
+# Supabase local CLI state
+supabase/.temp/
+
 # Vercel
 .vercel
 
